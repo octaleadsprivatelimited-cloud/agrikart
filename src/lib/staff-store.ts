@@ -263,6 +263,7 @@ export function captureGps(): Promise<{ lat: number; lng: number; accuracy: numb
 
 // ---------- Payments ----------
 export type PaymentKind = "joining" | "renewal";
+export type PaymentStatus = "Succeeded" | "Refunded" | "Failed";
 export type Payment = {
   id: string;
   farmerId: string;
@@ -270,16 +271,33 @@ export type Payment = {
   mobile?: string;
   kind: PaymentKind;
   amount: number;
+  status: PaymentStatus;
+  method?: "UPI" | "Card" | "NetBanking";
+  refundedAt?: number;
+  refundReason?: string;
   createdAt: number;
 };
 
-export function recordPayment(p: Omit<Payment, "id" | "createdAt">): Payment {
+export function recordPayment(p: Omit<Payment, "id" | "createdAt" | "status"> & { status?: PaymentStatus }): Payment {
   const all = read<Payment[]>(PAYMENTS_KEY, []);
-  const item: Payment = { ...p, id: crypto.randomUUID(), createdAt: Date.now() };
+  const methods: Payment["method"][] = ["UPI", "Card", "NetBanking"];
+  const item: Payment = {
+    ...p,
+    status: p.status ?? "Succeeded",
+    method: p.method ?? methods[Math.floor(Math.random() * methods.length)],
+    id: "PAY-" + crypto.randomUUID().slice(0, 8).toUpperCase(),
+    createdAt: Date.now(),
+  };
   all.unshift(item);
   write(PAYMENTS_KEY, all);
   window.dispatchEvent(new Event("agrikart-payments"));
   return item;
+}
+
+export function refundPayment(id: string, reason: string) {
+  const all = read<Payment[]>(PAYMENTS_KEY, []);
+  write(PAYMENTS_KEY, all.map(p => p.id === id ? { ...p, status: "Refunded" as PaymentStatus, refundedAt: Date.now(), refundReason: reason } : p));
+  window.dispatchEvent(new Event("agrikart-payments"));
 }
 
 export function usePayments() {
@@ -296,3 +314,4 @@ export function usePayments() {
   }, []);
   return items;
 }
+
