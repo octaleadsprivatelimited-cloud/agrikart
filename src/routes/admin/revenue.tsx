@@ -65,10 +65,10 @@ function AdminRevenue() {
 
   const exportCSV = () => {
     const rows = [
-      ["Txn ID", "Date", "Farmer ID", "Farmer", "Mobile", "Type", "Method", "Amount", "Status", "Refund Reason"],
+      ["Txn ID", "Order ID", "Date", "Farmer ID", "Farmer", "Mobile", "Email", "Type", "Method", "Amount", "Status", "Refund Reason"],
       ...filtered.map(p => [
-        p.id, new Date(p.createdAt).toISOString(), p.farmerId,
-        p.farmerName ?? "", p.mobile ?? "", p.kind, p.method ?? "",
+        p.id, p.orderId, new Date(p.createdAt).toISOString(), p.farmerId,
+        p.farmerName ?? "", p.mobile ?? "", p.email ?? "", p.kind, p.method ?? "",
         String(p.amount), p.status, p.refundReason ?? "",
       ]),
     ];
