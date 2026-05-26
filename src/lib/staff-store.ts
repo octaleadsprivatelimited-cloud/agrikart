@@ -260,3 +260,39 @@ export function captureGps(): Promise<{ lat: number; lng: number; accuracy: numb
     );
   });
 }
+
+// ---------- Payments ----------
+export type PaymentKind = "joining" | "renewal";
+export type Payment = {
+  id: string;
+  farmerId: string;
+  farmerName?: string;
+  mobile?: string;
+  kind: PaymentKind;
+  amount: number;
+  createdAt: number;
+};
+
+export function recordPayment(p: Omit<Payment, "id" | "createdAt">): Payment {
+  const all = read<Payment[]>(PAYMENTS_KEY, []);
+  const item: Payment = { ...p, id: crypto.randomUUID(), createdAt: Date.now() };
+  all.unshift(item);
+  write(PAYMENTS_KEY, all);
+  window.dispatchEvent(new Event("agrikart-payments"));
+  return item;
+}
+
+export function usePayments() {
+  const [items, setItems] = useState<Payment[]>([]);
+  useEffect(() => {
+    const sync = () => setItems(read<Payment[]>(PAYMENTS_KEY, []));
+    sync();
+    window.addEventListener("agrikart-payments", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-payments", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+  return items;
+}
