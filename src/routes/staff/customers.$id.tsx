@@ -3,12 +3,18 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCustomer, useRequests, addServiceRequest, serviceCategories, type ServiceCategory } from "@/lib/staff-store";
+import {
+  useCustomer, useRequests, addServiceRequest, serviceCategories,
+  type ServiceCategory, useCurrentStaff, useCustomerEdits, editCustomer,
+  permissions,
+} from "@/lib/staff-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
 import { StatusPill } from "./dashboard";
-import { ArrowLeft, MapPin, Phone, Sprout, Plus } from "lucide-react";
+import { EditHistoryCard } from "../admin/customers.$id";
+import { ArrowLeft, MapPin, Phone, Sprout, Plus, Pencil, X, Save } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/staff/customers/$id")({ component: CustomerDetail });
