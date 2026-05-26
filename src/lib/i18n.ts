@@ -140,14 +140,17 @@ const placeholder = (obj: Record<string, unknown>, path: string) => {
 };
 placeholder(te as unknown as Record<string, unknown>, "");
 
-void i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: { en: { translation: en }, te: { translation: te } },
-    fallbackLng: "en",
-    interpolation: { escapeValue: false },
-    detection: { order: ["localStorage", "navigator"], caches: ["localStorage"] },
-  });
+const isBrowser = typeof window !== "undefined";
+
+const chain = isBrowser ? i18n.use(LanguageDetector).use(initReactI18next) : i18n.use(initReactI18next);
+
+void chain.init({
+  resources: { en: { translation: en }, te: { translation: te } },
+  lng: isBrowser ? undefined : "en",
+  fallbackLng: "en",
+  interpolation: { escapeValue: false },
+  detection: isBrowser ? { order: ["localStorage", "navigator"], caches: ["localStorage"] } : undefined,
+  react: { useSuspense: false },
+});
 
 export default i18n;
