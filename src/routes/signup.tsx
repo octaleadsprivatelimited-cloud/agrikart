@@ -1,65 +1,102 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sprout } from "lucide-react";
-import { signup } from "@/lib/auth-store";
+import { Sprout, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/signup")({ component: SignupPage });
+export const Route = createFileRoute("/signup")({
+  component: RegisterPage,
+  head: () => ({
+    meta: [
+      { title: "Farmer Registration — AgriKart Fin" },
+      { name: "description", content: "Register as a farmer with AgriKart Fin. One-time joining fee ₹2,000." },
+    ],
+  }),
+});
 
-function SignupPage() {
+type Form = {
+  name: string; mobile: string; aadhaar: string; village: string; mandal: string;
+  district: string; state: string; landArea: string; surveyNumbers: string; mainCrop: string; season: string;
+};
+
+function RegisterPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: "", email: "", password: "", mobile: "", aadhaar: "",
-    village: "", district: "", landSize: "", crops: "",
+  const [form, setForm] = useState<Form>({
+    name: "", mobile: "", aadhaar: "", village: "", mandal: "",
+    district: "", state: "", landArea: "", surveyNumbers: "", mainCrop: "", season: "",
   });
-  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: e.target.value });
+  const [farmerId, setFarmerId] = useState<string | null>(null);
+
+  const upd = (k: keyof Form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: e.target.value });
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      signup({ ...form, name: form.name.trim(), email: form.email.trim() });
-      toast.success("Account created!");
-      void navigate({ to: "/portal/dashboard" });
-    } catch (err) {
-      if ((err as Error).message === "EMAIL_EXISTS") toast.error(t("auth.emailExists"));
-      else toast.error("Something went wrong.");
-    }
+    const id = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    setFarmerId(id);
+    toast.success("Registration captured. Redirecting to Rojaripay…");
+    setTimeout(() => void navigate({ to: "/pay" }), 1200);
   };
 
+  const f = t("register.fields", { returnObjects: true }) as Record<keyof Form, string>;
+
   return (
-    <section className="container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-2xl">
+    <section className="container mx-auto grid max-w-5xl gap-6 px-4 py-12 lg:grid-cols-[1fr_320px]">
+      <Card>
         <CardContent className="p-8">
-          <div className="mb-6 text-center">
-            <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground"><Sprout className="h-6 w-6" /></div>
-            <h1 className="mt-4 text-2xl font-bold">{t("auth.signupTitle")}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{t("auth.signupSubtitle")}</p>
+          <div className="mb-6">
+            <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground"><Sprout className="h-6 w-6" /></div>
+            <h1 className="mt-4 text-2xl font-bold">{t("register.title")}</h1>
+            <p className="mt-1 text-sm text-muted-foreground">{t("register.subtitle")}</p>
           </div>
-          <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
-            <Field label={t("auth.name")} id="name"><Input id="name" required maxLength={100} value={form.name} onChange={update("name")} /></Field>
-            <Field label={t("auth.mobile")} id="mobile"><Input id="mobile" required pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={update("mobile")} /></Field>
-            <Field label={t("auth.email")} id="email" className="sm:col-span-2"><Input id="email" type="email" required maxLength={255} value={form.email} onChange={update("email")} /></Field>
-            <Field label={t("auth.password")} id="password" className="sm:col-span-2"><Input id="password" type="password" required minLength={6} value={form.password} onChange={update("password")} /></Field>
-            <Field label={t("auth.aadhaar")} id="aadhaar" className="sm:col-span-2"><Input id="aadhaar" pattern="[0-9]{12}" maxLength={12} value={form.aadhaar} onChange={update("aadhaar")} /></Field>
-            <Field label={t("auth.village")} id="village"><Input id="village" required maxLength={100} value={form.village} onChange={update("village")} /></Field>
-            <Field label={t("auth.district")} id="district"><Input id="district" required maxLength={100} value={form.district} onChange={update("district")} /></Field>
-            <Field label={t("auth.landSize")} id="land"><Input id="land" required type="number" min="0" step="0.1" value={form.landSize} onChange={update("landSize")} /></Field>
-            <Field label={t("auth.crops")} id="crops"><Input id="crops" required maxLength={200} value={form.crops} onChange={update("crops")} placeholder="Cotton, Paddy, Chilli" /></Field>
-            <div className="sm:col-span-2">
-              <Button type="submit" size="lg" className="w-full">{t("auth.signupBtn")}</Button>
+
+          {farmerId ? (
+            <div className="rounded-lg border border-primary/30 bg-primary/5 p-6 text-center">
+              <p className="text-sm">{t("register.success")}</p>
+              <p className="mt-2 text-2xl font-extrabold tracking-wider text-primary">{farmerId}</p>
+              <p className="mt-3 text-xs text-muted-foreground">{t("register.note")}</p>
+              <Button className="mt-5" onClick={() => navigate({ to: "/pay" })}>
+                <IndianRupee className="mr-1.5 h-4 w-4" /> {t("hero.ctaSecondary")}
+              </Button>
             </div>
-          </form>
-          <p className="mt-5 text-center text-sm text-muted-foreground">
-            {t("auth.haveAccount")} <Link to="/login" className="font-semibold text-primary hover:underline">{t("nav.login")}</Link>
-          </p>
+          ) : (
+            <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
+              <Field label={f.name} id="name"><Input id="name" required maxLength={100} value={form.name} onChange={upd("name")} /></Field>
+              <Field label={f.mobile} id="mobile"><Input id="mobile" required pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={upd("mobile")} /></Field>
+              <Field label={f.aadhaar} id="aadhaar" className="sm:col-span-2"><Input id="aadhaar" required pattern="[0-9]{12}" maxLength={12} value={form.aadhaar} onChange={upd("aadhaar")} /></Field>
+              <Field label={f.village} id="village"><Input id="village" required value={form.village} onChange={upd("village")} /></Field>
+              <Field label={f.mandal} id="mandal"><Input id="mandal" required value={form.mandal} onChange={upd("mandal")} /></Field>
+              <Field label={f.district} id="district"><Input id="district" required value={form.district} onChange={upd("district")} /></Field>
+              <Field label={f.state} id="state"><Input id="state" required value={form.state} onChange={upd("state")} /></Field>
+              <Field label={f.landArea} id="land"><Input id="land" required type="number" min="0" step="0.1" value={form.landArea} onChange={upd("landArea")} /></Field>
+              <Field label={f.surveyNumbers} id="survey"><Input id="survey" required value={form.surveyNumbers} onChange={upd("surveyNumbers")} placeholder="e.g. 12/A, 13/B" /></Field>
+              <Field label={f.mainCrop} id="crop"><Input id="crop" required value={form.mainCrop} onChange={upd("mainCrop")} placeholder="Cotton / Paddy / Chilli" /></Field>
+              <Field label={f.season} id="season"><Input id="season" required value={form.season} onChange={upd("season")} placeholder="Kharif / Rabi" /></Field>
+              <div className="sm:col-span-2">
+                <Button type="submit" size="lg" className="w-full">{t("register.submit")}</Button>
+              </div>
+            </form>
+          )}
         </CardContent>
       </Card>
+
+      <aside className="space-y-4">
+        <Card>
+          <CardContent className="p-6">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t("register.feeTitle")}</h2>
+            <ul className="mt-3 space-y-2 text-sm">
+              <li className="font-medium">{t("register.joiningFee")}</li>
+              <li className="font-medium">{t("register.renewalFee")}</li>
+              <li className="text-muted-foreground">{t("register.paymentMode")}</li>
+            </ul>
+            <p className="mt-4 rounded-md bg-accent/30 p-3 text-xs text-accent-foreground">{t("register.note")}</p>
+          </CardContent>
+        </Card>
+      </aside>
     </section>
   );
 }

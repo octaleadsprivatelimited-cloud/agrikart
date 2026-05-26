@@ -7,72 +7,170 @@ const en = {
   brandFull: "AGRIKART FIN TECH PRIVATE LIMITED",
   cin: "CIN U47737TS2026PTC215691",
   nav: {
-    home: "Home", about: "About", services: "Services", contact: "Contact",
-    faq: "FAQ", careers: "Careers", blog: "Blog", login: "Login", signup: "Register",
-    portal: "My Portal", logout: "Logout",
+    home: "Home",
+    about: "About",
+    services: "Services",
+    schemes: "Govt Schemes",
+    contact: "Contact",
+    faq: "FAQ",
+    careers: "Careers",
+    blog: "Blog",
+    register: "Farmer Registration",
+    payNow: "Pay Now",
   },
   hero: {
-    eyebrow: "Empowering Indian Farmers",
-    title: "Smart agri-services, finance, and trade — all in one place.",
-    subtitle: "From drones and seeds to loans, insurance and exports — AgriKart Fin connects farmers to everything they need to grow.",
-    ctaPrimary: "Register as Farmer",
-    ctaSecondary: "Explore Services",
+    eyebrow: "Digital Agri-Finance & Services",
+    title: "AgriKart Fin Pvt Ltd – Digital Agri Finance & Services Platform",
+    subtitle:
+      "AgriKart Fin Pvt Ltd is a one-stop digital platform that connects farmers with loan assistance, insurance, quality agri inputs, cold storage and import–export opportunities.",
+    highlight: "Simple joining fee, continuous farmer support.",
+    ctaPrimary: "Farmer Quick Registration",
+    ctaSecondary: "Pay Now (Joining Fee)",
   },
+  whyTitle: "Why AgriKart Fin",
+  why: "Transparent process, doorstep support, digital tracking, better price opportunities.",
   services: {
     title: "Our Services",
-    subtitle: "Nine core services built for the modern Indian farmer.",
+    subtitle: "Six core services for the modern Indian farmer.",
     items: {
-      drone: { title: "Drone Rentals", desc: "Precision spraying and crop monitoring with certified drone pilots." },
-      seeds: { title: "Seeds & Fertilizers", desc: "High-yield certified seeds and fertilizers delivered to your village." },
-      pesticides: { title: "Pesticides", desc: "Safe, government-approved pesticides with expert guidance." },
-      cold: { title: "Cold Storage", desc: "Affordable cold-storage slots to preserve your harvest." },
-      trade: { title: "Import / Export", desc: "Reach domestic and global buyers through verified channels." },
-      loans: { title: "Agri Loans", desc: "Quick agricultural loans with simple paperwork." },
-      insurance: { title: "Crop Insurance", desc: "Protect your crops against weather, pests, and price shocks." },
-      schemes: { title: "Govt Schemes", desc: "Help applying for PM-KISAN, PMFBY and state subsidies." },
-      support: { title: "24x7 Support", desc: "Telugu-speaking support team, every day of the year." },
+      loans: {
+        title: "Loan Assistance",
+        short: "Facilitation between farmers and partner NBFCs / lenders.",
+        desc: "AgriKart Fin does not give loans directly to farmers. We work only as a facilitator/mediator between farmers and our partner NBFCs and other lenders. Farmers take loans from the NBFC or bank; we just provide loan assistance such as guidance, documentation support, application filling and follow-up. All decisions about loan eligibility, approval, amount, interest rate and disbursement are taken only by the lending NBFC or bank, not by AgriKart Fin.",
+      },
+      insurance: {
+        title: "Insurance",
+        short: "Crop, cattle, health and accident insurance advisory.",
+        desc: "Advisory for crop, cattle, health and accident insurance, help in choosing the right policy and filing claims.",
+      },
+      seeds: {
+        title: "Seeds & Fertilizers",
+        short: "Certified high-yield seeds and quality fertilizers.",
+        desc: "Company-certified high-yield seeds, quality fertilizers and crop protection products with crop and season-wise recommendations.",
+      },
+      cold: {
+        title: "Cold Storage",
+        short: "Digital slot booking with transparent charges.",
+        desc: "Safe storage facilities for vegetables, fruits and other produce with digital booking and transparent daily/weekly/monthly charges. Farmers can book slots online by entering Farmer ID, crop name, number of bags and expected storage days.",
+      },
+      trade: {
+        title: "Import & Export",
+        short: "Domestic and international buyer linkages.",
+        desc: "Connecting farmers and FPOs with domestic and international buyers, support in quality standards, packing, documentation and logistics. Information on export-friendly crops, countries served and basic quality & packing rules. Farmers and FPOs can register for export support by providing crop details and quantity.",
+      },
+      schemes: {
+        title: "Government Schemes",
+        short: "PMFBY, PM-KISAN, KCC and more.",
+        desc: "We help farmers understand and apply for major central and state government schemes.",
+      },
     },
-  },
-  testimonials: {
-    title: "Trusted by farmers across Telangana & Andhra Pradesh",
-    items: [
-      { name: "Ramesh, Warangal", quote: "I got my drone spraying done in 2 hours. Saved me a full week of labour." },
-      { name: "Lakshmi, Karimnagar", quote: "The team helped me apply for PM-KISAN. Money came directly to my account." },
-      { name: "Suresh, Khammam", quote: "Got my loan approved in 5 days. The local officer visited my farm personally." },
-    ],
   },
   about: {
     title: "About AgriKart Fin",
-    intro: "AgriKart Fin Tech Private Limited is a registered agri-business and fintech company headquartered in Telangana. Our mission is to bring world-class agricultural inputs, services, finance and market access to every Indian farmer — in their own language.",
-    missionTitle: "Our Mission",
-    mission: "To double farmer income through technology, trusted services and fair finance.",
-    visionTitle: "Our Vision",
-    vision: "A future where every farmer is empowered, connected, and prosperous.",
+    whoTitle: "Who We Are",
+    who:
+      "AgriKart Fin Pvt Ltd is a fintech–agri company focused on improving farmer income and reducing risk through finance support, insurance, quality inputs and market linkages.",
+    visionTitle: "Vision",
+    vision: "To become the most trusted digital partner for every Indian farmer.",
+    missionTitle: "Mission",
+    mission:
+      "To provide simple, fast and transparent access to agri finance support and services at the village level.",
+    valuesTitle: "Our Values",
+    values: ["Trust", "Transparency", "Farmer First", "Innovation"],
   },
-  contact: {
-    title: "Contact Us",
-    subtitle: "We're here to help. Reach us anytime.",
-    nameLabel: "Your Name", phoneLabel: "Mobile Number", messageLabel: "Message", submit: "Send Message",
-    address: "Hyderabad, Telangana, India",
-    sent: "Message sent! We'll get back to you shortly.",
+  schemes: {
+    title: "Government Schemes",
+    intro: "We help farmers understand and apply for major central and state government schemes.",
+    items: [
+      {
+        name: "PMFBY – Pradhan Mantri Fasal Bima Yojana",
+        desc: "Crop insurance against natural calamities and pests with low premium and claim support.",
+      },
+      {
+        name: "PM-KISAN – Pradhan Mantri Kisan Samman Nidhi",
+        desc: "Support to check eligibility, registration status and resolve issues.",
+      },
+      {
+        name: "Kisan Credit Card (KCC)",
+        desc: "Assistance in KCC application, understanding credit limit, interest subsidy and repayment.",
+      },
+    ],
+  },
+  register: {
+    title: "Farmer Registration",
+    subtitle: "Join AgriKart Fin and get continuous farmer support.",
+    feeTitle: "Fee Details",
+    joiningFee: "Joining Fee: ₹2,000 (one-time)",
+    renewalFee: "Annual Renewal: ₹1,499 per year",
+    paymentMode: "Payment Mode: Rojaripay online payment",
+    note:
+      "Your registration will be activated only after successful payment through Rojaripay.",
+    fields: {
+      name: "Farmer Name",
+      mobile: "Mobile Number",
+      aadhaar: "Aadhaar Number",
+      village: "Village",
+      mandal: "Mandal",
+      district: "District",
+      state: "State",
+      landArea: "Land Area (acres)",
+      surveyNumbers: "Survey Numbers",
+      mainCrop: "Main Crop",
+      season: "Season",
+    },
+    submit: "Register & Pay ₹2,000",
+    success: "Thank you! You are successfully registered with AgriKart Fin. Your Farmer ID:",
+  },
+  pay: {
+    title: "Pay Now",
+    subtitle:
+      "Pay your joining fee of ₹2,000 and annual renewal of ₹1,499 securely using Rojaripay (UPI, cards, net banking).",
+    joining: "Joining Fee — ₹2,000",
+    renewal: "Annual Renewal — ₹1,499",
+    payBtn: "Proceed to Rojaripay",
+    success: "Payment successful. Receipt has been sent to your mobile and email.",
+  },
+  commission: {
+    title: "Commission Model",
+    body:
+      "Commission on loan assistance closures, insurance policies and agri input sales based on slabs, with monthly payout directly to bank account and digital payslip.",
   },
   faq: {
     title: "Frequently Asked Questions",
     items: [
-      { q: "How do I register as a farmer?", a: "Click the Register button at the top and fill in your details. It takes less than 2 minutes." },
-      { q: "Is there any registration fee?", a: "No. Registration is completely free for all farmers." },
-      { q: "How long does loan approval take?", a: "Most loans are processed within 5-7 working days after document verification." },
-      { q: "Do you serve villages outside Telangana?", a: "We are expanding rapidly across South India. Contact us to check your district." },
-      { q: "Can I cancel a booking?", a: "Yes, bookings can be cancelled before they are marked Approved. See our refund policy." },
+      {
+        q: "Do you give loans directly?",
+        a: "No. We only act as a facilitator between farmers and partner NBFCs and provide loan assistance.",
+      },
+      {
+        q: "Is there any joining fee?",
+        a: "Yes, there is a one-time joining fee of ₹2,000 and annual renewal of ₹1,499.",
+      },
+      {
+        q: "How is the joining fee paid?",
+        a: "Securely via Rojaripay — UPI, cards or net banking. Registration activates after successful payment.",
+      },
+      {
+        q: "Do you serve villages outside Telangana?",
+        a: "We are expanding across South India. Contact us to check your district.",
+      },
     ],
+  },
+  testimonials: {
+    title: "Success Stories",
+    note: "Real farmer stories coming soon.",
+  },
+  partners: {
+    title: "Our Partners",
+    note: "Dealers, FPOs and NBFC partner details coming soon.",
   },
   careers: {
     title: "Careers at AgriKart Fin",
-    intro: "Join us in transforming Indian agriculture. We're hiring across field operations, technology and customer support.",
+    intro:
+      "Join us in transforming Indian agriculture. We're hiring across field operations, technology and customer support.",
     openings: [
       { role: "Field Operations Executive", loc: "Warangal / Karimnagar", type: "Full-time" },
       { role: "Customer Support — Telugu", loc: "Hyderabad", type: "Full-time" },
-      { role: "Drone Pilot (DGCA Certified)", loc: "Multiple districts", type: "Contract" },
       { role: "Frontend Engineer (React)", loc: "Hyderabad / Remote", type: "Full-time" },
     ],
     apply: "Apply via careers@agrikartfin.com",
@@ -81,10 +179,20 @@ const en = {
     title: "Insights & News",
     subtitle: "Tips, schemes and stories from the field.",
     posts: [
-      { title: "5 Drone Spraying Tips for Cotton Farmers", date: "May 2026", excerpt: "Improve coverage and reduce chemical use with these expert-backed tips." },
-      { title: "Understanding PMFBY: A Complete Guide", date: "Apr 2026", excerpt: "Everything you need to know about the Pradhan Mantri Fasal Bima Yojana." },
+      { title: "Understanding PMFBY: A Complete Guide", date: "May 2026", excerpt: "Everything you need to know about the Pradhan Mantri Fasal Bima Yojana." },
       { title: "How to Get Your KCC Loan in 7 Days", date: "Apr 2026", excerpt: "Step-by-step process to apply for a Kisan Credit Card loan." },
+      { title: "Cold Storage: Reducing Post-Harvest Loss", date: "Mar 2026", excerpt: "Why digital slot booking matters for small farmers." },
     ],
+  },
+  contact: {
+    title: "Contact Us",
+    subtitle: "We're here to help. Reach us anytime.",
+    nameLabel: "Your Name",
+    phoneLabel: "Mobile Number",
+    messageLabel: "Message",
+    submit: "Send Message",
+    address: "Hyderabad, Telangana, India",
+    sent: "Message sent! We'll get back to you shortly.",
   },
   legal: {
     privacyTitle: "Privacy Policy",
@@ -92,56 +200,227 @@ const en = {
     refundTitle: "Refund Policy",
     updated: "Last updated: May 2026",
   },
-  auth: {
-    loginTitle: "Welcome back",
-    loginSubtitle: "Login to manage your farm services.",
-    signupTitle: "Create your farmer account",
-    signupSubtitle: "Get access to all AgriKart Fin services.",
-    name: "Full Name", mobile: "Mobile Number", aadhaar: "Aadhaar Number (optional)",
-    village: "Village", district: "District", landSize: "Land Size (acres)", crops: "Main Crops Grown",
-    email: "Email", password: "Password",
-    loginBtn: "Login", signupBtn: "Create Account",
-    noAccount: "Don't have an account?", haveAccount: "Already have an account?",
-    invalidLogin: "Invalid email or password.",
-    emailExists: "An account with this email already exists.",
-  },
-  portal: {
-    welcome: "Welcome",
-    dashboardTitle: "My Farm Dashboard",
-    bookService: "Book a Service",
-    myBookings: "My Bookings",
-    totalBookings: "Total Bookings",
-    pending: "Pending", approved: "Approved", rejected: "Rejected",
-    chooseService: "Choose Service", describe: "Describe your requirement",
-    submit: "Submit Request",
-    submitted: "Your request has been submitted!",
-    empty: "No bookings yet. Book your first service to get started.",
-    payment: "UPI Payment Link",
-    status: "Status",
-    date: "Date",
-  },
   footer: {
-    company: "Company", legal: "Legal", services: "Services", contact: "Contact",
+    company: "Company",
+    legal: "Legal",
+    services: "Services",
+    contact: "Contact",
     rights: "All rights reserved.",
     tagline: "Empowering Indian farmers with technology, finance and trust.",
   },
 };
 
-// Telugu placeholders per spec — client will supply translations
-const te = JSON.parse(JSON.stringify(en)) as typeof en;
-const placeholder = (obj: Record<string, unknown>, path: string) => {
-  for (const k of Object.keys(obj)) {
-    const v = obj[k];
-    const p = path ? `${path}.${k}` : k;
-    if (typeof v === "string") obj[k] = `[TE: ${p}]`;
-    else if (Array.isArray(v)) v.forEach((item, i) => typeof item === "object" && placeholder(item as Record<string, unknown>, `${p}.${i}`));
-    else if (v && typeof v === "object") placeholder(v as Record<string, unknown>, p);
-  }
+// ---------------- Telugu translations (provided by client) ----------------
+const te: typeof en = {
+  brand: "ఆగ్రికార్ట్ ఫిన్",
+  brandFull: "AGRIKART FIN TECH PRIVATE LIMITED",
+  cin: "CIN U47737TS2026PTC215691",
+  nav: {
+    home: "హోమ్",
+    about: "మా గురించి",
+    services: "సేవలు",
+    schemes: "ప్రభుత్వ పథకాలు",
+    contact: "సంప్రదించండి",
+    faq: "ప్రశ్నలు",
+    careers: "ఉద్యోగాలు",
+    blog: "బ్లాగ్",
+    register: "రైతు నమోదు",
+    payNow: "చెల్లించండి",
+  },
+  hero: {
+    eyebrow: "డిజిటల్ అగ్రి ఫైనాన్స్ & సేవలు",
+    title: "AgriKart Fin Pvt Ltd – రైతుల కోసం డిజిటల్ అగ్రి ఫైనాన్స్ & సేవల వేదిక",
+    subtitle:
+      "AgriKart Fin Pvt Ltd రైతులను రుణ సహాయం, ఇన్సూరెన్స్, నాణ్యమైన అగ్రి ఇన్పుట్లు, కోల్డ్ స్టోరేజ్, ఇంపోర్ట్–ఎక్స్పోర్ట్ అవకాశాలతో కలిపే ఒకే డిజిటల్ ప్లాట్‌ఫార్మ్.",
+    highlight: "ఒకసారి జాయినింగ్ ఫీజు, రైతులకు నిరంతర సేవలు.",
+    ctaPrimary: "రైతు తక్షణ నమోదు",
+    ctaSecondary: "జాయినింగ్ ఫీజు చెల్లించండి",
+  },
+  whyTitle: "ఎందుకు AgriKart Fin",
+  why: "పారదర్శక విధానం, ఇంటి వద్ద సపోర్ట్, డిజిటల్ ట్రాకింగ్, మంచి ధరలు పొందే అవకాశాలు.",
+  services: {
+    title: "మా సేవలు",
+    subtitle: "ఆధునిక భారతీయ రైతుకు ఆరు ముఖ్య సేవలు.",
+    items: {
+      loans: {
+        title: "రుణ సహాయం",
+        short: "రైతులు మరియు భాగస్వామ్య NBFCల మధ్య సమన్వయం.",
+        desc:
+          "AgriKart Fin ద్వారా మేము రైతులకు నేరుగా రుణాలు ఇవ్వము. మేము కేవలం రైతులు మరియు మా భాగస్వామ్య NBFCలు / రుణ సంస్థల మధ్య సమన్వయకర్త (mediator / facilitator) గా మాత్రమే పని చేస్తాము. రైతులు NBFC లేదా బ్యాంకు నుంచే రుణం తీసుకుంటారు; మేము కేవలం రుణ సహాయం – గైడెన్స్, డాక్యుమెంటేషన్, అప్లికేషన్ నింపడం, ఫాలో-అప్ – మాత్రమే చేస్తాము.",
+      },
+      insurance: {
+        title: "ఇన్సూరెన్స్",
+        short: "పంట, పశు, ఆరోగ్య, ప్రమాద బీమా సలహా.",
+        desc: "పంట, పశు, ఆరోగ్య, ప్రమాద బీమా కోసం సలహా, సరైన పాలసీ ఎంపిక, క్లెయిమ్ ఫైల్ చేయడంలో సహాయం.",
+      },
+      seeds: {
+        title: "విత్తనాలు & ఎరువులు",
+        short: "సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు.",
+        desc:
+          "కంపెనీ సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు, పంట రక్షణ ఉత్పత్తులు, పంట & సీజన్–వైజ్ సూచనలు.",
+      },
+      cold: {
+        title: "కోల్డ్ స్టోరేజ్",
+        short: "డిజిటల్ స్లాట్ బుకింగ్, పారదర్శక చార్జీలు.",
+        desc:
+          "కూరగాయలు, పండ్లు, ఇతర పంటల కోసం సురక్షిత కోల్డ్ స్టోరేజ్, డిజిటల్ బుకింగ్, రోజువారీ/వారానికి/నెలకు పారదర్శక చార్జీలు. రైతులు రైతు ID, పంట పేరు, బస్తాల సంఖ్య, నిల్వ రోజులను నమోదు చేసి ఆన్‌లైన్‌లో స్లాట్ బుక్ చేసుకోవచ్చు.",
+      },
+      trade: {
+        title: "ఇంపోర్ట్ & ఎక్స్‌పోర్ట్",
+        short: "దేశీయ & అంతర్జాతీయ కొనుగోలుదారులతో కనెక్షన్.",
+        desc:
+          "రైతులు, FPOలను దేశీయ & అంతర్జాతీయ కొనుగోలుదారులతో కనెక్ట్ చేయడం, నాణ్యత ప్రమాణాలు, ప్యాకింగ్, డాక్యుమెంటేషన్, లాజిస్టిక్స్‌లో సహాయం.",
+      },
+      schemes: {
+        title: "ప్రభుత్వ పథకాలు",
+        short: "PMFBY, PM-KISAN, KCC మరియు ఇతరములు.",
+        desc: "ముఖ్యమైన కేంద్ర, రాష్ట్ర ప్రభుత్వం పథకాలు రైతులు ఉపయోగించుకునేలా మేము గైడ్ చేస్తాం.",
+      },
+    },
+  },
+  about: {
+    title: "AgriKart Fin గురించి",
+    whoTitle: "మేము ఎవరం",
+    who:
+      "AgriKart Fin Pvt Ltd రైతుల ఆదాయం పెరగటానికి, ప్రమాదం తగ్గించటానికి ఫైనాన్స్ సహాయం, ఇన్సూరెన్స్, నాణ్యమైన ఇన్పుట్లు, మార్కెట్ కనెక్షన్లు అందించే ఫిన్‌టెక్–అగ్రి సంస్థ.",
+    visionTitle: "విజన్",
+    vision: "ప్రతి భారతీయ రైతుకు నమ్మకమైన డిజిటల్ భాగస్వామిగా ఎదగడం.",
+    missionTitle: "మిషన్",
+    mission: "గ్రామ స్థాయిలోనే సులభ, శీఘ్ర, పారదర్శక అగ్రి ఫైనాన్స్ సహాయం & సేవలు అందించడం.",
+    valuesTitle: "మా విలువలు",
+    values: ["నమ్మకం", "పారదర్శకత", "రైతు ముందుగా", "నూతనత"],
+  },
+  schemes: {
+    title: "ప్రభుత్వ పథకాలు",
+    intro: "ముఖ్యమైన కేంద్ర, రాష్ట్ర ప్రభుత్వం పథకాలు రైతులు ఉపయోగించుకునేలా మేము గైడ్ చేస్తాం.",
+    items: [
+      {
+        name: "PMFBY – ప్రధాన మంత్రి ఫసల్ బీమా యోజన",
+        desc: "సహాజ విపత్తులు, పురుగుల వల్ల పంట నష్టం జరిగితే తక్కువ ప్రీమియంతో రక్షణ, క్లెయిమ్‌లో సహాయం.",
+      },
+      {
+        name: "PM-KISAN – ప్రధాన మంత్రి కిసాన్ సమ్మాన్ నిధి",
+        desc: "అర్హత, రిజిస్ట్రేషన్ స్టేటస్ చెక్ చేయడం, సమస్యలు ఉంటే పరిష్కారం కోసం సహాయం.",
+      },
+      {
+        name: "కిసాన్ క్రెడిట్ కార్డ్ (KCC)",
+        desc: "KCC కోసం అప్లై చేయడంలో సహాయం, క్రెడిట్ లిమిట్, వడ్డీ సబ్సిడీ, రీపేమెంట్ వివరాలు క్లియర్‌గా వివరించడం.",
+      },
+    ],
+  },
+  register: {
+    title: "రైతు నమోదు",
+    subtitle: "AgriKart Finలో జాయిన్ అయి నిరంతర రైతు సేవలు పొందండి.",
+    feeTitle: "ఫీజు వివరాలు",
+    joiningFee: "జాయినింగ్ ఫీజు: ₹2,000 (ఒకసారి మాత్రమే)",
+    renewalFee: "వార్షిక రీన్యువల్: ప్రతి సంవత్సరం ₹1,499",
+    paymentMode: "చెల్లింపు విధానం: Rojaripay ద్వారా ఆన్‌లైన్ చెల్లింపు",
+    note: "Rojaripay ద్వారా చెల్లింపు విజయవంతంగా పూర్తయిన తర్వాత మాత్రమే మీ రిజిస్ట్రేషన్ సక్రియమవుతుంది.",
+    fields: {
+      name: "రైతు పేరు",
+      mobile: "మొబైల్ నెంబరు",
+      aadhaar: "ఆధార్ నంబరు",
+      village: "గ్రామం",
+      mandal: "మండలం",
+      district: "జిల్లా",
+      state: "రాష్ట్రం",
+      landArea: "భూ విస్తీర్ణం (ఎకరాలు)",
+      surveyNumbers: "సర్వే నెంబర్లు",
+      mainCrop: "ప్రధాన పంట",
+      season: "సీజన్",
+    },
+    submit: "నమోదు & ₹2,000 చెల్లించండి",
+    success: "ధన్యవాదాలు! మీరు AgriKart Finలో విజయవంతంగా నమోదు అయ్యారు. మీ రైతు ID:",
+  },
+  pay: {
+    title: "చెల్లించండి",
+    subtitle:
+      "మీ ₹2,000 జాయినింగ్ ఫీజు మరియు ప్రతి సంవత్సరం ₹1,499 రీన్యువల్ ఫీజును Rojaripay (UPI, కార్డులు, నెట్‌బ్యాంకింగ్) ద్వారా సురక్షితంగా చెల్లించండి.",
+    joining: "జాయినింగ్ ఫీజు — ₹2,000",
+    renewal: "వార్షిక రీన్యువల్ — ₹1,499",
+    payBtn: "Rojaripayకి వెళ్లండి",
+    success: "పేమెంట్ విజయవంతం. మీ మొబైల్ మరియు ఇమెయిల్‌కు రసీదు పంపబడింది.",
+  },
+  commission: {
+    title: "కమిషన్ మోడల్",
+    body:
+      "రుణ సహాయం ద్వారా పూర్తయిన కేసులు, ఇన్సూరెన్స్ పాలసీలు, విత్తనాలు–ఎరువుల సేల్స్‌పై స్లాబ్–వైజ్ కమిషన్, ప్రతి నెల బ్యాంక్ ఖాతాకు నేరుగా జమ చేసి డిజిటల్ పేస్లిప్ అందించబడుతుంది.",
+  },
+  faq: {
+    title: "తరచూ అడిగే ప్రశ్నలు",
+    items: [
+      {
+        q: "మీరు నేరుగా రుణాలు ఇస్తారా?",
+        a: "లేదు. మేము రైతులు మరియు భాగస్వామ్య NBFCల మధ్య సమన్వయకర్తగా ఉండి రుణ సహాయం మాత్రమే చేస్తాము.",
+      },
+      {
+        q: "ఏమైనా జాయినింగ్ ఫీజుందా?",
+        a: "అవును, ఒకసారి జాయినింగ్ ఫీజు ₹2,000, ప్రతి సంవత్సరం రీన్యువల్ ₹1,499.",
+      },
+      {
+        q: "జాయినింగ్ ఫీజు ఎలా చెల్లించాలి?",
+        a: "Rojaripay ద్వారా UPI, కార్డులు లేదా నెట్‌బ్యాంకింగ్‌తో సురక్షితంగా చెల్లించవచ్చు.",
+      },
+      {
+        q: "తెలంగాణ బయట గ్రామాలకు సేవలు అందిస్తారా?",
+        a: "మేము దక్షిణ భారతదేశంలో విస్తరిస్తున్నాము. మీ జిల్లాను చెక్ చేయటానికి సంప్రదించండి.",
+      },
+    ],
+  },
+  testimonials: {
+    title: "విజయ కథలు",
+    note: "నిజమైన రైతు కథలు త్వరలో.",
+  },
+  partners: {
+    title: "మా భాగస్వాములు",
+    note: "డీలర్లు, FPOలు మరియు NBFC భాగస్వాముల వివరాలు త్వరలో.",
+  },
+  careers: {
+    title: "AgriKart Finలో ఉద్యోగాలు",
+    intro: "భారత వ్యవసాయాన్ని మార్చడంలో మాతో చేరండి. ఫీల్డ్, టెక్నాలజీ, కస్టమర్ సపోర్ట్‌లో అవకాశాలు.",
+    openings: [
+      { role: "ఫీల్డ్ ఆపరేషన్స్ ఎగ్జిక్యూటివ్", loc: "వరంగల్ / కరీంనగర్", type: "ఫుల్-టైమ్" },
+      { role: "కస్టమర్ సపోర్ట్ — తెలుగు", loc: "హైదరాబాద్", type: "ఫుల్-టైమ్" },
+      { role: "ఫ్రంటెండ్ ఇంజినీర్ (React)", loc: "హైదరాబాద్ / రిమోట్", type: "ఫుల్-టైమ్" },
+    ],
+    apply: "careers@agrikartfin.com ద్వారా దరఖాస్తు చేయండి",
+  },
+  blog: {
+    title: "సమాచారం & వార్తలు",
+    subtitle: "క్షేత్ర స్థాయి చిట్కాలు, పథకాలు, కథలు.",
+    posts: [
+      { title: "PMFBY అర్థం: పూర్తి గైడ్", date: "మే 2026", excerpt: "ప్రధాన మంత్రి ఫసల్ బీమా యోజన గురించి మీరు తెలుసుకోవలసినవి." },
+      { title: "7 రోజుల్లో KCC రుణం పొందండి", date: "ఏప్రి 2026", excerpt: "కిసాన్ క్రెడిట్ కార్డ్ రుణం కోసం స్టెప్-బై-స్టెప్." },
+      { title: "కోల్డ్ స్టోరేజ్: పంట కోత తర్వాత నష్టాలు తగ్గించడం", date: "మార్చి 2026", excerpt: "చిన్న రైతులకు డిజిటల్ స్లాట్ బుకింగ్ ఎందుకు ముఖ్యం." },
+    ],
+  },
+  contact: {
+    title: "సంప్రదించండి",
+    subtitle: "మేము సహాయం కోసం ఎప్పుడూ ఉన్నాము.",
+    nameLabel: "మీ పేరు",
+    phoneLabel: "మొబైల్ నెంబరు",
+    messageLabel: "సందేశం",
+    submit: "సందేశం పంపండి",
+    address: "హైదరాబాద్, తెలంగాణ, భారత్",
+    sent: "సందేశం పంపబడింది! త్వరలో సంప్రదిస్తాము.",
+  },
+  legal: {
+    privacyTitle: "ప్రైవసీ పాలసీ",
+    termsTitle: "నిబంధనలు & షరతులు",
+    refundTitle: "రీఫండ్ పాలసీ",
+    updated: "చివరిగా అప్‌డేట్: మే 2026",
+  },
+  footer: {
+    company: "కంపెనీ",
+    legal: "న్యాయపరమైనవి",
+    services: "సేవలు",
+    contact: "సంప్రదించండి",
+    rights: "అన్ని హక్కులూ సంరక్షించబడ్డాయి.",
+    tagline: "సాంకేతికత, ఆర్థికం, నమ్మకంతో భారత రైతుల సశక్తీకరణ.",
+  },
 };
-placeholder(te as unknown as Record<string, unknown>, "");
 
 const isBrowser = typeof window !== "undefined";
-
 const chain = isBrowser ? i18n.use(LanguageDetector).use(initReactI18next) : i18n.use(initReactI18next);
 
 void chain.init({

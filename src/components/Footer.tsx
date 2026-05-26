@@ -33,6 +33,10 @@ export function Footer() {
           <h4 className="text-sm font-semibold">{t("footer.services")}</h4>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             <li><Link to="/services" className="hover:text-primary">{t("nav.services")}</Link></li>
+            <li><Link to="/schemes" className="hover:text-primary">{t("nav.schemes")}</Link></li>
+            <li><Link to="/signup" className="hover:text-primary">{t("nav.register")}</Link></li>
+            <li><Link to="/pay" className="hover:text-primary">{t("nav.payNow")}</Link></li>
+            <li><Link to="/commission" className="hover:text-primary">Commission Model</Link></li>
             <li><Link to="/faq" className="hover:text-primary">{t("nav.faq")}</Link></li>
             <li><Link to="/staff/login" className="hover:text-primary">Staff Login</Link></li>
           </ul>
