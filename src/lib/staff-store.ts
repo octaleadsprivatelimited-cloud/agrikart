@@ -9,6 +9,7 @@ const STAFF_KEY = "agrikart.staff";
 const STAFF_SESSION_KEY = "agrikart.staff_session";
 const CUSTOMERS_KEY = "agrikart.customers";
 const REQUESTS_KEY = "agrikart.service_requests";
+const PAYMENTS_KEY = "agrikart.payments";
 const SEED_KEY = "agrikart.seeded_v1";
 
 function read<T>(key: string, fallback: T): T {
