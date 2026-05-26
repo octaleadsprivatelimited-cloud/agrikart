@@ -12,8 +12,9 @@ export function Navbar() {
 
   const items: Array<{ to: string; label: string }> = [
     { to: "/", label: t("nav.home") },
+    { to: "/products", label: "Products" },
     { to: "/services", label: t("nav.services") },
-    { to: "/schemes", label: t("nav.schemes") },
+    { to: "/support", label: "Support" },
     { to: "/about", label: t("nav.about") },
     { to: "/faq", label: t("nav.faq") },
     { to: "/contact", label: t("nav.contact") },
