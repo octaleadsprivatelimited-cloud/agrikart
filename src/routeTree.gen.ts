@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SupportRouteImport } from './routes/support'
 import { Route as StaffRouteImport } from './routes/staff'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -48,6 +49,11 @@ import { Route as AdminCustomersIdRouteImport } from './routes/admin/customers.$
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffRoute = StaffRouteImport.update({
@@ -240,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/staff': typeof StaffRouteWithChildren
+  '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -276,6 +283,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/staff': typeof StaffRouteWithChildren
+  '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -314,6 +322,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
   '/staff': typeof StaffRouteWithChildren
+  '/support': typeof SupportRoute
   '/terms': typeof TermsRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
@@ -353,6 +362,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/staff'
+    | '/support'
     | '/terms'
     | '/admin/customers'
     | '/admin/dashboard'
@@ -389,6 +399,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/staff'
+    | '/support'
     | '/terms'
     | '/admin/customers'
     | '/admin/dashboard'
@@ -426,6 +437,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/signup'
     | '/staff'
+    | '/support'
     | '/terms'
     | '/admin/customers'
     | '/admin/dashboard'
@@ -464,6 +476,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
   StaffRoute: typeof StaffRouteWithChildren
+  SupportRoute: typeof SupportRoute
   TermsRoute: typeof TermsRoute
 }
 
@@ -474,6 +487,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff': {
@@ -823,6 +843,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
   StaffRoute: StaffRouteWithChildren,
+  SupportRoute: SupportRoute,
   TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
