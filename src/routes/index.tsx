@@ -6,16 +6,22 @@ import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark,
   ArrowRight, CheckCircle2, IndianRupee,
 } from "lucide-react";
+import imgLoans from "@/assets/service-loans.jpg";
+import imgInsurance from "@/assets/service-insurance.jpg";
+import imgSeeds from "@/assets/service-seeds.jpg";
+import imgCold from "@/assets/service-cold.jpg";
+import imgTrade from "@/assets/service-trade.jpg";
+import imgSchemes from "@/assets/service-schemes.jpg";
 
 export const Route = createFileRoute("/")({ component: Home });
 
 const homeServices = [
-  { key: "loans", Icon: Banknote },
-  { key: "insurance", Icon: ShieldCheck },
-  { key: "seeds", Icon: Sprout },
-  { key: "cold", Icon: Snowflake },
-  { key: "trade", Icon: Ship },
-  { key: "schemes", Icon: Landmark },
+  { key: "loans", Icon: Banknote, img: imgLoans },
+  { key: "insurance", Icon: ShieldCheck, img: imgInsurance },
+  { key: "seeds", Icon: Sprout, img: imgSeeds },
+  { key: "cold", Icon: Snowflake, img: imgCold },
+  { key: "trade", Icon: Ship, img: imgTrade },
+  { key: "schemes", Icon: Landmark, img: imgSchemes },
 ] as const;
 
 function Home() {
