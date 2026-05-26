@@ -4,8 +4,11 @@ import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { IndianRupee, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { recordPayment } from "@/lib/staff-store";
 
 export const Route = createFileRoute("/pay")({
   component: PayPage,
@@ -20,9 +23,17 @@ export const Route = createFileRoute("/pay")({
 function PayPage() {
   const { t } = useTranslation();
   const [paid, setPaid] = useState<"joining" | "renewal" | null>(null);
+  const [farmerId, setFarmerId] = useState("");
+  const [farmerName, setFarmerName] = useState("");
+  const [mobile, setMobile] = useState("");
 
   const pay = (kind: "joining" | "renewal") => {
-    // Rojaripay integration placeholder
+    if (!farmerId.trim()) {
+      toast.error("Please enter your Farmer ID");
+      return;
+    }
+    const amount = kind === "joining" ? 2000 : 1499;
+    recordPayment({ farmerId: farmerId.trim().toUpperCase(), farmerName: farmerName.trim() || undefined, mobile: mobile.trim() || undefined, kind, amount });
     toast.success(t("pay.success"));
     setPaid(kind);
   };
@@ -30,21 +41,18 @@ function PayPage() {
   return (
     <>
       <PageHeader title={t("pay.title")} subtitle={t("pay.subtitle")} />
-      <section className="container mx-auto grid max-w-3xl gap-5 px-4 py-12 md:grid-cols-2">
-        <PayCard
-          label={t("pay.joining")}
-          amount="₹2,000"
-          onPay={() => pay("joining")}
-          paid={paid === "joining"}
-          btn={t("pay.payBtn")}
-        />
-        <PayCard
-          label={t("pay.renewal")}
-          amount="₹1,499"
-          onPay={() => pay("renewal")}
-          paid={paid === "renewal"}
-          btn={t("pay.payBtn")}
-        />
+      <section className="container mx-auto max-w-3xl px-4 py-12">
+        <Card className="mb-6">
+          <CardContent className="grid gap-3 p-6 sm:grid-cols-3">
+            <div><Label>Farmer ID *</Label><Input value={farmerId} onChange={(e) => setFarmerId(e.target.value)} placeholder="AKFXXXXXX" /></div>
+            <div><Label>Name (optional)</Label><Input value={farmerName} onChange={(e) => setFarmerName(e.target.value)} /></div>
+            <div><Label>Mobile (optional)</Label><Input value={mobile} onChange={(e) => setMobile(e.target.value)} /></div>
+          </CardContent>
+        </Card>
+        <div className="grid gap-5 md:grid-cols-2">
+          <PayCard label={t("pay.joining")} amount="₹2,000" onPay={() => pay("joining")} paid={paid === "joining"} btn={t("pay.payBtn")} />
+          <PayCard label={t("pay.renewal")} amount="₹1,499" onPay={() => pay("renewal")} paid={paid === "renewal"} btn={t("pay.payBtn")} />
+        </div>
       </section>
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">
         Powered by Rojaripay • UPI / Cards / Net Banking

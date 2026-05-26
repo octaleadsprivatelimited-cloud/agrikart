@@ -9,6 +9,7 @@ const STAFF_KEY = "agrikart.staff";
 const STAFF_SESSION_KEY = "agrikart.staff_session";
 const CUSTOMERS_KEY = "agrikart.customers";
 const REQUESTS_KEY = "agrikart.service_requests";
+const PAYMENTS_KEY = "agrikart.payments";
 const SEED_KEY = "agrikart.seeded_v1";
 
 function read<T>(key: string, fallback: T): T {
@@ -72,6 +73,50 @@ export function useCurrentStaff() {
     };
   }, []);
   return s;
+}
+
+// ---------- Staff management (admin) ----------
+export function useStaffList() {
+  const [items, setItems] = useState<Staff[]>([]);
+  useEffect(() => {
+    const sync = () => {
+      const all = read<StoredStaff[]>(STAFF_KEY, []);
+      setItems(all.map(({ password: _p, ...rest }) => rest));
+    };
+    sync();
+    window.addEventListener("agrikart-staff", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-staff", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+  return items;
+}
+
+export function createStaff(input: { email: string; name: string; password: string; role: StaffRole }): Staff {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  if (all.some(s => s.email.toLowerCase() === input.email.toLowerCase())) {
+    throw new Error("Email already in use");
+  }
+  const item: StoredStaff = { ...input, id: (input.role === "admin" ? "adm-" : "emp-") + crypto.randomUUID().slice(0, 8) };
+  all.push(item);
+  write(STAFF_KEY, all);
+  window.dispatchEvent(new Event("agrikart-staff"));
+  const { password: _p, ...rest } = item;
+  return rest;
+}
+
+export function deleteStaff(id: string) {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  write(STAFF_KEY, all.filter(s => s.id !== id));
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
+export function updateStaffRole(id: string, role: StaffRole) {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  write(STAFF_KEY, all.map(s => s.id === id ? { ...s, role } : s));
+  window.dispatchEvent(new Event("agrikart-staff"));
 }
 
 // ---------- Customers ----------
@@ -214,4 +259,40 @@ export function captureGps(): Promise<{ lat: number; lng: number; accuracy: numb
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
     );
   });
+}
+
+// ---------- Payments ----------
+export type PaymentKind = "joining" | "renewal";
+export type Payment = {
+  id: string;
+  farmerId: string;
+  farmerName?: string;
+  mobile?: string;
+  kind: PaymentKind;
+  amount: number;
+  createdAt: number;
+};
+
+export function recordPayment(p: Omit<Payment, "id" | "createdAt">): Payment {
+  const all = read<Payment[]>(PAYMENTS_KEY, []);
+  const item: Payment = { ...p, id: crypto.randomUUID(), createdAt: Date.now() };
+  all.unshift(item);
+  write(PAYMENTS_KEY, all);
+  window.dispatchEvent(new Event("agrikart-payments"));
+  return item;
+}
+
+export function usePayments() {
+  const [items, setItems] = useState<Payment[]>([]);
+  useEffect(() => {
+    const sync = () => setItems(read<Payment[]>(PAYMENTS_KEY, []));
+    sync();
+    window.addEventListener("agrikart-payments", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-payments", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+  return items;
 }

@@ -35,6 +35,8 @@ import { Route as StaffAddCustomerRouteImport } from './routes/staff/add-custome
 import { Route as PortalDashboardRouteImport } from './routes/portal/dashboard'
 import { Route as PortalBookingsRouteImport } from './routes/portal/bookings'
 import { Route as PortalBookRouteImport } from './routes/portal/book'
+import { Route as AdminStaffRouteImport } from './routes/admin/staff'
+import { Route as AdminRevenueRouteImport } from './routes/admin/revenue'
 import { Route as AdminRequestsRouteImport } from './routes/admin/requests'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminCustomersRouteImport } from './routes/admin/customers'
@@ -171,6 +173,16 @@ const PortalBookRoute = PortalBookRouteImport.update({
   path: '/book',
   getParentRoute: () => PortalRoute,
 } as any)
+const AdminStaffRoute = AdminStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRevenueRoute = AdminRevenueRouteImport.update({
+  id: '/revenue',
+  path: '/revenue',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminRequestsRoute = AdminRequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -219,6 +231,8 @@ export interface FileRoutesByFullPath {
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/requests': typeof AdminRequestsRoute
+  '/admin/revenue': typeof AdminRevenueRoute
+  '/admin/staff': typeof AdminStaffRoute
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
@@ -251,6 +265,8 @@ export interface FileRoutesByTo {
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/requests': typeof AdminRequestsRoute
+  '/admin/revenue': typeof AdminRevenueRoute
+  '/admin/staff': typeof AdminStaffRoute
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
@@ -285,6 +301,8 @@ export interface FileRoutesById {
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/requests': typeof AdminRequestsRoute
+  '/admin/revenue': typeof AdminRevenueRoute
+  '/admin/staff': typeof AdminStaffRoute
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
@@ -320,6 +338,8 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/dashboard'
     | '/admin/requests'
+    | '/admin/revenue'
+    | '/admin/staff'
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
@@ -352,6 +372,8 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/dashboard'
     | '/admin/requests'
+    | '/admin/revenue'
+    | '/admin/staff'
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
@@ -385,6 +407,8 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/dashboard'
     | '/admin/requests'
+    | '/admin/revenue'
+    | '/admin/staff'
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
@@ -602,6 +626,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalBookRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/admin/staff': {
+      id: '/admin/staff'
+      path: '/staff'
+      fullPath: '/admin/staff'
+      preLoaderRoute: typeof AdminStaffRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/revenue': {
+      id: '/admin/revenue'
+      path: '/revenue'
+      fullPath: '/admin/revenue'
+      preLoaderRoute: typeof AdminRevenueRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/requests': {
       id: '/admin/requests'
       path: '/requests'
@@ -656,6 +694,8 @@ interface AdminRouteChildren {
   AdminCustomersRoute: typeof AdminCustomersRouteWithChildren
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminRequestsRoute: typeof AdminRequestsRoute
+  AdminRevenueRoute: typeof AdminRevenueRoute
+  AdminStaffRoute: typeof AdminStaffRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -663,6 +703,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCustomersRoute: AdminCustomersRouteWithChildren,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminRequestsRoute: AdminRequestsRoute,
+  AdminRevenueRoute: AdminRevenueRoute,
+  AdminStaffRoute: AdminStaffRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
