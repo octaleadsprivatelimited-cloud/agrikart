@@ -38,11 +38,12 @@ function RegisterPage() {
     e.preventDefault();
     const id = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
     setFarmerId(id);
-    toast.success("Registration captured. Redirecting to Rojaripay…");
+    toast.success(t("register.captured"));
     setTimeout(() => void navigate({ to: "/pay" }), 1200);
   };
 
   const f = t("register.fields", { returnObjects: true }) as Record<keyof Form, string>;
+  const ph = t("register.placeholders", { returnObjects: true }) as { survey: string; crop: string; season: string };
 
   return (
     <section className="container mx-auto grid max-w-5xl gap-6 px-4 py-12 lg:grid-cols-[1fr_320px]">
