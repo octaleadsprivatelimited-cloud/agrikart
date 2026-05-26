@@ -102,7 +102,7 @@ function seed() {
       image: "🧪", status: "Active", supplier: "Rallis Wholesale, Hyderabad", cropTags: ["Cotton", "Paddy", "Chilli"],
     },
     {
-      name: "Coromandel Gromor 28-28-0 Complex", category: "Fertilizers", brand: "Coromandel", manufacturer: "Coromandel International",
+      name: "Coromandel Gromor 28-28-0 Complex", category: "Fertilisers", brand: "Coromandel", manufacturer: "Coromandel International",
       price: 1450, stock: 88, reorderLevel: 15,
       batchNumber: "CRM-GR-28C", expiryDate: isoPlus(900), license: "FCO/AP/2024/F-2241",
       description: "Balanced NPK complex fertilizer ideal for basal application across most crops.",
@@ -120,7 +120,7 @@ function seed() {
       image: "🌾", status: "Active", supplier: "Mahyco AP Depot", cropTags: ["Cotton"],
     },
     {
-      name: "Knapsack Manual Sprayer 16L", category: "Farming Tools", brand: "Aspee", manufacturer: "American Spring & Pressing",
+      name: "Knapsack Manual Sprayer 16L", category: "Implements", brand: "Aspee", manufacturer: "American Spring & Pressing",
       price: 1850, discountPrice: 1699, stock: 42, reorderLevel: 8,
       batchNumber: "ASP-KS16-A12", expiryDate: isoPlus(1800), license: "BIS:IS-3756",
       description: "Durable 16-litre manual knapsack sprayer with brass nozzle and adjustable strap.",
@@ -129,7 +129,7 @@ function seed() {
       image: "🛠️", status: "Active", supplier: "Aspee Distributors", cropTags: ["All Crops"],
     },
     {
-      name: "UPL Saaf Carbendazim + Mancozeb 75% WP", category: "Crop Protection", brand: "UPL", manufacturer: "UPL Limited",
+      name: "UPL Saaf Carbendazim + Mancozeb 75% WP", category: "Organic", brand: "UPL", manufacturer: "UPL Limited",
       price: 540, stock: 0, reorderLevel: 12,
       batchNumber: "UPL-SAAF-24", expiryDate: isoPlus(60), license: "CIB&RC/2023/PROT/0902",
       description: "Broad-spectrum systemic + contact fungicide for blight, sheath blight, rust and leaf spots.",
@@ -138,7 +138,7 @@ function seed() {
       image: "🛡️", status: "Active", supplier: "UPL South India", cropTags: ["Paddy", "Wheat", "Vegetables"],
     },
     {
-      name: "IFFCO Urea 46% N", category: "Fertilizers", brand: "IFFCO", manufacturer: "IFFCO",
+      name: "IFFCO Urea 46% N", category: "Fertilisers", brand: "IFFCO", manufacturer: "IFFCO",
       price: 295, stock: 240, reorderLevel: 50,
       batchNumber: "IFC-UREA-08", expiryDate: isoPlus(720), license: "FCO/2024/UREA",
       description: "Nitrogen-rich urea fertilizer for top-dressing and tillering stages.",
@@ -156,7 +156,7 @@ function seed() {
       image: "🍅", status: "Active", supplier: "Kaveri Seeds Hyderabad", cropTags: ["Tomato"],
     },
     {
-      name: "Battery Operated Cordless Pruner", category: "Farming Tools", brand: "Stihl", manufacturer: "Stihl India",
+      name: "Battery Operated Cordless Pruner", category: "Implements", brand: "Stihl", manufacturer: "Stihl India",
       price: 8500, stock: 14, reorderLevel: 5,
       batchNumber: "STL-PR-12V", expiryDate: isoPlus(1800), license: "BIS:IS-13947",
       description: "Lightweight cordless pruner for orchards and vineyards. 30 mm cutting capacity.",
