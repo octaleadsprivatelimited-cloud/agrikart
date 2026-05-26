@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark,
-  ArrowRight, CheckCircle2, IndianRupee,
+  ArrowRight, CheckCircle2, Truck, Stethoscope, Headphones, PlayCircle, Leaf, Users, SprayCan,
 } from "lucide-react";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
@@ -29,56 +29,69 @@ function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-hero-gradient">
-        <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" />
-        <div className="container relative mx-auto grid gap-8 px-4 py-10 sm:py-14 md:py-20 lg:grid-cols-2 lg:items-center lg:gap-12 lg:py-24">
-          <div className="animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary sm:text-xs">
-              <Sprout className="h-3.5 w-3.5" /> {t("hero.eyebrow")}
-            </span>
-            <h1 className="mt-3 text-balance text-2xl font-extrabold tracking-tight sm:mt-5 sm:text-3xl md:text-5xl lg:text-6xl">
-              <span className="text-gradient-brand">{t("hero.title")}</span>
-            </h1>
-            <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:mt-5 sm:text-base md:text-lg">{t("hero.subtitle")}</p>
-            <p className="mt-2 text-xs font-semibold text-primary sm:mt-3 sm:text-sm">{t("hero.highlight")}</p>
-            <div className="mt-5 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
-              <Button asChild size="default" className="gap-2 shadow-elegant sm:size-lg">
-                <Link to="/signup">{t("hero.ctaPrimary")} <ArrowRight className="h-4 w-4" /></Link>
-              </Button>
-              <Button asChild size="default" variant="outline" className="gap-2 sm:size-lg">
-                <Link to="/pay"><IndianRupee className="h-4 w-4" /> {t("hero.ctaSecondary")}</Link>
-              </Button>
+      {/* Promo banner hero */}
+      <section className="container mx-auto px-3 pt-4 sm:px-4 sm:pt-6">
+        <div className="relative overflow-hidden rounded-2xl shadow-elegant">
+          <div className="relative grid items-center gap-4 bg-[linear-gradient(110deg,#1a1a1a_0%,#2a2a1a_45%,#d4b830_55%,#f0d860_100%)] p-5 sm:gap-6 sm:p-8 md:grid-cols-2 md:p-12">
+            <div className="relative z-10 text-white animate-fade-up">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur sm:text-xs">
+                <Truck className="h-3 w-3" /> Limited offer
+              </span>
+              <h1 className="mt-3 text-3xl font-black leading-[0.95] tracking-tight drop-shadow-md sm:text-5xl md:text-6xl">
+                FREE DOOR<br />DELIVERY!!
+              </h1>
+              <p className="mt-3 max-w-md text-xs font-semibold text-amber-100 sm:text-sm">
+                Buy for ₹5,000 &amp; above to get free delivery on all products except fertilisers.
+              </p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-amber-300 sm:text-xs">
+                Offer valid till June 30, 2026
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
+                <Button asChild size="default" className="gap-2 bg-white text-foreground hover:bg-white/90">
+                  <Link to="/products">Shop now <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+                <Button asChild size="default" variant="outline" className="gap-2 border-white/60 bg-transparent text-white hover:bg-white/10">
+                  <Link to="/signup">{t("hero.ctaPrimary")}</Link>
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="relative hidden animate-rise sm:block">
-            <div className="absolute -inset-4 -z-10 rounded-3xl bg-cta-gradient opacity-20 blur-2xl" />
-            <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-border/60 bg-card shadow-glow">
-              <div className="h-full w-full bg-cta-gradient p-6 text-white sm:p-8">
-                <div className="flex h-full flex-col justify-between">
-                  <div>
-                    <p className="text-sm uppercase tracking-wider opacity-90">{t("brand")}</p>
-                    <p className="mt-2 text-2xl font-bold leading-tight">
-                      {t("hero.highlight")}
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { n: "₹2,000", l: t("register.joiningFee").replace("Joining Fee: ", "").replace("జాయినింగ్ ఫీజు: ", "") },
-                      { n: "₹1,499", l: t("register.renewalFee").replace("Annual Renewal: ", "").replace("వార్షిక రీన్యువల్: ", "") },
-                      { n: "6", l: t("services.title") },
-                      { n: "3+", l: t("schemes.title") },
-                    ].map((s, i) => (
-                      <div key={i} className="rounded-lg bg-white/15 p-3 backdrop-blur transition-colors hover:bg-white/25">
-                        <p className="text-xl font-bold">{s.n}</p>
-                        <p className="text-xs opacity-90">{s.l}</p>
-                      </div>
-                    ))}
-                  </div>
+            <div className="relative hidden md:block">
+              <div className="relative ml-auto aspect-square w-full max-w-sm rounded-2xl bg-gradient-to-br from-amber-200/80 to-amber-400/40 p-6 backdrop-blur">
+                <div className="flex h-full flex-col items-center justify-center text-center text-foreground">
+                  <Truck className="h-20 w-20 text-amber-900" strokeWidth={1.5} />
+                  <p className="mt-4 text-2xl font-extrabold">₹5,000+</p>
+                  <p className="mt-1 text-sm font-semibold opacity-80">Order value for free shipping</p>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Service tile row */}
+        <div className="mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:grid-cols-4 sm:gap-3 lg:grid-cols-7">
+          {[
+            { label: "Spraying", Icon: SprayCan, to: "/services/$slug", slug: "schemes" as const },
+            { label: "Door Delivery", Icon: Truck, to: "/services/$slug", slug: "trade" as const },
+            { label: "Crop Doctor", Icon: Leaf, to: "/services/$slug", slug: "seeds" as const },
+            { label: "Ask an Expert", Icon: Headphones, to: "/support", slug: null },
+            { label: "Agri Video", Icon: PlayCircle, to: "/blog", slug: null },
+            { label: "My Crops", Icon: Sprout, to: "/portal/dashboard", slug: null },
+            { label: "Connect", Icon: Users, to: "/contact", slug: null },
+          ].map(({ label, Icon, to, slug }) => {
+            const content = (
+              <div className="flex flex-col items-center gap-1.5 rounded-xl border border-border/60 bg-muted/40 p-3 text-center transition hover:border-primary/40 hover:bg-muted sm:flex-row sm:gap-2 sm:p-4 sm:text-left">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span className="text-[11px] font-semibold leading-tight sm:text-sm">{label}</span>
+              </div>
+            );
+            return slug ? (
+              <Link key={label} to={to} params={{ slug }}>{content}</Link>
+            ) : (
+              <Link key={label} to={to}>{content}</Link>
+            );
+          })}
         </div>
       </section>
 
