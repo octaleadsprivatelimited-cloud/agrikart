@@ -64,11 +64,11 @@ function ProductsPage() {
     <div className="bg-muted/30">
       {/* Category circles strip */}
       <section className="border-b bg-gradient-to-b from-emerald-50/60 to-muted/30">
-        <div className="container mx-auto px-3 py-5 sm:px-4 sm:py-7">
-          <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 hover:text-primary">
+        <div className="container mx-auto px-3 py-3 sm:px-4 sm:py-7">
+          <Link to="/" className="mb-2 inline-flex items-center gap-1 text-xs font-semibold text-foreground/80 hover:text-primary sm:mb-3 sm:text-sm">
             <ChevronLeft className="h-4 w-4" /> Back
           </Link>
-          <div className="flex gap-3 overflow-x-auto pb-1 sm:gap-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-2.5 overflow-x-auto pb-1 sm:gap-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {TILE_ORDER.map(key => {
               const Icon = CATEGORY_ICONS[key];
               const isActive = cat === key;
@@ -76,16 +76,16 @@ function ProductsPage() {
                 <button
                   key={key}
                   onClick={() => setCat(key)}
-                  className="group flex shrink-0 flex-col items-center gap-2"
+                  className="group flex shrink-0 flex-col items-center gap-1.5 sm:gap-2"
                 >
                   <span
-                    className={`grid h-16 w-16 place-items-center rounded-full border-2 bg-emerald-100/70 text-emerald-800 transition sm:h-20 sm:w-20 ${
+                    className={`grid h-12 w-12 place-items-center rounded-full border-2 bg-emerald-100/70 text-emerald-800 transition sm:h-20 sm:w-20 ${
                       isActive ? "border-amber-400 shadow-elegant" : "border-primary/70 group-hover:border-primary"
                     }`}
                   >
-                    <Icon className="h-7 w-7 sm:h-9 sm:w-9" strokeWidth={1.8} />
+                    <Icon className="h-5 w-5 sm:h-9 sm:w-9" strokeWidth={1.8} />
                   </span>
-                  <span className={`whitespace-nowrap text-[11px] font-semibold sm:text-sm ${isActive ? "text-primary" : "text-foreground/80"}`}>
+                  <span className={`whitespace-nowrap text-[10px] font-semibold sm:text-sm ${isActive ? "text-primary" : "text-foreground/80"}`}>
                     {key}
                   </span>
                 </button>
@@ -180,38 +180,38 @@ function ProductsPage() {
               <p className="mt-2 text-xs text-muted-foreground">Products are managed from the admin panel.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {filtered.map(p => {
                 const price = p.discountPrice ?? p.price;
                 const popular = p.stock > p.reorderLevel * 3;
                 return (
                   <Card key={p.id} className="group relative flex flex-col overflow-hidden rounded-xl border-border/60 bg-white shadow-sm transition hover:shadow-lg">
                     {popular && (
-                      <span className="absolute left-3 top-3 z-10 rounded-md bg-sky-100 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                      <span className="absolute left-2 top-2 z-10 rounded-md bg-sky-100 px-1.5 py-0.5 text-[9px] font-bold text-sky-700 sm:left-3 sm:top-3 sm:px-2 sm:text-[10px]">
                         Popular
                       </span>
                     )}
-                    <button aria-label="Wishlist" className="absolute right-3 top-3 z-10 grid h-7 w-7 place-items-center rounded-full bg-white/80 text-muted-foreground hover:text-rose-500">
-                      <Heart className="h-4 w-4" />
+                    <button aria-label="Wishlist" className="absolute right-2 top-2 z-10 grid h-6 w-6 place-items-center rounded-full bg-white/80 text-muted-foreground hover:text-rose-500 sm:right-3 sm:top-3 sm:h-7 sm:w-7">
+                      <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </button>
 
                     <Link to="/products/$slug" params={{ slug: p.slug }} className="block">
-                      <div className="m-2 grid aspect-square place-items-center rounded-lg bg-emerald-50 text-5xl sm:m-3 sm:text-7xl">
+                      <div className="m-1.5 grid aspect-square place-items-center rounded-lg bg-emerald-50 text-4xl sm:m-3 sm:text-7xl">
                         {p.image}
                       </div>
                     </Link>
 
-                    <div className="flex flex-1 flex-col px-3 pb-3 sm:px-4 sm:pb-4">
+                    <div className="flex flex-1 flex-col px-2.5 pb-2.5 sm:px-4 sm:pb-4">
                       <Link to="/products/$slug" params={{ slug: p.slug }}>
-                        <h3 className="line-clamp-2 min-h-[36px] text-xs font-bold uppercase tracking-wide text-foreground group-hover:text-primary sm:text-sm">
+                        <h3 className="line-clamp-2 min-h-[32px] text-[11px] font-bold uppercase tracking-wide text-foreground group-hover:text-primary sm:min-h-[36px] sm:text-sm">
                           {p.name}
                         </h3>
                       </Link>
-                      <p className="mt-1 text-[11px] text-muted-foreground">{p.brand}</p>
-                      <p className="mt-2 text-base font-extrabold sm:text-lg">{fmt(price)}</p>
-                      <Button asChild size="sm" variant="outline" className="mt-2 w-full gap-1 border-primary/40 font-semibold text-primary hover:bg-primary hover:text-primary-foreground">
+                      <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-[11px]">{p.brand}</p>
+                      <p className="mt-1 text-sm font-extrabold sm:mt-2 sm:text-lg">{fmt(price)}</p>
+                      <Button asChild size="sm" variant="outline" className="mt-1.5 h-8 w-full gap-1 border-primary/40 px-2 text-[11px] font-semibold text-primary hover:bg-primary hover:text-primary-foreground sm:mt-2 sm:h-9 sm:text-sm">
                         <Link to="/products/$slug" params={{ slug: p.slug }}>
-                          View Details <ArrowRight className="h-3.5 w-3.5" />
+                          View Details <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </Link>
                       </Button>
                     </div>
