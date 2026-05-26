@@ -84,7 +84,7 @@ function Home() {
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {homeServices.map(({ key, Icon }) => (
-            <Card key={key} className="group transition-shadow hover:shadow-md">
+            <Card key={key} className="group card-lift border-border/60">
               <CardContent className="p-6">
                 <div className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="h-5 w-5" />
