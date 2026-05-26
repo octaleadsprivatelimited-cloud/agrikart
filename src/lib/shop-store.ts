@@ -65,7 +65,13 @@ const ORDERS_KEY = "agrikart.orders";
 const ADDR_KEY = "agrikart.addresses";
 const TICKETS_KEY = "agrikart.tickets";
 const SETTINGS_KEY = "agrikart.settings";
+const MOVES_KEY = "agrikart.stock_moves";
 const SEED_KEY = "agrikart.shop_seed_v2";
+
+export type StockMove = {
+  id: string; productId: string; productName: string;
+  delta: number; reason: string; ts: number;
+};
 
 function read<T>(k: string, fb: T): T {
   if (typeof window === "undefined") return fb;
@@ -260,12 +266,19 @@ export function deleteProduct(id: string) {
   write(PROD_KEY, read<Product[]>(PROD_KEY, []).filter(p => p.id !== id));
   emit("agrikart-products");
 }
-export function adjustStock(id: string, delta: number, note: string) {
+export const useStockMoves = () => useStore<StockMove[]>(MOVES_KEY, "agrikart-moves", []);
+export function adjustStock(id: string, delta: number, reason: string) {
   const all = read<Product[]>(PROD_KEY, []);
+  const prod = all.find(p => p.id === id);
   write(PROD_KEY, all.map(p => p.id === id ? { ...p, stock: Math.max(0, p.stock + delta) } : p));
+  const moves = read<StockMove[]>(MOVES_KEY, []);
+  write(MOVES_KEY, [{
+    id: "mv-" + crypto.randomUUID().slice(0, 6),
+    productId: id, productName: prod?.name ?? id,
+    delta, reason, ts: Date.now(),
+  }, ...moves].slice(0, 500));
   emit("agrikart-products");
-  // Stock history is implicit; could be persisted separately. Note retained for UI flash.
-  void note;
+  emit("agrikart-moves");
 }
 
 // ---------- Cart ----------
