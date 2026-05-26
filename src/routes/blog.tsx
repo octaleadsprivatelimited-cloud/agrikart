@@ -14,7 +14,7 @@ function Blog() {
       <PageHeader title={t("blog.title")} subtitle={t("blog.subtitle")} />
       <section className="container mx-auto grid gap-6 px-4 py-16 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((p, i) => (
-          <Card key={i} className="transition-shadow hover:shadow-md">
+          <Card key={i} className="card-lift border-border/60">
             <div className="aspect-[16/10] rounded-t-xl bg-[linear-gradient(135deg,oklch(0.62_0.16_145)_0%,oklch(0.78_0.15_75)_100%)]" />
             <CardContent className="p-6">
               <p className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">

@@ -22,7 +22,7 @@ function Services() {
       <PageHeader title={t("services.title")} subtitle={t("services.subtitle")} />
       <section className="container mx-auto grid gap-5 px-4 py-16 md:grid-cols-2">
         {items.map(({ key, Icon }) => (
-          <Card key={key} className="transition-shadow hover:shadow-md">
+          <Card key={key} className="card-lift border-border/60">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
