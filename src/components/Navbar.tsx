@@ -1,23 +1,20 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "./LanguageToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Sprout, LogOut } from "lucide-react";
-import { logout, useCurrentUser } from "@/lib/auth-store";
+import { Menu, Sprout } from "lucide-react";
 
 const linkCls = "text-sm font-medium text-foreground/80 hover:text-primary transition-colors";
 
 export function Navbar() {
   const { t } = useTranslation();
-  const user = useCurrentUser();
-  const navigate = useNavigate();
 
   const items: Array<{ to: string; label: string }> = [
     { to: "/", label: t("nav.home") },
     { to: "/services", label: t("nav.services") },
+    { to: "/schemes", label: t("nav.schemes") },
     { to: "/about", label: t("nav.about") },
-    { to: "/blog", label: t("nav.blog") },
     { to: "/faq", label: t("nav.faq") },
     { to: "/contact", label: t("nav.contact") },
   ];
@@ -42,26 +39,12 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <LanguageToggle />
-          {user ? (
-            <>
-              <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
-                <Link to="/portal/dashboard">{t("nav.portal")}</Link>
-              </Button>
-              <Button size="sm" variant="outline" onClick={() => { logout(); void navigate({ to: "/" }); }}>
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">{t("nav.logout")}</span>
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button asChild size="sm" variant="ghost" className="hidden sm:inline-flex">
-                <Link to="/login">{t("nav.login")}</Link>
-              </Button>
-              <Button asChild size="sm" className="hidden sm:inline-flex">
-                <Link to="/signup">{t("nav.signup")}</Link>
-              </Button>
-            </>
-          )}
+          <Button asChild size="sm" variant="outline" className="hidden sm:inline-flex">
+            <Link to="/signup">{t("nav.register")}</Link>
+          </Button>
+          <Button asChild size="sm" className="hidden sm:inline-flex">
+            <Link to="/pay">{t("nav.payNow")}</Link>
+          </Button>
 
           <Sheet>
             <SheetTrigger asChild>
@@ -77,14 +60,8 @@ export function Navbar() {
                   </Link>
                 ))}
                 <div className="mt-4 border-t pt-4 flex flex-col gap-2">
-                  {user ? (
-                    <Button asChild><Link to="/portal/dashboard">{t("nav.portal")}</Link></Button>
-                  ) : (
-                    <>
-                      <Button asChild variant="outline"><Link to="/login">{t("nav.login")}</Link></Button>
-                      <Button asChild><Link to="/signup">{t("nav.signup")}</Link></Button>
-                    </>
-                  )}
+                  <Button asChild variant="outline"><Link to="/signup">{t("nav.register")}</Link></Button>
+                  <Button asChild><Link to="/pay">{t("nav.payNow")}</Link></Button>
                 </div>
               </div>
             </SheetContent>
