@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useCustomers, useRequests, useStaffList, usePayments, type Payment } from "@/lib/staff-store";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { useCustomers, useRequests, useStaffList, usePayments, refundPayment, type Payment } from "@/lib/staff-store";
 import {
   Users, CheckCircle2, Clock, XCircle, ClipboardList, IndianRupee, UserCog,
-  TrendingUp, TrendingDown, RotateCcw, Activity, ArrowUpRight,
+  TrendingUp, TrendingDown, RotateCcw, Activity, ArrowUpRight, Eye, Mail, Phone, Hash, Receipt,
 } from "lucide-react";
+import { toast } from "sonner";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer,
   XAxis, YAxis, Tooltip, CartesianGrid, Legend,
@@ -22,6 +27,18 @@ function AdminDashboard() {
   const requests = useRequests();
   const staff = useStaffList();
   const payments = usePayments();
+  const [viewing, setViewing] = useState<Payment | null>(null);
+  const [refunding, setRefunding] = useState<Payment | null>(null);
+  const [reason, setReason] = useState("");
+
+  const submitRefund = () => {
+    if (!refunding) return;
+    if (!reason.trim()) return toast.error("Refund reason is required");
+    refundPayment(refunding.id, reason.trim());
+    toast.success(`Refunded ${fmt(refunding.amount)} · ${refunding.id}`);
+    setRefunding(null);
+    setReason("");
+  };
 
   const m = useMemo(() => {
     const now = Date.now();
@@ -213,7 +230,11 @@ function AdminDashboard() {
               <p className="py-6 text-center text-sm text-muted-foreground">No payments recorded yet.</p>
             ) : (
               <ul className="divide-y">
-                {recentPayments.map(p => <PaymentRow key={p.id} p={p} />)}
+                {recentPayments.map(p => (
+                  <PaymentRow key={p.id} p={p}
+                    onView={() => setViewing(p)}
+                    onRefund={() => { setRefunding(p); setReason(""); }} />
+                ))}
               </ul>
             )}
           </CardContent>
@@ -243,9 +264,88 @@ function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Payment details */}
+      <Dialog open={!!viewing} onOpenChange={(o) => { if (!o) setViewing(null); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Payment details</DialogTitle>
+            <DialogDescription>Full transaction and customer record.</DialogDescription>
+          </DialogHeader>
+          {viewing && (
+            <div className="grid gap-3 text-sm">
+              <Detail Icon={Hash} label="Transaction ID" value={viewing.id} mono />
+              <Detail Icon={Receipt} label="Order ID" value={viewing.orderId} mono />
+              <div className="grid grid-cols-2 gap-3">
+                <Detail label="Type" value={viewing.kind} />
+                <Detail label="Method" value={viewing.method ?? "—"} />
+                <Detail label="Amount" value={fmt(viewing.amount)} />
+                <Detail label="Status" value={viewing.status} />
+              </div>
+              <div className="border-t pt-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Customer</p>
+                <div className="mt-2 grid gap-2">
+                  <Detail label="Farmer ID" value={viewing.farmerId} mono />
+                  <Detail label="Name" value={viewing.farmerName ?? "—"} />
+                  <Detail Icon={Phone} label="Mobile" value={viewing.mobile ?? "—"} />
+                  <Detail Icon={Mail} label="Email" value={viewing.email ?? "—"} />
+                </div>
+              </div>
+              <Detail label="Date" value={new Date(viewing.createdAt).toLocaleString()} />
+              {viewing.refundedAt && (
+                <div className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs">
+                  <p className="font-semibold text-destructive">Refunded {new Date(viewing.refundedAt).toLocaleString()}</p>
+                  {viewing.refundReason && <p className="mt-1 text-muted-foreground">Reason: {viewing.refundReason}</p>}
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            {viewing?.status === "Succeeded" && (
+              <Button variant="destructive" onClick={() => { setRefunding(viewing); setViewing(null); }}>
+                <RotateCcw className="h-4 w-4" /> Issue Refund
+              </Button>
+            )}
+            <Button variant="outline" onClick={() => setViewing(null)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Refund */}
+      <Dialog open={!!refunding} onOpenChange={(o) => { if (!o) { setRefunding(null); setReason(""); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Issue refund</DialogTitle>
+            <DialogDescription>
+              Refunding {refunding && fmt(refunding.amount)} · {refunding?.id}. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="reason">Reason</Label>
+            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not delivered…" />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setRefunding(null); setReason(""); }}>Cancel</Button>
+            <Button variant="destructive" onClick={submitRefund}>Confirm Refund</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+
+function Detail({ Icon, label, value, mono }: { Icon?: typeof Hash; label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="flex items-start gap-2">
+      {Icon && <Icon className="mt-0.5 h-3.5 w-3.5 text-muted-foreground" />}
+      <div className="min-w-0 flex-1">
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className={`truncate text-sm ${mono ? "font-mono" : "font-medium"}`}>{value}</p>
+      </div>
+    </div>
+  );
+}
+
 
 function Kpi({ label, value, sub, Icon, delta, tone }: { label: string; value: string; sub?: string; Icon: typeof IndianRupee; delta?: number; tone: string }) {
   const up = (delta ?? 0) >= 0;
@@ -298,16 +398,25 @@ function FunnelRow({ label, value, total, color }: { label: string; value: numbe
   );
 }
 
-function PaymentRow({ p }: { p: Payment }) {
+function PaymentRow({ p, onView, onRefund }: { p: Payment; onView: () => void; onRefund: () => void }) {
   return (
-    <li className="flex items-center justify-between py-2.5 text-sm">
-      <div>
-        <p className="font-medium">{p.farmerName ?? p.farmerId} <span className="ml-1 text-[11px] font-normal text-muted-foreground">· {p.kind}</span></p>
+    <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-medium">{p.farmerName ?? p.farmerId} <span className="ml-1 text-[11px] font-normal text-muted-foreground">· {p.kind}</span></p>
+        <p className="truncate text-[11px] text-muted-foreground font-mono">{p.id}</p>
         <p className="text-[11px] text-muted-foreground">{new Date(p.createdAt).toLocaleString()} · {p.method}</p>
       </div>
       <div className="text-right">
         <p className={`font-semibold ${p.status === "Refunded" ? "text-destructive line-through" : ""}`}>{fmt(p.amount)}</p>
         <StatusBadge status={p.status} />
+      </div>
+      <div className="flex flex-col gap-1">
+        <Button size="sm" variant="ghost" className="h-7 px-2" onClick={onView}><Eye className="h-3.5 w-3.5" /></Button>
+        {p.status === "Succeeded" && (
+          <Button size="sm" variant="ghost" className="h-7 px-2 text-destructive hover:text-destructive" onClick={onRefund}>
+            <RotateCcw className="h-3.5 w-3.5" />
+          </Button>
+        )}
       </div>
     </li>
   );

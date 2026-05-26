@@ -65,10 +65,10 @@ function AdminRevenue() {
 
   const exportCSV = () => {
     const rows = [
-      ["Txn ID", "Date", "Farmer ID", "Farmer", "Mobile", "Type", "Method", "Amount", "Status", "Refund Reason"],
+      ["Txn ID", "Order ID", "Date", "Farmer ID", "Farmer", "Mobile", "Email", "Type", "Method", "Amount", "Status", "Refund Reason"],
       ...filtered.map(p => [
-        p.id, new Date(p.createdAt).toISOString(), p.farmerId,
-        p.farmerName ?? "", p.mobile ?? "", p.kind, p.method ?? "",
+        p.id, p.orderId, new Date(p.createdAt).toISOString(), p.farmerId,
+        p.farmerName ?? "", p.mobile ?? "", p.email ?? "", p.kind, p.method ?? "",
         String(p.amount), p.status, p.refundReason ?? "",
       ]),
     ];
@@ -121,9 +121,10 @@ function AdminRevenue() {
             <table className="w-full text-sm">
               <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
-                  <th className="px-4 py-3">Txn ID</th>
+                  <th className="px-4 py-3">Txn / Order</th>
                   <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">Farmer</th>
+                  <th className="px-4 py-3">Customer</th>
+                  <th className="px-4 py-3 hidden lg:table-cell">Contact</th>
                   <th className="px-4 py-3 hidden md:table-cell">Type</th>
                   <th className="px-4 py-3 hidden lg:table-cell">Method</th>
                   <th className="px-4 py-3 text-right">Amount</th>
@@ -134,11 +135,19 @@ function AdminRevenue() {
               <tbody>
                 {filtered.map(p => (
                   <tr key={p.id} className="border-b border-border last:border-0 hover:bg-muted/40">
-                    <td className="px-4 py-3 font-mono text-[11px]">{p.id}</td>
+                    <td className="px-4 py-3 font-mono text-[11px]">
+                      <p>{p.id}</p>
+                      <p className="text-muted-foreground">{p.orderId}</p>
+                    </td>
                     <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(p.createdAt).toLocaleString()}</td>
                     <td className="px-4 py-3">
                       <p className="font-medium">{p.farmerName ?? "—"}</p>
-                      <p className="text-[11px] text-muted-foreground">{p.farmerId} {p.mobile && `· ${p.mobile}`}</p>
+                      <p className="text-[11px] text-muted-foreground">{p.farmerId}</p>
+                    </td>
+                    <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">
+                      {p.mobile && <p>{p.mobile}</p>}
+                      {p.email && <p className="truncate max-w-[180px]" title={p.email}>{p.email}</p>}
+                      {!p.mobile && !p.email && "—"}
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell capitalize">{p.kind}</td>
                     <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{p.method}</td>
