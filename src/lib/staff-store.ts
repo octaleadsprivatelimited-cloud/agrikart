@@ -205,7 +205,7 @@ export function getCustomer(id: string): Customer | undefined {
 }
 
 export function useCustomer(id: string | undefined) {
-  const [c, setC] = useState<Customer | undefined>(() => id ? getCustomer(id) : undefined);
+  const [c, setC] = useState<Customer | undefined>(undefined);
   useEffect(() => {
     if (!id) return;
     const sync = () => setC(getCustomer(id));
