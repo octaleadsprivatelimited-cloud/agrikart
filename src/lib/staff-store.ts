@@ -75,6 +75,50 @@ export function useCurrentStaff() {
   return s;
 }
 
+// ---------- Staff management (admin) ----------
+export function useStaffList() {
+  const [items, setItems] = useState<Staff[]>([]);
+  useEffect(() => {
+    const sync = () => {
+      const all = read<StoredStaff[]>(STAFF_KEY, []);
+      setItems(all.map(({ password: _p, ...rest }) => rest));
+    };
+    sync();
+    window.addEventListener("agrikart-staff", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-staff", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+  return items;
+}
+
+export function createStaff(input: { email: string; name: string; password: string; role: StaffRole }): Staff {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  if (all.some(s => s.email.toLowerCase() === input.email.toLowerCase())) {
+    throw new Error("Email already in use");
+  }
+  const item: StoredStaff = { ...input, id: (input.role === "admin" ? "adm-" : "emp-") + crypto.randomUUID().slice(0, 8) };
+  all.push(item);
+  write(STAFF_KEY, all);
+  window.dispatchEvent(new Event("agrikart-staff"));
+  const { password: _p, ...rest } = item;
+  return rest;
+}
+
+export function deleteStaff(id: string) {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  write(STAFF_KEY, all.filter(s => s.id !== id));
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
+export function updateStaffRole(id: string, role: StaffRole) {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  write(STAFF_KEY, all.map(s => s.id === id ? { ...s, role } : s));
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
 // ---------- Customers ----------
 export type CustomerStatus = "Pending" | "Approved" | "Rejected";
 export type Customer = {
