@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as StaffRouteImport } from './routes/staff'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RefundRouteImport } from './routes/refund'
@@ -20,15 +21,30 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StaffLoginRouteImport } from './routes/staff/login'
+import { Route as StaffDashboardRouteImport } from './routes/staff/dashboard'
+import { Route as StaffCustomersRouteImport } from './routes/staff/customers'
+import { Route as StaffAddCustomerRouteImport } from './routes/staff/add-customer'
 import { Route as PortalDashboardRouteImport } from './routes/portal/dashboard'
 import { Route as PortalBookingsRouteImport } from './routes/portal/bookings'
 import { Route as PortalBookRouteImport } from './routes/portal/book'
+import { Route as AdminRequestsRouteImport } from './routes/admin/requests'
+import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminCustomersRouteImport } from './routes/admin/customers'
+import { Route as StaffCustomersIdRouteImport } from './routes/staff/customers.$id'
+import { Route as AdminCustomersIdRouteImport } from './routes/admin/customers.$id'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffRoute = StaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -81,6 +97,11 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -90,6 +111,26 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const StaffLoginRoute = StaffLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => StaffRoute,
+} as any)
+const StaffDashboardRoute = StaffDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => StaffRoute,
+} as any)
+const StaffCustomersRoute = StaffCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => StaffRoute,
+} as any)
+const StaffAddCustomerRoute = StaffAddCustomerRouteImport.update({
+  id: '/add-customer',
+  path: '/add-customer',
+  getParentRoute: () => StaffRoute,
 } as any)
 const PortalDashboardRoute = PortalDashboardRouteImport.update({
   id: '/dashboard',
@@ -106,10 +147,36 @@ const PortalBookRoute = PortalBookRouteImport.update({
   path: '/book',
   getParentRoute: () => PortalRoute,
 } as any)
+const AdminRequestsRoute = AdminRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCustomersRoute = AdminCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const StaffCustomersIdRoute = StaffCustomersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => StaffCustomersRoute,
+} as any)
+const AdminCustomersIdRoute = AdminCustomersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminCustomersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -120,14 +187,25 @@ export interface FileRoutesByFullPath {
   '/refund': typeof RefundRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/staff': typeof StaffRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/customers': typeof AdminCustomersRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/requests': typeof AdminRequestsRoute
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
+  '/staff/add-customer': typeof StaffAddCustomerRoute
+  '/staff/customers': typeof StaffCustomersRouteWithChildren
+  '/staff/dashboard': typeof StaffDashboardRoute
+  '/staff/login': typeof StaffLoginRoute
+  '/admin/customers/$id': typeof AdminCustomersIdRoute
+  '/staff/customers/$id': typeof StaffCustomersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -138,15 +216,26 @@ export interface FileRoutesByTo {
   '/refund': typeof RefundRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/staff': typeof StaffRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/customers': typeof AdminCustomersRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/requests': typeof AdminRequestsRoute
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
+  '/staff/add-customer': typeof StaffAddCustomerRoute
+  '/staff/customers': typeof StaffCustomersRouteWithChildren
+  '/staff/dashboard': typeof StaffDashboardRoute
+  '/staff/login': typeof StaffLoginRoute
+  '/admin/customers/$id': typeof AdminCustomersIdRoute
+  '/staff/customers/$id': typeof StaffCustomersIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
@@ -157,16 +246,27 @@ export interface FileRoutesById {
   '/refund': typeof RefundRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
+  '/staff': typeof StaffRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/customers': typeof AdminCustomersRouteWithChildren
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/requests': typeof AdminRequestsRoute
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
+  '/staff/add-customer': typeof StaffAddCustomerRoute
+  '/staff/customers': typeof StaffCustomersRouteWithChildren
+  '/staff/dashboard': typeof StaffDashboardRoute
+  '/staff/login': typeof StaffLoginRoute
+  '/admin/customers/$id': typeof AdminCustomersIdRoute
+  '/staff/customers/$id': typeof StaffCustomersIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/blog'
     | '/careers'
     | '/contact'
@@ -177,14 +277,25 @@ export interface FileRouteTypes {
     | '/refund'
     | '/services'
     | '/signup'
+    | '/staff'
     | '/terms'
+    | '/admin/customers'
+    | '/admin/dashboard'
+    | '/admin/requests'
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
+    | '/staff/add-customer'
+    | '/staff/customers'
+    | '/staff/dashboard'
+    | '/staff/login'
+    | '/admin/customers/$id'
+    | '/staff/customers/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/blog'
     | '/careers'
     | '/contact'
@@ -195,14 +306,25 @@ export interface FileRouteTypes {
     | '/refund'
     | '/services'
     | '/signup'
+    | '/staff'
     | '/terms'
+    | '/admin/customers'
+    | '/admin/dashboard'
+    | '/admin/requests'
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
+    | '/staff/add-customer'
+    | '/staff/customers'
+    | '/staff/dashboard'
+    | '/staff/login'
+    | '/admin/customers/$id'
+    | '/staff/customers/$id'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/blog'
     | '/careers'
     | '/contact'
@@ -213,15 +335,26 @@ export interface FileRouteTypes {
     | '/refund'
     | '/services'
     | '/signup'
+    | '/staff'
     | '/terms'
+    | '/admin/customers'
+    | '/admin/dashboard'
+    | '/admin/requests'
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
+    | '/staff/add-customer'
+    | '/staff/customers'
+    | '/staff/dashboard'
+    | '/staff/login'
+    | '/admin/customers/$id'
+    | '/staff/customers/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
@@ -232,6 +365,7 @@ export interface RootRouteChildren {
   RefundRoute: typeof RefundRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
+  StaffRoute: typeof StaffRouteWithChildren
   TermsRoute: typeof TermsRoute
 }
 
@@ -242,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff': {
+      id: '/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof StaffRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -314,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -327,6 +475,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/staff/login': {
+      id: '/staff/login'
+      path: '/login'
+      fullPath: '/staff/login'
+      preLoaderRoute: typeof StaffLoginRouteImport
+      parentRoute: typeof StaffRoute
+    }
+    '/staff/dashboard': {
+      id: '/staff/dashboard'
+      path: '/dashboard'
+      fullPath: '/staff/dashboard'
+      preLoaderRoute: typeof StaffDashboardRouteImport
+      parentRoute: typeof StaffRoute
+    }
+    '/staff/customers': {
+      id: '/staff/customers'
+      path: '/customers'
+      fullPath: '/staff/customers'
+      preLoaderRoute: typeof StaffCustomersRouteImport
+      parentRoute: typeof StaffRoute
+    }
+    '/staff/add-customer': {
+      id: '/staff/add-customer'
+      path: '/add-customer'
+      fullPath: '/staff/add-customer'
+      preLoaderRoute: typeof StaffAddCustomerRouteImport
+      parentRoute: typeof StaffRoute
     }
     '/portal/dashboard': {
       id: '/portal/dashboard'
@@ -349,8 +525,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalBookRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/admin/requests': {
+      id: '/admin/requests'
+      path: '/requests'
+      fullPath: '/admin/requests'
+      preLoaderRoute: typeof AdminRequestsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/customers': {
+      id: '/admin/customers'
+      path: '/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof AdminCustomersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/staff/customers/$id': {
+      id: '/staff/customers/$id'
+      path: '/$id'
+      fullPath: '/staff/customers/$id'
+      preLoaderRoute: typeof StaffCustomersIdRouteImport
+      parentRoute: typeof StaffCustomersRoute
+    }
+    '/admin/customers/$id': {
+      id: '/admin/customers/$id'
+      path: '/$id'
+      fullPath: '/admin/customers/$id'
+      preLoaderRoute: typeof AdminCustomersIdRouteImport
+      parentRoute: typeof AdminCustomersRoute
+    }
   }
 }
+
+interface AdminCustomersRouteChildren {
+  AdminCustomersIdRoute: typeof AdminCustomersIdRoute
+}
+
+const AdminCustomersRouteChildren: AdminCustomersRouteChildren = {
+  AdminCustomersIdRoute: AdminCustomersIdRoute,
+}
+
+const AdminCustomersRouteWithChildren = AdminCustomersRoute._addFileChildren(
+  AdminCustomersRouteChildren,
+)
+
+interface AdminRouteChildren {
+  AdminCustomersRoute: typeof AdminCustomersRouteWithChildren
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminRequestsRoute: typeof AdminRequestsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCustomersRoute: AdminCustomersRouteWithChildren,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminRequestsRoute: AdminRequestsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface PortalRouteChildren {
   PortalBookRoute: typeof PortalBookRoute
@@ -367,9 +604,38 @@ const PortalRouteChildren: PortalRouteChildren = {
 const PortalRouteWithChildren =
   PortalRoute._addFileChildren(PortalRouteChildren)
 
+interface StaffCustomersRouteChildren {
+  StaffCustomersIdRoute: typeof StaffCustomersIdRoute
+}
+
+const StaffCustomersRouteChildren: StaffCustomersRouteChildren = {
+  StaffCustomersIdRoute: StaffCustomersIdRoute,
+}
+
+const StaffCustomersRouteWithChildren = StaffCustomersRoute._addFileChildren(
+  StaffCustomersRouteChildren,
+)
+
+interface StaffRouteChildren {
+  StaffAddCustomerRoute: typeof StaffAddCustomerRoute
+  StaffCustomersRoute: typeof StaffCustomersRouteWithChildren
+  StaffDashboardRoute: typeof StaffDashboardRoute
+  StaffLoginRoute: typeof StaffLoginRoute
+}
+
+const StaffRouteChildren: StaffRouteChildren = {
+  StaffAddCustomerRoute: StaffAddCustomerRoute,
+  StaffCustomersRoute: StaffCustomersRouteWithChildren,
+  StaffDashboardRoute: StaffDashboardRoute,
+  StaffLoginRoute: StaffLoginRoute,
+}
+
+const StaffRouteWithChildren = StaffRoute._addFileChildren(StaffRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
@@ -380,6 +646,7 @@ const rootRouteChildren: RootRouteChildren = {
   RefundRoute: RefundRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
+  StaffRoute: StaffRouteWithChildren,
   TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,0 +1,135 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useCustomer, useRequests, addServiceRequest, serviceCategories, type ServiceCategory } from "@/lib/staff-store";
+import { CustomerMapClient } from "@/components/CustomerMapClient";
+import { StatusPill } from "./dashboard";
+import { ArrowLeft, MapPin, Phone, Sprout, Plus } from "lucide-react";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/staff/customers/$id")({ component: CustomerDetail });
+
+function CustomerDetail() {
+  const { id } = Route.useParams();
+  const customer = useCustomer(id);
+  const requests = useRequests({ customerId: id });
+  const [cat, setCat] = useState<ServiceCategory | "">("");
+  const [desc, setDesc] = useState("");
+
+  if (!customer) {
+    return (
+      <Card><CardContent className="p-8 text-center text-muted-foreground">
+        Customer not found. <Link to="/staff/customers" className="text-primary underline">Back to list</Link>
+      </CardContent></Card>
+    );
+  }
+
+  const addReq = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!cat) return;
+    addServiceRequest(customer.id, cat, desc.trim());
+    setCat(""); setDesc("");
+    toast.success("Service request added");
+  };
+
+  return (
+    <div className="space-y-6">
+      <Button asChild variant="ghost" size="sm" className="-ml-2">
+        <Link to="/staff/customers"><ArrowLeft className="h-4 w-4" /> Back</Link>
+      </Button>
+
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold">{customer.farmerName}</h1>
+              <p className="mt-1 text-sm text-muted-foreground inline-flex items-center gap-1">
+                <MapPin className="h-3.5 w-3.5" /> {customer.village}, {customer.district}
+              </p>
+            </div>
+            <StatusPill status={customer.status} />
+          </div>
+          {customer.remarks && (
+            <p className="mt-3 rounded-md bg-muted px-3 py-2 text-sm"><span className="font-semibold">Remarks:</span> {customer.remarks}</p>
+          )}
+          <div className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+            <Info Icon={Phone} label="Mobile" value={customer.mobile} />
+            <Info Icon={Sprout} label="Crops" value={customer.crops} />
+            <Info label="Land size" value={`${customer.landSize} acres`} />
+            <Info label="Aadhaar" value={customer.aadhaar || "—"} />
+            <Info label="Added by" value={customer.employeeName} />
+            <Info label="Date" value={new Date(customer.createdAt).toLocaleString()} />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold">GPS Location</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} · ±{Math.round(customer.gps.accuracy)}m
+          </p>
+          <div className="mt-4">
+            <CustomerMapClient lat={customer.gps.lat} lng={customer.gps.lng} label={customer.farmerName} />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold">Service Requests</h2>
+          <form onSubmit={addReq} className="mt-4 grid gap-3 sm:grid-cols-[200px_1fr_auto]">
+            <div>
+              <Label>Category</Label>
+              <Select value={cat} onValueChange={(v) => setCat(v as ServiceCategory)} required>
+                <SelectTrigger><SelectValue placeholder="Select…" /></SelectTrigger>
+                <SelectContent>
+                  {serviceCategories.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea required minLength={3} maxLength={500} rows={1} value={desc} onChange={(e) => setDesc(e.target.value)} />
+            </div>
+            <div className="flex items-end">
+              <Button type="submit" disabled={!cat}><Plus className="h-4 w-4" /> Add</Button>
+            </div>
+          </form>
+
+          {requests.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">No service requests yet.</p>
+          ) : (
+            <ul className="mt-4 divide-y">
+              {requests.map(r => (
+                <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
+                  <div>
+                    <p className="font-medium">{r.category}</p>
+                    <p className="text-xs text-muted-foreground">{r.description || "—"} · {new Date(r.createdAt).toLocaleDateString()}</p>
+                  </div>
+                  <StatusPill status={r.status} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function Info({ Icon, label, value }: { Icon?: typeof MapPin; label: string; value: string }) {
+  return (
+    <div className="flex items-start gap-2">
+      {Icon && <Icon className="mt-0.5 h-4 w-4 text-muted-foreground" />}
+      <div>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="font-medium">{value}</p>
+      </div>
+    </div>
+  );
+}
