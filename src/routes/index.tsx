@@ -89,13 +89,24 @@ function Home() {
           <p className="mt-2 text-sm text-muted-foreground sm:mt-3 sm:text-base">{t("services.subtitle")}</p>
         </div>
         <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-5 lg:grid-cols-3">
-          {homeServices.map(({ key, Icon }) => (
-            <Card key={key} className="group card-lift border-border/60">
-              <CardContent className="p-4 sm:p-6">
-                <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:h-11 sm:w-11">
+          {homeServices.map(({ key, Icon, img }) => (
+            <Card key={key} className="group card-lift overflow-hidden border-border/60">
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <img
+                  src={img}
+                  alt={t(`services.items.${key}.title`)}
+                  loading="lazy"
+                  width={768}
+                  height={512}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <div className="absolute left-3 top-3 grid h-9 w-9 place-items-center rounded-lg bg-background/90 text-primary shadow-sm backdrop-blur sm:h-11 sm:w-11">
                   <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
-                <h3 className="mt-3 text-sm font-semibold sm:mt-4 sm:text-lg">{t(`services.items.${key}.title`)}</h3>
+              </div>
+              <CardContent className="p-4 sm:p-6">
+                <h3 className="text-sm font-semibold sm:text-lg">{t(`services.items.${key}.title`)}</h3>
                 <p className="mt-1 hidden text-sm text-muted-foreground sm:block">{t(`services.items.${key}.short`)}</p>
               </CardContent>
             </Card>
