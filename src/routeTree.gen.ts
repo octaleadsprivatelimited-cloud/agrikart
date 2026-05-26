@@ -34,6 +34,7 @@ import { Route as StaffLoginRouteImport } from './routes/staff/login'
 import { Route as StaffDashboardRouteImport } from './routes/staff/dashboard'
 import { Route as StaffCustomersRouteImport } from './routes/staff/customers'
 import { Route as StaffAddCustomerRouteImport } from './routes/staff/add-customer'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as PortalDashboardRouteImport } from './routes/portal/dashboard'
 import { Route as PortalBookingsRouteImport } from './routes/portal/bookings'
@@ -179,6 +180,11 @@ const StaffAddCustomerRoute = StaffAddCustomerRouteImport.update({
   path: '/add-customer',
   getParentRoute: () => StaffRoute,
 } as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ServicesRoute,
+} as any)
 const ProductsSlugRoute = ProductsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -291,7 +297,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRouteWithChildren
   '/refund': typeof RefundRoute
   '/schemes': typeof SchemesRoute
-  '/services': typeof ServicesRoute
+  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/staff': typeof StaffRouteWithChildren
   '/support': typeof SupportRoute
@@ -313,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/staff/add-customer': typeof StaffAddCustomerRoute
   '/staff/customers': typeof StaffCustomersRouteWithChildren
   '/staff/dashboard': typeof StaffDashboardRoute
@@ -336,7 +343,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRouteWithChildren
   '/refund': typeof RefundRoute
   '/schemes': typeof SchemesRoute
-  '/services': typeof ServicesRoute
+  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/staff': typeof StaffRouteWithChildren
   '/support': typeof SupportRoute
@@ -358,6 +365,7 @@ export interface FileRoutesByTo {
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/staff/add-customer': typeof StaffAddCustomerRoute
   '/staff/customers': typeof StaffCustomersRouteWithChildren
   '/staff/dashboard': typeof StaffDashboardRoute
@@ -383,7 +391,7 @@ export interface FileRoutesById {
   '/products': typeof ProductsRouteWithChildren
   '/refund': typeof RefundRoute
   '/schemes': typeof SchemesRoute
-  '/services': typeof ServicesRoute
+  '/services': typeof ServicesRouteWithChildren
   '/signup': typeof SignupRoute
   '/staff': typeof StaffRouteWithChildren
   '/support': typeof SupportRoute
@@ -405,6 +413,7 @@ export interface FileRoutesById {
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
   '/products/$slug': typeof ProductsSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
   '/staff/add-customer': typeof StaffAddCustomerRoute
   '/staff/customers': typeof StaffCustomersRouteWithChildren
   '/staff/dashboard': typeof StaffDashboardRoute
@@ -453,6 +462,7 @@ export interface FileRouteTypes {
     | '/portal/bookings'
     | '/portal/dashboard'
     | '/products/$slug'
+    | '/services/$slug'
     | '/staff/add-customer'
     | '/staff/customers'
     | '/staff/dashboard'
@@ -498,6 +508,7 @@ export interface FileRouteTypes {
     | '/portal/bookings'
     | '/portal/dashboard'
     | '/products/$slug'
+    | '/services/$slug'
     | '/staff/add-customer'
     | '/staff/customers'
     | '/staff/dashboard'
@@ -544,6 +555,7 @@ export interface FileRouteTypes {
     | '/portal/bookings'
     | '/portal/dashboard'
     | '/products/$slug'
+    | '/services/$slug'
     | '/staff/add-customer'
     | '/staff/customers'
     | '/staff/dashboard'
@@ -569,7 +581,7 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRouteWithChildren
   RefundRoute: typeof RefundRoute
   SchemesRoute: typeof SchemesRoute
-  ServicesRoute: typeof ServicesRoute
+  ServicesRoute: typeof ServicesRouteWithChildren
   SignupRoute: typeof SignupRoute
   StaffRoute: typeof StaffRouteWithChildren
   SupportRoute: typeof SupportRoute
@@ -752,6 +764,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/staff/add-customer'
       preLoaderRoute: typeof StaffAddCustomerRouteImport
       parentRoute: typeof StaffRoute
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof ServicesRoute
     }
     '/products/$slug': {
       id: '/products/$slug'
@@ -964,6 +983,18 @@ const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
   ProductsRouteChildren,
 )
 
+interface ServicesRouteChildren {
+  ServicesSlugRoute: typeof ServicesSlugRoute
+}
+
+const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesSlugRoute: ServicesSlugRoute,
+}
+
+const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
+  ServicesRouteChildren,
+)
+
 interface StaffCustomersRouteChildren {
   StaffCustomersIdRoute: typeof StaffCustomersIdRoute
 }
@@ -1008,7 +1039,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRouteWithChildren,
   RefundRoute: RefundRoute,
   SchemesRoute: SchemesRoute,
-  ServicesRoute: ServicesRoute,
+  ServicesRoute: ServicesRouteWithChildren,
   SignupRoute: SignupRoute,
   StaffRoute: StaffRouteWithChildren,
   SupportRoute: SupportRoute,
