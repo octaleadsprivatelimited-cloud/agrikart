@@ -29,9 +29,9 @@ function PayPage() {
   const [email, setEmail] = useState("");
 
   const pay = (kind: "joining" | "renewal") => {
-    if (!farmerId.trim()) return toast.error("Please enter your Farmer ID");
-    if (mobile && !/^\d{10}$/.test(mobile.trim())) return toast.error("Mobile must be 10 digits");
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return toast.error("Enter a valid email");
+    if (!farmerId.trim()) return toast.error(t("pay.errFarmerId"));
+    if (mobile && !/^\d{10}$/.test(mobile.trim())) return toast.error(t("pay.errMobile"));
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return toast.error(t("pay.errEmail"));
     const amount = kind === "joining" ? 2000 : 1499;
     const p = recordPayment({
       farmerId: farmerId.trim().toUpperCase(),
