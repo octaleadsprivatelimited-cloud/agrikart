@@ -1,6 +1,9 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { getCurrentStaff, staffLogout, useCurrentStaff } from "@/lib/staff-store";
-import { LayoutDashboard, Users, ClipboardList, LogOut, ShieldCheck, UserCog, IndianRupee } from "lucide-react";
+import {
+  LayoutDashboard, Users, ClipboardList, LogOut, ShieldCheck, UserCog, IndianRupee,
+  Package, Boxes, ShoppingCart, Truck, CreditCard, LifeBuoy, FileBarChart, Settings,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin")({
@@ -18,10 +21,18 @@ function AdminLayout() {
   const navigate = useNavigate();
   const items = [
     { to: "/admin/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+    { to: "/admin/products", label: "Products", Icon: Package },
+    { to: "/admin/inventory", label: "Inventory", Icon: Boxes },
+    { to: "/admin/orders", label: "Orders", Icon: ShoppingCart },
+    { to: "/admin/deliveries", label: "Deliveries", Icon: Truck },
+    { to: "/admin/payments", label: "Payments", Icon: CreditCard },
+    { to: "/admin/tickets", label: "Support", Icon: LifeBuoy },
+    { to: "/admin/reports", label: "Reports", Icon: FileBarChart },
     { to: "/admin/customers", label: "Customers", Icon: Users },
     { to: "/admin/requests", label: "Service Requests", Icon: ClipboardList },
     { to: "/admin/staff", label: "Staff", Icon: UserCog },
     { to: "/admin/revenue", label: "Revenue", Icon: IndianRupee },
+    { to: "/admin/settings", label: "Settings", Icon: Settings },
   ] as const;
   return (
     <section className="container mx-auto grid gap-8 px-4 py-10 lg:grid-cols-[220px_1fr]">
