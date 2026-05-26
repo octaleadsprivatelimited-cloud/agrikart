@@ -220,6 +220,37 @@ const en = {
     termsTitle: "Terms & Conditions",
     refundTitle: "Refund Policy",
     updated: "Last updated: May 2026",
+    privacy: {
+      intro: "AGRIKART FIN TECH PRIVATE LIMITED (\"we\", \"us\") respects your privacy. This policy explains what data we collect and how we use it.",
+      points: [
+        "We collect farmer name, mobile, Aadhaar (optional), village, district, land details, crop information, and payment details.",
+        "We use your data only to deliver services, process payments, verify identity, and share scheme/insurance updates.",
+        "We do not sell or rent your personal data to any third party for marketing purposes.",
+        "Your data is stored securely with industry-standard encryption and restricted employee access.",
+        "You may request deletion of your account and data anytime by emailing privacy@agrikartfin.com.",
+      ],
+    },
+    terms: {
+      intro: "By using AgriKart Fin services you agree to the following terms and conditions.",
+      points: [
+        "You must be 18 years or older and a resident of India to use our services.",
+        "AgriKart Fin is a facilitator only — loans, insurance and inputs are provided by partner NBFCs, insurers and dealers.",
+        "Joining fee ₹2,000 and annual renewal ₹1,499 must be paid via approved online channels (Rojaripay UPI / Cards / Net Banking).",
+        "Services are subject to availability in your district; we may refuse or delay any request without prior notice.",
+        "AgriKart Fin is not liable for crop loss, weather damage, NBFC decisions or third-party actions beyond our reasonable control.",
+        "Disputes are governed by Indian law and fall under the jurisdiction of courts in Hyderabad, Telangana.",
+      ],
+    },
+    refund: {
+      intro: "This policy explains how joining fees, renewals and service charges are refunded.",
+      points: [
+        "Joining fee and annual renewal fee are non-refundable once the Farmer ID is activated.",
+        "Service bookings (cold storage, drone, etc.) can be cancelled free of charge before they are marked Approved by our team.",
+        "Approved refunds are processed back to the original payment method within 7–10 working days.",
+        "Government fees, third-party insurance premiums and already-consumed services are non-refundable.",
+        "For refund queries contact support@agrikartfin.com or call +91 99999 99999.",
+      ],
+    },
   },
   footer: {
     company: "Company",
@@ -451,6 +482,37 @@ const te: typeof en = {
     termsTitle: "నిబంధనలు & షరతులు",
     refundTitle: "రీఫండ్ పాలసీ",
     updated: "చివరిగా అప్‌డేట్: మే 2026",
+    privacy: {
+      intro: "AGRIKART FIN TECH PRIVATE LIMITED (\"మేము\") మీ గోప్యతను గౌరవిస్తుంది. మేము ఏ డేటాను సేకరిస్తాము మరియు ఎలా ఉపయోగిస్తామో ఈ పాలసీ వివరిస్తుంది.",
+      points: [
+        "మేము రైతు పేరు, మొబైల్, ఆధార్ (ఐచ్ఛికం), గ్రామం, జిల్లా, భూమి వివరాలు, పంట సమాచారం, చెల్లింపు వివరాలు మాత్రమే సేకరిస్తాము.",
+        "మీ డేటాను సేవలు అందించడం, చెల్లింపులు ప్రాసెస్ చేయడం, గుర్తింపు ధృవీకరణ, పథకాలు/ఇన్సూరెన్స్ అప్‌డేట్‌లకు మాత్రమే ఉపయోగిస్తాము.",
+        "మార్కెటింగ్ కోసం మీ వ్యక్తిగత డేటాను ఏ థర్డ్ పార్టీకి అమ్మము లేదా అద్దెకు ఇవ్వము.",
+        "మీ డేటా పరిశ్రమ ప్రామాణిక ఎన్‌క్రిప్షన్‌తో సురక్షితంగా నిల్వ చేయబడుతుంది, అధికారిక ఉద్యోగులకే యాక్సెస్ ఉంటుంది.",
+        "మీరు ఎప్పుడైనా privacy@agrikartfin.com కు ఇమెయిల్ చేసి మీ ఖాతా & డేటా తొలగింపును అభ్యర్థించవచ్చు.",
+      ],
+    },
+    terms: {
+      intro: "AgriKart Fin సేవలను ఉపయోగించడం ద్వారా మీరు ఈ నిబంధనలు & షరతులకు అంగీకరిస్తున్నారు.",
+      points: [
+        "మా సేవలు ఉపయోగించటానికి మీరు 18 సంవత్సరాలు లేదా అంతకంటే ఎక్కువ వయస్సు ఉన్న భారతీయ నివాసి అయి ఉండాలి.",
+        "AgriKart Fin కేవలం ఒక సమన్వయకర్త మాత్రమే — రుణాలు, ఇన్సూరెన్స్, ఇన్‌పుట్‌లు భాగస్వామ్య NBFCలు, ఇన్సూరర్లు, డీలర్లు అందిస్తారు.",
+        "జాయినింగ్ ఫీజు ₹2,000 మరియు వార్షిక రీన్యువల్ ₹1,499 ను Rojaripay (UPI / కార్డులు / నెట్‌బ్యాంకింగ్) ద్వారా చెల్లించాలి.",
+        "సేవలు మీ జిల్లాలో అందుబాటును బట్టి ఉంటాయి; ముందస్తు నోటీసు లేకుండా అభ్యర్థనను నిరాకరించే లేదా ఆలస్యం చేసే హక్కు మాకు ఉంది.",
+        "పంట నష్టం, వాతావరణ నష్టం, NBFC నిర్ణయాలు లేదా థర్డ్ పార్టీ చర్యలకు AgriKart Fin బాధ్యత వహించదు.",
+        "వివాదాలు భారత చట్టాల పరిధిలో, హైదరాబాద్, తెలంగాణ న్యాయస్థానాల పరిధిలో వస్తాయి.",
+      ],
+    },
+    refund: {
+      intro: "జాయినింగ్ ఫీజులు, రీన్యువల్‌లు, సేవా చార్జీలు ఎలా రీఫండ్ అవుతాయో ఈ పాలసీ వివరిస్తుంది.",
+      points: [
+        "రైతు ID యాక్టివేట్ అయిన తర్వాత జాయినింగ్ ఫీజు & వార్షిక రీన్యువల్ ఫీజు రీఫండ్ చేయబడవు.",
+        "సేవా బుకింగ్‌లు (కోల్డ్ స్టోరేజ్, డ్రోన్ మొదలైనవి) మా టీమ్ ఆమోదానికి ముందు ఉచితంగా రద్దు చేయవచ్చు.",
+        "ఆమోదించబడిన రీఫండ్‌లు 7–10 పని దినాల్లో అసలు చెల్లింపు విధానానికి తిరిగి జమ చేయబడతాయి.",
+        "ప్రభుత్వ ఫీజులు, థర్డ్ పార్టీ ఇన్సూరెన్స్ ప్రీమియంలు, ఇప్పటికే వినియోగించిన సేవలు రీఫండ్ చేయబడవు.",
+        "రీఫండ్ ప్రశ్నల కోసం support@agrikartfin.com ను సంప్రదించండి లేదా +91 99999 99999 కు కాల్ చేయండి.",
+      ],
+    },
   },
   footer: {
     company: "కంపెనీ",
