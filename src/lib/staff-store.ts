@@ -174,11 +174,30 @@ export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt">)
   return item;
 }
 
-export function updateCustomerStatus(id: string, status: CustomerStatus, remarks?: string) {
+export function updateCustomerStatus(id: string, status: CustomerStatus, editor: Staff, remarks?: string) {
+  if (!permissions.canChangeCustomerStatus(editor)) {
+    throw new Error("Only admins can change customer status");
+  }
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
+  const current = all.find(c => c.id === id);
+  if (!current) throw new Error("Customer not found");
   const next = all.map(c => c.id === id ? { ...c, status, remarks } : c);
   write(CUSTOMERS_KEY, next);
+  // Log status change to audit
+  const changes: CustomerEditChange[] = [{ field: "status", from: current.status, to: status }];
+  if ((remarks ?? "") !== (current.remarks ?? "")) {
+    changes.push({ field: "remarks", from: current.remarks ?? "", to: remarks ?? "" });
+  }
+  const edit: CustomerEdit = {
+    id: crypto.randomUUID(), customerId: id,
+    editorId: editor.id, editorName: editor.name, editorRole: editor.role,
+    changes, at: Date.now(),
+  };
+  const log = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
+  log.unshift(edit);
+  write(CUSTOMER_EDITS_KEY, log);
   window.dispatchEvent(new Event("agrikart-customers"));
+  window.dispatchEvent(new Event("agrikart-customer-edits"));
 }
 
 export function getCustomer(id: string): Customer | undefined {
