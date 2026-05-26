@@ -4,18 +4,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useCustomer, useRequests, updateCustomerStatus, updateRequestStatus } from "@/lib/staff-store";
+import { useCustomer, useRequests, updateCustomerStatus, updateRequestStatus, useCurrentStaff, useCustomerEdits } from "@/lib/staff-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
 import { StatusPill } from "../staff/dashboard";
-import { ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle, History } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/customers/$id")({ component: AdminCustomerDetail });
 
 function AdminCustomerDetail() {
   const { id } = Route.useParams();
+  const staff = useCurrentStaff();
   const customer = useCustomer(id);
   const requests = useRequests({ customerId: id });
+  const edits = useCustomerEdits(id);
   const [remarks, setRemarks] = useState("");
 
   if (!customer) {
@@ -27,14 +29,14 @@ function AdminCustomerDetail() {
   }
 
   const approve = () => {
-    updateCustomerStatus(customer.id, "Approved", remarks.trim() || undefined);
-    toast.success(`${customer.farmerName} approved`);
-    setRemarks("");
+    if (!staff) return;
+    try { updateCustomerStatus(customer.id, "Approved", staff, remarks.trim() || undefined); toast.success(`${customer.farmerName} approved`); setRemarks(""); }
+    catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
   const reject = () => {
-    updateCustomerStatus(customer.id, "Rejected", remarks.trim() || undefined);
-    toast.success(`${customer.farmerName} rejected`);
-    setRemarks("");
+    if (!staff) return;
+    try { updateCustomerStatus(customer.id, "Rejected", staff, remarks.trim() || undefined); toast.success(`${customer.farmerName} rejected`); setRemarks(""); }
+    catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
   return (
