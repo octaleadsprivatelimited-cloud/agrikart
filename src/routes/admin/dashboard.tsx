@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useCustomers, useRequests, useStaffList, usePayments, type Payment } from "@/lib/staff-store";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { useCustomers, useRequests, useStaffList, usePayments, refundPayment, type Payment } from "@/lib/staff-store";
 import {
   Users, CheckCircle2, Clock, XCircle, ClipboardList, IndianRupee, UserCog,
-  TrendingUp, TrendingDown, RotateCcw, Activity, ArrowUpRight,
+  TrendingUp, TrendingDown, RotateCcw, Activity, ArrowUpRight, Eye, Mail, Phone, Hash, Receipt,
 } from "lucide-react";
+import { toast } from "sonner";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer,
   XAxis, YAxis, Tooltip, CartesianGrid, Legend,
