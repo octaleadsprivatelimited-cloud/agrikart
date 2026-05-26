@@ -15,6 +15,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as RefundRouteImport } from './routes/refund'
+import { Route as ProductsRouteImport } from './routes/products'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PayRouteImport } from './routes/pay'
@@ -32,6 +33,7 @@ import { Route as StaffLoginRouteImport } from './routes/staff/login'
 import { Route as StaffDashboardRouteImport } from './routes/staff/dashboard'
 import { Route as StaffCustomersRouteImport } from './routes/staff/customers'
 import { Route as StaffAddCustomerRouteImport } from './routes/staff/add-customer'
+import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as PortalDashboardRouteImport } from './routes/portal/dashboard'
 import { Route as PortalBookingsRouteImport } from './routes/portal/bookings'
 import { Route as PortalBookRouteImport } from './routes/portal/book'
@@ -71,6 +73,11 @@ const SchemesRoute = SchemesRouteImport.update({
 const RefundRoute = RefundRouteImport.update({
   id: '/refund',
   path: '/refund',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -158,6 +165,11 @@ const StaffAddCustomerRoute = StaffAddCustomerRouteImport.update({
   path: '/add-customer',
   getParentRoute: () => StaffRoute,
 } as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProductsRoute,
+} as any)
 const PortalDashboardRoute = PortalDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -222,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/pay': typeof PayRoute
   '/portal': typeof PortalRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/products': typeof ProductsRouteWithChildren
   '/refund': typeof RefundRoute
   '/schemes': typeof SchemesRoute
   '/services': typeof ServicesRoute
@@ -236,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/staff/add-customer': typeof StaffAddCustomerRoute
   '/staff/customers': typeof StaffCustomersRouteWithChildren
   '/staff/dashboard': typeof StaffDashboardRoute
@@ -256,6 +270,7 @@ export interface FileRoutesByTo {
   '/pay': typeof PayRoute
   '/portal': typeof PortalRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/products': typeof ProductsRouteWithChildren
   '/refund': typeof RefundRoute
   '/schemes': typeof SchemesRoute
   '/services': typeof ServicesRoute
@@ -270,6 +285,7 @@ export interface FileRoutesByTo {
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/staff/add-customer': typeof StaffAddCustomerRoute
   '/staff/customers': typeof StaffCustomersRouteWithChildren
   '/staff/dashboard': typeof StaffDashboardRoute
@@ -292,6 +308,7 @@ export interface FileRoutesById {
   '/pay': typeof PayRoute
   '/portal': typeof PortalRouteWithChildren
   '/privacy': typeof PrivacyRoute
+  '/products': typeof ProductsRouteWithChildren
   '/refund': typeof RefundRoute
   '/schemes': typeof SchemesRoute
   '/services': typeof ServicesRoute
@@ -306,6 +323,7 @@ export interface FileRoutesById {
   '/portal/book': typeof PortalBookRoute
   '/portal/bookings': typeof PortalBookingsRoute
   '/portal/dashboard': typeof PortalDashboardRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/staff/add-customer': typeof StaffAddCustomerRoute
   '/staff/customers': typeof StaffCustomersRouteWithChildren
   '/staff/dashboard': typeof StaffDashboardRoute
@@ -329,6 +347,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/portal'
     | '/privacy'
+    | '/products'
     | '/refund'
     | '/schemes'
     | '/services'
@@ -343,6 +362,7 @@ export interface FileRouteTypes {
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
+    | '/products/$slug'
     | '/staff/add-customer'
     | '/staff/customers'
     | '/staff/dashboard'
@@ -363,6 +383,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/portal'
     | '/privacy'
+    | '/products'
     | '/refund'
     | '/schemes'
     | '/services'
@@ -377,6 +398,7 @@ export interface FileRouteTypes {
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
+    | '/products/$slug'
     | '/staff/add-customer'
     | '/staff/customers'
     | '/staff/dashboard'
@@ -398,6 +420,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/portal'
     | '/privacy'
+    | '/products'
     | '/refund'
     | '/schemes'
     | '/services'
@@ -412,6 +435,7 @@ export interface FileRouteTypes {
     | '/portal/book'
     | '/portal/bookings'
     | '/portal/dashboard'
+    | '/products/$slug'
     | '/staff/add-customer'
     | '/staff/customers'
     | '/staff/dashboard'
@@ -434,6 +458,7 @@ export interface RootRouteChildren {
   PayRoute: typeof PayRoute
   PortalRoute: typeof PortalRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
+  ProductsRoute: typeof ProductsRouteWithChildren
   RefundRoute: typeof RefundRoute
   SchemesRoute: typeof SchemesRoute
   ServicesRoute: typeof ServicesRoute
@@ -484,6 +509,13 @@ declare module '@tanstack/react-router' {
       path: '/refund'
       fullPath: '/refund'
       preLoaderRoute: typeof RefundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -605,6 +637,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffAddCustomerRouteImport
       parentRoute: typeof StaffRoute
     }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
+      parentRoute: typeof ProductsRoute
+    }
     '/portal/dashboard': {
       id: '/portal/dashboard'
       path: '/dashboard'
@@ -725,6 +764,18 @@ const PortalRouteChildren: PortalRouteChildren = {
 const PortalRouteWithChildren =
   PortalRoute._addFileChildren(PortalRouteChildren)
 
+interface ProductsRouteChildren {
+  ProductsSlugRoute: typeof ProductsSlugRoute
+}
+
+const ProductsRouteChildren: ProductsRouteChildren = {
+  ProductsSlugRoute: ProductsSlugRoute,
+}
+
+const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
+  ProductsRouteChildren,
+)
+
 interface StaffCustomersRouteChildren {
   StaffCustomersIdRoute: typeof StaffCustomersIdRoute
 }
@@ -766,6 +817,7 @@ const rootRouteChildren: RootRouteChildren = {
   PayRoute: PayRoute,
   PortalRoute: PortalRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
+  ProductsRoute: ProductsRouteWithChildren,
   RefundRoute: RefundRoute,
   SchemesRoute: SchemesRoute,
   ServicesRoute: ServicesRoute,
@@ -776,3 +828,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
