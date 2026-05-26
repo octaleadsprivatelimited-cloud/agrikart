@@ -26,29 +26,29 @@ function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero-gradient">
         <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" />
-        <div className="container relative mx-auto grid gap-12 px-4 py-16 md:py-24 lg:grid-cols-2 lg:items-center">
+        <div className="container relative mx-auto grid gap-8 px-4 py-10 sm:py-14 md:py-20 lg:grid-cols-2 lg:items-center lg:gap-12 lg:py-24">
           <div className="animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary sm:text-xs">
               <Sprout className="h-3.5 w-3.5" /> {t("hero.eyebrow")}
             </span>
-            <h1 className="mt-5 text-balance text-3xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
+            <h1 className="mt-3 text-balance text-2xl font-extrabold tracking-tight sm:mt-5 sm:text-3xl md:text-5xl lg:text-6xl">
               <span className="text-gradient-brand">{t("hero.title")}</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base text-muted-foreground md:text-lg">{t("hero.subtitle")}</p>
-            <p className="mt-3 text-sm font-semibold text-primary">{t("hero.highlight")}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="gap-2 shadow-elegant">
+            <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:mt-5 sm:text-base md:text-lg">{t("hero.subtitle")}</p>
+            <p className="mt-2 text-xs font-semibold text-primary sm:mt-3 sm:text-sm">{t("hero.highlight")}</p>
+            <div className="mt-5 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
+              <Button asChild size="default" className="gap-2 shadow-elegant sm:size-lg">
                 <Link to="/signup">{t("hero.ctaPrimary")} <ArrowRight className="h-4 w-4" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="gap-2">
+              <Button asChild size="default" variant="outline" className="gap-2 sm:size-lg">
                 <Link to="/pay"><IndianRupee className="h-4 w-4" /> {t("hero.ctaSecondary")}</Link>
               </Button>
             </div>
           </div>
-          <div className="relative animate-rise">
+          <div className="relative hidden animate-rise sm:block">
             <div className="absolute -inset-4 -z-10 rounded-3xl bg-cta-gradient opacity-20 blur-2xl" />
             <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-border/60 bg-card shadow-glow">
-              <div className="h-full w-full bg-cta-gradient p-8 text-white">
+              <div className="h-full w-full bg-cta-gradient p-6 text-white sm:p-8">
                 <div className="flex h-full flex-col justify-between">
                   <div>
                     <p className="text-sm uppercase tracking-wider opacity-90">{t("brand")}</p>
