@@ -64,11 +64,11 @@ function ProductsPage() {
     <div className="bg-muted/30">
       {/* Category circles strip */}
       <section className="border-b bg-gradient-to-b from-emerald-50/60 to-muted/30">
-        <div className="container mx-auto px-3 py-5 sm:px-4 sm:py-7">
-          <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-foreground/80 hover:text-primary">
+        <div className="container mx-auto px-3 py-3 sm:px-4 sm:py-7">
+          <Link to="/" className="mb-2 inline-flex items-center gap-1 text-xs font-semibold text-foreground/80 hover:text-primary sm:mb-3 sm:text-sm">
             <ChevronLeft className="h-4 w-4" /> Back
           </Link>
-          <div className="flex gap-3 overflow-x-auto pb-1 sm:gap-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-2.5 overflow-x-auto pb-1 sm:gap-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {TILE_ORDER.map(key => {
               const Icon = CATEGORY_ICONS[key];
               const isActive = cat === key;
@@ -76,16 +76,16 @@ function ProductsPage() {
                 <button
                   key={key}
                   onClick={() => setCat(key)}
-                  className="group flex shrink-0 flex-col items-center gap-2"
+                  className="group flex shrink-0 flex-col items-center gap-1.5 sm:gap-2"
                 >
                   <span
-                    className={`grid h-16 w-16 place-items-center rounded-full border-2 bg-emerald-100/70 text-emerald-800 transition sm:h-20 sm:w-20 ${
+                    className={`grid h-12 w-12 place-items-center rounded-full border-2 bg-emerald-100/70 text-emerald-800 transition sm:h-20 sm:w-20 ${
                       isActive ? "border-amber-400 shadow-elegant" : "border-primary/70 group-hover:border-primary"
                     }`}
                   >
-                    <Icon className="h-7 w-7 sm:h-9 sm:w-9" strokeWidth={1.8} />
+                    <Icon className="h-5 w-5 sm:h-9 sm:w-9" strokeWidth={1.8} />
                   </span>
-                  <span className={`whitespace-nowrap text-[11px] font-semibold sm:text-sm ${isActive ? "text-primary" : "text-foreground/80"}`}>
+                  <span className={`whitespace-nowrap text-[10px] font-semibold sm:text-sm ${isActive ? "text-primary" : "text-foreground/80"}`}>
                     {key}
                   </span>
                 </button>
