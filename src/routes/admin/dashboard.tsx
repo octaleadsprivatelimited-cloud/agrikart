@@ -345,8 +345,7 @@ function Detail({ Icon, label, value, mono }: { Icon?: typeof Hash; label: strin
     </div>
   );
 }
-  );
-}
+
 
 function Kpi({ label, value, sub, Icon, delta, tone }: { label: string; value: string; sub?: string; Icon: typeof IndianRupee; delta?: number; tone: string }) {
   const up = (delta ?? 0) >= 0;
