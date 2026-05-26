@@ -230,7 +230,11 @@ function AdminDashboard() {
               <p className="py-6 text-center text-sm text-muted-foreground">No payments recorded yet.</p>
             ) : (
               <ul className="divide-y">
-                {recentPayments.map(p => <PaymentRow key={p.id} p={p} />)}
+                {recentPayments.map(p => (
+                  <PaymentRow key={p.id} p={p}
+                    onView={() => setViewing(p)}
+                    onRefund={() => { setRefunding(p); setReason(""); }} />
+                ))}
               </ul>
             )}
           </CardContent>
