@@ -17,7 +17,10 @@ import {
   XAxis, YAxis, Tooltip, CartesianGrid, Legend,
 } from "recharts";
 
-export const Route = createFileRoute("/admin/dashboard")({ component: AdminDashboard });
+export const Route = createFileRoute("/admin/dashboard")({
+  codeSplitGroupings: [],
+  component: AdminDashboard,
+});
 
 const fmt = (n: number) => "₹" + Math.round(n).toLocaleString("en-IN");
 const dayKey = (ts: number) => new Date(ts).toISOString().slice(0, 10);
