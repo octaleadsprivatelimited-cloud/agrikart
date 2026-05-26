@@ -38,11 +38,12 @@ function RegisterPage() {
     e.preventDefault();
     const id = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
     setFarmerId(id);
-    toast.success("Registration captured. Redirecting to Rojaripay…");
+    toast.success(t("register.captured"));
     setTimeout(() => void navigate({ to: "/pay" }), 1200);
   };
 
   const f = t("register.fields", { returnObjects: true }) as Record<keyof Form, string>;
+  const ph = t("register.placeholders", { returnObjects: true }) as { survey: string; crop: string; season: string };
 
   return (
     <section className="container mx-auto grid max-w-5xl gap-6 px-4 py-12 lg:grid-cols-[1fr_320px]">
@@ -73,9 +74,9 @@ function RegisterPage() {
               <Field label={f.district} id="district"><Input id="district" required value={form.district} onChange={upd("district")} /></Field>
               <Field label={f.state} id="state"><Input id="state" required value={form.state} onChange={upd("state")} /></Field>
               <Field label={f.landArea} id="land"><Input id="land" required type="number" min="0" step="0.1" value={form.landArea} onChange={upd("landArea")} /></Field>
-              <Field label={f.surveyNumbers} id="survey"><Input id="survey" required value={form.surveyNumbers} onChange={upd("surveyNumbers")} placeholder="e.g. 12/A, 13/B" /></Field>
-              <Field label={f.mainCrop} id="crop"><Input id="crop" required value={form.mainCrop} onChange={upd("mainCrop")} placeholder="Cotton / Paddy / Chilli" /></Field>
-              <Field label={f.season} id="season"><Input id="season" required value={form.season} onChange={upd("season")} placeholder="Kharif / Rabi" /></Field>
+              <Field label={f.surveyNumbers} id="survey"><Input id="survey" required value={form.surveyNumbers} onChange={upd("surveyNumbers")} placeholder={ph.survey} /></Field>
+              <Field label={f.mainCrop} id="crop"><Input id="crop" required value={form.mainCrop} onChange={upd("mainCrop")} placeholder={ph.crop} /></Field>
+              <Field label={f.season} id="season"><Input id="season" required value={form.season} onChange={upd("season")} placeholder={ph.season} /></Field>
               <div className="sm:col-span-2">
                 <Button type="submit" size="lg" className="w-full">{t("register.submit")}</Button>
               </div>
