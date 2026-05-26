@@ -180,38 +180,38 @@ function ProductsPage() {
               <p className="mt-2 text-xs text-muted-foreground">Products are managed from the admin panel.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {filtered.map(p => {
                 const price = p.discountPrice ?? p.price;
                 const popular = p.stock > p.reorderLevel * 3;
                 return (
                   <Card key={p.id} className="group relative flex flex-col overflow-hidden rounded-xl border-border/60 bg-white shadow-sm transition hover:shadow-lg">
                     {popular && (
-                      <span className="absolute left-3 top-3 z-10 rounded-md bg-sky-100 px-2 py-0.5 text-[10px] font-bold text-sky-700">
+                      <span className="absolute left-2 top-2 z-10 rounded-md bg-sky-100 px-1.5 py-0.5 text-[9px] font-bold text-sky-700 sm:left-3 sm:top-3 sm:px-2 sm:text-[10px]">
                         Popular
                       </span>
                     )}
-                    <button aria-label="Wishlist" className="absolute right-3 top-3 z-10 grid h-7 w-7 place-items-center rounded-full bg-white/80 text-muted-foreground hover:text-rose-500">
-                      <Heart className="h-4 w-4" />
+                    <button aria-label="Wishlist" className="absolute right-2 top-2 z-10 grid h-6 w-6 place-items-center rounded-full bg-white/80 text-muted-foreground hover:text-rose-500 sm:right-3 sm:top-3 sm:h-7 sm:w-7">
+                      <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </button>
 
                     <Link to="/products/$slug" params={{ slug: p.slug }} className="block">
-                      <div className="m-2 grid aspect-square place-items-center rounded-lg bg-emerald-50 text-5xl sm:m-3 sm:text-7xl">
+                      <div className="m-1.5 grid aspect-square place-items-center rounded-lg bg-emerald-50 text-4xl sm:m-3 sm:text-7xl">
                         {p.image}
                       </div>
                     </Link>
 
-                    <div className="flex flex-1 flex-col px-3 pb-3 sm:px-4 sm:pb-4">
+                    <div className="flex flex-1 flex-col px-2.5 pb-2.5 sm:px-4 sm:pb-4">
                       <Link to="/products/$slug" params={{ slug: p.slug }}>
-                        <h3 className="line-clamp-2 min-h-[36px] text-xs font-bold uppercase tracking-wide text-foreground group-hover:text-primary sm:text-sm">
+                        <h3 className="line-clamp-2 min-h-[32px] text-[11px] font-bold uppercase tracking-wide text-foreground group-hover:text-primary sm:min-h-[36px] sm:text-sm">
                           {p.name}
                         </h3>
                       </Link>
-                      <p className="mt-1 text-[11px] text-muted-foreground">{p.brand}</p>
-                      <p className="mt-2 text-base font-extrabold sm:text-lg">{fmt(price)}</p>
-                      <Button asChild size="sm" variant="outline" className="mt-2 w-full gap-1 border-primary/40 font-semibold text-primary hover:bg-primary hover:text-primary-foreground">
+                      <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-[11px]">{p.brand}</p>
+                      <p className="mt-1 text-sm font-extrabold sm:mt-2 sm:text-lg">{fmt(price)}</p>
+                      <Button asChild size="sm" variant="outline" className="mt-1.5 h-8 w-full gap-1 border-primary/40 px-2 text-[11px] font-semibold text-primary hover:bg-primary hover:text-primary-foreground sm:mt-2 sm:h-9 sm:text-sm">
                         <Link to="/products/$slug" params={{ slug: p.slug }}>
-                          View Details <ArrowRight className="h-3.5 w-3.5" />
+                          View Details <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </Link>
                       </Button>
                     </div>
