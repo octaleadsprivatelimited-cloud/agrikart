@@ -27,6 +27,18 @@ function AdminDashboard() {
   const requests = useRequests();
   const staff = useStaffList();
   const payments = usePayments();
+  const [viewing, setViewing] = useState<Payment | null>(null);
+  const [refunding, setRefunding] = useState<Payment | null>(null);
+  const [reason, setReason] = useState("");
+
+  const submitRefund = () => {
+    if (!refunding) return;
+    if (!reason.trim()) return toast.error("Refund reason is required");
+    refundPayment(refunding.id, reason.trim());
+    toast.success(`Refunded ${fmt(refunding.amount)} · ${refunding.id}`);
+    setRefunding(null);
+    setReason("");
+  };
 
   const m = useMemo(() => {
     const now = Date.now();
