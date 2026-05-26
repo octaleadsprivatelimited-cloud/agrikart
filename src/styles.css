@@ -102,9 +102,55 @@
 @layer utilities {
   .bg-hero-gradient {
     background-image:
-      radial-gradient(at 20% 10%, color-mix(in oklch, var(--leaf) 30%, transparent) 0, transparent 50%),
-      radial-gradient(at 80% 0%, color-mix(in oklch, var(--accent) 25%, transparent) 0, transparent 50%),
-      linear-gradient(180deg, var(--background), color-mix(in oklch, var(--primary) 6%, var(--background)));
+      radial-gradient(at 20% 10%, color-mix(in oklch, var(--leaf) 32%, transparent) 0, transparent 55%),
+      radial-gradient(at 85% 0%, color-mix(in oklch, var(--accent) 28%, transparent) 0, transparent 55%),
+      linear-gradient(180deg, var(--background), color-mix(in oklch, var(--primary) 7%, var(--background)));
+  }
+  .bg-grain {
+    background-image: radial-gradient(color-mix(in oklch, var(--primary) 8%, transparent) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .bg-cta-gradient {
+    background-image:
+      radial-gradient(at 0% 0%, color-mix(in oklch, var(--accent) 55%, transparent) 0, transparent 55%),
+      linear-gradient(135deg, var(--primary), color-mix(in oklch, var(--leaf) 75%, var(--primary)));
+  }
+  .text-gradient-brand {
+    background: linear-gradient(120deg, var(--primary), color-mix(in oklch, var(--accent) 70%, var(--primary)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-elegant {
+    box-shadow:
+      0 1px 2px color-mix(in oklch, var(--primary) 8%, transparent),
+      0 10px 30px -12px color-mix(in oklch, var(--primary) 22%, transparent);
+  }
+  .shadow-glow {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--primary) 14%, transparent),
+      0 20px 50px -20px color-mix(in oklch, var(--primary) 35%, transparent);
+  }
+  .card-lift {
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklch, var(--primary) 35%, var(--border));
+    box-shadow:
+      0 2px 4px color-mix(in oklch, var(--primary) 6%, transparent),
+      0 18px 36px -18px color-mix(in oklch, var(--primary) 28%, transparent);
   }
   .text-balance { text-wrap: balance; }
+  .animate-fade-up { animation: fade-up .55s cubic-bezier(.22,.61,.36,1) both; }
+  .animate-rise { animation: rise .8s cubic-bezier(.22,.61,.36,1) both; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
