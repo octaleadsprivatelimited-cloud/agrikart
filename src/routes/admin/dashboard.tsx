@@ -319,16 +319,25 @@ function FunnelRow({ label, value, total, color }: { label: string; value: numbe
   );
 }
 
-function PaymentRow({ p }: { p: Payment }) {
+function PaymentRow({ p, onView, onRefund }: { p: Payment; onView: () => void; onRefund: () => void }) {
   return (
-    <li className="flex items-center justify-between py-2.5 text-sm">
-      <div>
-        <p className="font-medium">{p.farmerName ?? p.farmerId} <span className="ml-1 text-[11px] font-normal text-muted-foreground">· {p.kind}</span></p>
+    <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-medium">{p.farmerName ?? p.farmerId} <span className="ml-1 text-[11px] font-normal text-muted-foreground">· {p.kind}</span></p>
+        <p className="truncate text-[11px] text-muted-foreground font-mono">{p.id}</p>
         <p className="text-[11px] text-muted-foreground">{new Date(p.createdAt).toLocaleString()} · {p.method}</p>
       </div>
       <div className="text-right">
         <p className={`font-semibold ${p.status === "Refunded" ? "text-destructive line-through" : ""}`}>{fmt(p.amount)}</p>
         <StatusBadge status={p.status} />
+      </div>
+      <div className="flex flex-col gap-1">
+        <Button size="sm" variant="ghost" className="h-7 px-2" onClick={onView}><Eye className="h-3.5 w-3.5" /></Button>
+        {p.status === "Succeeded" && (
+          <Button size="sm" variant="ghost" className="h-7 px-2 text-destructive hover:text-destructive" onClick={onRefund}>
+            <RotateCcw className="h-3.5 w-3.5" />
+          </Button>
+        )}
       </div>
     </li>
   );
