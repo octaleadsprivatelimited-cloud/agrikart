@@ -83,19 +83,51 @@ function CustomerDetail() {
                 <MapPin className="h-3.5 w-3.5" /> {customer.village}, {customer.district}
               </p>
             </div>
-            <StatusPill status={customer.status} />
+            <div className="flex items-center gap-2">
+              <StatusPill status={customer.status} />
+              {canEdit && !editing && (
+                <Button size="sm" variant="outline" onClick={startEdit}><Pencil className="h-3.5 w-3.5" /> Edit</Button>
+              )}
+            </div>
           </div>
-          {customer.remarks && (
-            <p className="mt-3 rounded-md bg-muted px-3 py-2 text-sm"><span className="font-semibold">Remarks:</span> {customer.remarks}</p>
+
+          {editing ? (
+            <form onSubmit={saveEdit} className="mt-5 grid gap-3 sm:grid-cols-2">
+              {[
+                ["farmerName", "Farmer Name"], ["mobile", "Mobile"], ["aadhaar", "Aadhaar"],
+                ["village", "Village"], ["district", "District"], ["landSize", "Land size (acres)"],
+                ["crops", "Crops"],
+              ].map(([k, label]) => (
+                <div key={k}>
+                  <Label>{label}</Label>
+                  <Input value={form[k] ?? ""} onChange={(e) => setForm(f => ({ ...f, [k]: e.target.value }))} />
+                </div>
+              ))}
+              <div className="sm:col-span-2">
+                <Label>Remarks</Label>
+                <Textarea rows={2} value={form.remarks ?? ""} onChange={(e) => setForm(f => ({ ...f, remarks: e.target.value }))} />
+              </div>
+              <div className="sm:col-span-2 flex gap-2">
+                <Button type="submit"><Save className="h-4 w-4" /> Save changes</Button>
+                <Button type="button" variant="ghost" onClick={() => setEditing(false)}><X className="h-4 w-4" /> Cancel</Button>
+                <p className="ml-auto self-center text-xs text-muted-foreground">Customer entries cannot be deleted.</p>
+              </div>
+            </form>
+          ) : (
+            <>
+              {customer.remarks && (
+                <p className="mt-3 rounded-md bg-muted px-3 py-2 text-sm"><span className="font-semibold">Remarks:</span> {customer.remarks}</p>
+              )}
+              <div className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+                <Info Icon={Phone} label="Mobile" value={customer.mobile} />
+                <Info Icon={Sprout} label="Crops" value={customer.crops} />
+                <Info label="Land size" value={`${customer.landSize} acres`} />
+                <Info label="Aadhaar" value={customer.aadhaar || "—"} />
+                <Info label="Added by" value={customer.employeeName} />
+                <Info label="Date" value={new Date(customer.createdAt).toLocaleString()} />
+              </div>
+            </>
           )}
-          <div className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
-            <Info Icon={Phone} label="Mobile" value={customer.mobile} />
-            <Info Icon={Sprout} label="Crops" value={customer.crops} />
-            <Info label="Land size" value={`${customer.landSize} acres`} />
-            <Info label="Aadhaar" value={customer.aadhaar || "—"} />
-            <Info label="Added by" value={customer.employeeName} />
-            <Info label="Date" value={new Date(customer.createdAt).toLocaleString()} />
-          </div>
         </CardContent>
       </Card>
 
