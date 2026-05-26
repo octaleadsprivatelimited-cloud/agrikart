@@ -264,7 +264,87 @@ function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Payment details */}
+      <Dialog open={!!viewing} onOpenChange={(o) => { if (!o) setViewing(null); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Payment details</DialogTitle>
+            <DialogDescription>Full transaction and customer record.</DialogDescription>
+          </DialogHeader>
+          {viewing && (
+            <div className="grid gap-3 text-sm">
+              <Detail Icon={Hash} label="Transaction ID" value={viewing.id} mono />
+              <Detail Icon={Receipt} label="Order ID" value={viewing.orderId} mono />
+              <div className="grid grid-cols-2 gap-3">
+                <Detail label="Type" value={viewing.kind} />
+                <Detail label="Method" value={viewing.method ?? "—"} />
+                <Detail label="Amount" value={fmt(viewing.amount)} />
+                <Detail label="Status" value={viewing.status} />
+              </div>
+              <div className="border-t pt-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Customer</p>
+                <div className="mt-2 grid gap-2">
+                  <Detail label="Farmer ID" value={viewing.farmerId} mono />
+                  <Detail label="Name" value={viewing.farmerName ?? "—"} />
+                  <Detail Icon={Phone} label="Mobile" value={viewing.mobile ?? "—"} />
+                  <Detail Icon={Mail} label="Email" value={viewing.email ?? "—"} />
+                </div>
+              </div>
+              <Detail label="Date" value={new Date(viewing.createdAt).toLocaleString()} />
+              {viewing.refundedAt && (
+                <div className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs">
+                  <p className="font-semibold text-destructive">Refunded {new Date(viewing.refundedAt).toLocaleString()}</p>
+                  {viewing.refundReason && <p className="mt-1 text-muted-foreground">Reason: {viewing.refundReason}</p>}
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter>
+            {viewing?.status === "Succeeded" && (
+              <Button variant="destructive" onClick={() => { setRefunding(viewing); setViewing(null); }}>
+                <RotateCcw className="h-4 w-4" /> Issue Refund
+              </Button>
+            )}
+            <Button variant="outline" onClick={() => setViewing(null)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Refund */}
+      <Dialog open={!!refunding} onOpenChange={(o) => { if (!o) { setRefunding(null); setReason(""); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Issue refund</DialogTitle>
+            <DialogDescription>
+              Refunding {refunding && fmt(refunding.amount)} · {refunding?.id}. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label htmlFor="reason">Reason</Label>
+            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not delivered…" />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setRefunding(null); setReason(""); }}>Cancel</Button>
+            <Button variant="destructive" onClick={submitRefund}>Confirm Refund</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+  );
+}
+
+function Detail({ Icon, label, value, mono }: { Icon?: typeof Hash; label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="flex items-start gap-2">
+      {Icon && <Icon className="mt-0.5 h-3.5 w-3.5 text-muted-foreground" />}
+      <div className="min-w-0 flex-1">
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className={`truncate text-sm ${mono ? "font-mono" : "font-medium"}`}>{value}</p>
+      </div>
+    </div>
+  );
+}
   );
 }
 
