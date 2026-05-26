@@ -1,19 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CATEGORIES, useProducts, fmt, type Category } from "@/lib/shop-store";
 import {
   Search, Heart, ChevronLeft, Layers, Bug, Beaker, Wrench, Leaf, FlaskConical,
-  Stethoscope, Sparkles, Atom, ChevronDown,
+  Stethoscope, Sparkles, Atom, ChevronDown, ArrowRight,
 } from "lucide-react";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "Agri Products — Pesticides, Fertilizers, Seeds & Tools | AgriKart" },
-      { name: "description", content: "Browse certified pesticides, fertilizers, hybrid seeds, farming tools and crop protection products with batch and expiry transparency." },
+      { title: "Agri Products — Pesticides, Fertilisers, Seeds & Tools | AgriKart" },
+      { name: "description", content: "Browse certified pesticides, fertilisers, hybrid seeds, implements and crop protection products with batch and expiry transparency." },
       { property: "og:title", content: "Agri Products | AgriKart" },
       { property: "og:description", content: "Certified agri-inputs with batch, expiry and licence details. Doorstep delivery across Telangana & AP." },
     ],
@@ -21,23 +21,31 @@ export const Route = createFileRoute("/products")({
   component: ProductsPage,
 });
 
-const CATEGORY_TILES = [
-  { key: "All", label: "All", Icon: Layers },
-  { key: "Pesticides", label: "Pesticides", Icon: Bug },
-  { key: "Fertilizers", label: "Fertilisers", Icon: Beaker },
-  { key: "Farming Tools", label: "Implements", Icon: Wrench },
-  { key: "Crop Protection", label: "Organic", Icon: Leaf },
-  { key: "Seeds", label: "Specialty", Icon: FlaskConical },
-  { key: "Pesticides", label: "Veterinary", Icon: Stethoscope, alias: true },
-  { key: "Seeds", label: "Seeds", Icon: Sparkles },
-  { key: "Fertilizers", label: "Nano", Icon: Atom, alias: true },
-] as const;
+const CATEGORY_ICONS: Record<Category | "All", typeof Layers> = {
+  All: Layers,
+  Pesticides: Bug,
+  Fertilisers: Beaker,
+  Implements: Wrench,
+  Organic: Leaf,
+  "Speciality Nutrients": FlaskConical,
+  Veterinary: Stethoscope,
+  Seeds: Sparkles,
+  Nano: Atom,
+};
+
+const TILE_ORDER: Array<Category | "All"> = [
+  "All", "Pesticides", "Fertilisers", "Implements", "Organic",
+  "Speciality Nutrients", "Veterinary", "Seeds", "Nano",
+];
 
 function ProductsPage() {
   const products = useProducts();
+  const [mounted, setMounted] = useState(false);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "All">("All");
   const [sort, setSort] = useState<"featured" | "low" | "high">("featured");
+
+  useEffect(() => setMounted(true), []);
 
   const filtered = useMemo(() => {
     const list = products.filter(p =>
@@ -61,12 +69,13 @@ function ProductsPage() {
             <ChevronLeft className="h-4 w-4" /> Back
           </Link>
           <div className="flex gap-3 overflow-x-auto pb-1 sm:gap-5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            {CATEGORY_TILES.map(({ key, label, Icon }, i) => {
-              const isActive = cat === key && activeLabel.toLowerCase().includes(label.toLowerCase().slice(0, 4));
+            {TILE_ORDER.map(key => {
+              const Icon = CATEGORY_ICONS[key];
+              const isActive = cat === key;
               return (
                 <button
-                  key={`${key}-${i}`}
-                  onClick={() => setCat(key as Category | "All")}
+                  key={key}
+                  onClick={() => setCat(key)}
                   className="group flex shrink-0 flex-col items-center gap-2"
                 >
                   <span
@@ -76,8 +85,8 @@ function ProductsPage() {
                   >
                     <Icon className="h-7 w-7 sm:h-9 sm:w-9" strokeWidth={1.8} />
                   </span>
-                  <span className={`text-[11px] font-semibold sm:text-sm ${isActive ? "text-primary" : "text-foreground/80"}`}>
-                    {label}
+                  <span className={`whitespace-nowrap text-[11px] font-semibold sm:text-sm ${isActive ? "text-primary" : "text-foreground/80"}`}>
+                    {key}
                   </span>
                 </button>
               );
@@ -112,7 +121,7 @@ function ProductsPage() {
                         onChange={() => setCat(cat === c ? "All" : c)}
                         className="h-4 w-4 accent-primary"
                       />
-                      <span className="font-semibold uppercase tracking-wide text-xs">{c}</span>
+                      <span className="text-xs font-semibold uppercase tracking-wide">{c}</span>
                     </label>
                   </li>
                 ))}
@@ -125,13 +134,16 @@ function ProductsPage() {
         <div>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <h1 className="text-lg font-bold sm:text-2xl">
-              {activeLabel} <span className="text-muted-foreground font-medium">Total {filtered.length} Item(s)</span>
+              {activeLabel}{" "}
+              <span className="font-medium text-muted-foreground">
+                Total {mounted ? filtered.length : "—"} Item(s)
+              </span>
             </h1>
             <div className="relative">
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as typeof sort)}
-                className="appearance-none rounded-md border bg-background pl-3 pr-9 py-2 text-xs font-semibold sm:text-sm"
+                className="appearance-none rounded-md border bg-background py-2 pl-3 pr-9 text-xs font-semibold sm:text-sm"
               >
                 <option value="featured">Sort by: Featured</option>
                 <option value="low">Price: Low to High</option>
@@ -156,8 +168,17 @@ function ProductsPage() {
             ))}
           </div>
 
-          {filtered.length === 0 ? (
-            <p className="py-24 text-center text-sm text-muted-foreground">No products match your search.</p>
+          {!mounted ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Card key={i} className="aspect-[3/4] animate-pulse bg-muted/60" />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="rounded-2xl border bg-card py-20 text-center">
+              <p className="text-sm text-muted-foreground">No products match your search.</p>
+              <p className="mt-2 text-xs text-muted-foreground">Products are managed from the admin panel.</p>
+            </div>
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {filtered.map(p => {
@@ -186,21 +207,12 @@ function ProductsPage() {
                           {p.name}
                         </h3>
                       </Link>
-                      <div className="relative mt-2">
-                        <select className="w-full appearance-none rounded-md border bg-background px-2.5 py-1.5 text-xs font-semibold sm:text-sm">
-                          <option>1 Unit</option>
-                          <option>5 Units</option>
-                          <option>10 Units</option>
-                        </select>
-                        <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2" />
-                      </div>
+                      <p className="mt-1 text-[11px] text-muted-foreground">{p.brand}</p>
                       <p className="mt-2 text-base font-extrabold sm:text-lg">{fmt(price)}</p>
-                      <Button
-                        size="sm"
-                        className="mt-2 w-full bg-amber-400 font-bold text-foreground hover:bg-amber-500"
-                        disabled={p.stock === 0}
-                      >
-                        {p.stock === 0 ? "Out of stock" : "Add to Cart"}
+                      <Button asChild size="sm" variant="outline" className="mt-2 w-full gap-1 border-primary/40 font-semibold text-primary hover:bg-primary hover:text-primary-foreground">
+                        <Link to="/products/$slug" params={{ slug: p.slug }}>
+                          View Details <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
                       </Button>
                     </div>
                   </Card>
