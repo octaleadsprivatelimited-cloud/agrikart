@@ -120,15 +120,16 @@ function Home() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-20">
-        <div className="relative overflow-hidden rounded-2xl bg-primary px-6 py-12 text-primary-foreground md:px-12 md:py-16">
+        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient px-6 py-12 text-primary-foreground shadow-glow md:px-12 md:py-16">
+          <div className="absolute inset-0 bg-grain opacity-25 pointer-events-none" />
           <div className="relative z-10 max-w-2xl">
             <h2 className="text-balance text-3xl font-bold md:text-4xl">{t("register.title")}</h2>
-            <p className="mt-3 text-primary-foreground/80">{t("register.subtitle")}</p>
+            <p className="mt-3 text-primary-foreground/85">{t("register.subtitle")}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg" variant="secondary">
+              <Button asChild size="lg" variant="secondary" className="shadow-elegant">
                 <Link to="/signup">{t("hero.ctaPrimary")}</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
+              <Button asChild size="lg" variant="outline" className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
                 <Link to="/pay">{t("hero.ctaSecondary")}</Link>
               </Button>
             </div>
