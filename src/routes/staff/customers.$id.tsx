@@ -21,10 +21,14 @@ export const Route = createFileRoute("/staff/customers/$id")({ component: Custom
 
 function CustomerDetail() {
   const { id } = Route.useParams();
+  const staff = useCurrentStaff();
   const customer = useCustomer(id);
   const requests = useRequests({ customerId: id });
+  const edits = useCustomerEdits(id);
   const [cat, setCat] = useState<ServiceCategory | "">("");
   const [desc, setDesc] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState<Record<string, string>>({});
 
   if (!customer) {
     return (
@@ -33,6 +37,28 @@ function CustomerDetail() {
       </CardContent></Card>
     );
   }
+
+  const canEdit = permissions.canEditCustomer(staff, customer);
+
+  const startEdit = () => {
+    setForm({
+      farmerName: customer.farmerName, mobile: customer.mobile, aadhaar: customer.aadhaar ?? "",
+      village: customer.village, district: customer.district, landSize: customer.landSize,
+      crops: customer.crops, remarks: customer.remarks ?? "",
+    });
+    setEditing(true);
+  };
+  const saveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!staff) return;
+    try {
+      const { edit } = editCustomer(customer.id, form, staff);
+      toast.success(edit ? `Saved ${edit.changes.length} change${edit.changes.length === 1 ? "" : "s"}` : "No changes to save");
+      setEditing(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed");
+    }
+  };
 
   const addReq = (e: React.FormEvent) => {
     e.preventDefault();
