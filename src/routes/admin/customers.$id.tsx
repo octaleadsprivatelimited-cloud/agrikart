@@ -4,18 +4,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useCustomer, useRequests, updateCustomerStatus, updateRequestStatus } from "@/lib/staff-store";
+import { useCustomer, useRequests, updateCustomerStatus, updateRequestStatus, useCurrentStaff, useCustomerEdits } from "@/lib/staff-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
 import { StatusPill } from "../staff/dashboard";
-import { ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle, History } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/customers/$id")({ component: AdminCustomerDetail });
 
 function AdminCustomerDetail() {
   const { id } = Route.useParams();
+  const staff = useCurrentStaff();
   const customer = useCustomer(id);
   const requests = useRequests({ customerId: id });
+  const edits = useCustomerEdits(id);
   const [remarks, setRemarks] = useState("");
 
   if (!customer) {
@@ -27,14 +29,14 @@ function AdminCustomerDetail() {
   }
 
   const approve = () => {
-    updateCustomerStatus(customer.id, "Approved", remarks.trim() || undefined);
-    toast.success(`${customer.farmerName} approved`);
-    setRemarks("");
+    if (!staff) return;
+    try { updateCustomerStatus(customer.id, "Approved", staff, remarks.trim() || undefined); toast.success(`${customer.farmerName} approved`); setRemarks(""); }
+    catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
   const reject = () => {
-    updateCustomerStatus(customer.id, "Rejected", remarks.trim() || undefined);
-    toast.success(`${customer.farmerName} rejected`);
-    setRemarks("");
+    if (!staff) return;
+    try { updateCustomerStatus(customer.id, "Rejected", staff, remarks.trim() || undefined); toast.success(`${customer.farmerName} rejected`); setRemarks(""); }
+    catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
 
   return (
@@ -127,7 +129,42 @@ function AdminCustomerDetail() {
           )}
         </CardContent>
       </Card>
+
+      <EditHistoryCard edits={edits} />
     </div>
+  );
+}
+
+export function EditHistoryCard({ edits }: { edits: ReturnType<typeof useCustomerEdits> }) {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="inline-flex items-center gap-2 text-lg font-semibold"><History className="h-4 w-4" /> Edit History</h2>
+        {edits.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">No edits recorded yet.</p>
+        ) : (
+          <ul className="mt-4 space-y-4">
+            {edits.map(e => (
+              <li key={e.id} className="border-l-2 border-primary/40 pl-4">
+                <p className="text-sm font-medium">
+                  {e.editorName} <span className="text-xs uppercase text-muted-foreground">({e.editorRole})</span>
+                </p>
+                <p className="text-xs text-muted-foreground">{new Date(e.at).toLocaleString()}</p>
+                <ul className="mt-2 space-y-1 text-xs">
+                  {e.changes.map((c, i) => (
+                    <li key={i}>
+                      <span className="font-medium">{c.field}:</span>{" "}
+                      <span className="line-through text-muted-foreground">{c.from || "—"}</span>{" → "}
+                      <span className="text-foreground">{c.to || "—"}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

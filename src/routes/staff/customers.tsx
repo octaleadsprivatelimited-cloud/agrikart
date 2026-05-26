@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCurrentStaff, useCustomers, type CustomerStatus } from "@/lib/staff-store";
+import { useCurrentStaff, useCustomers, type CustomerStatus, permissions } from "@/lib/staff-store";
 import { StatusPill } from "./dashboard";
 import { Search, MapPin, ChevronRight } from "lucide-react";
 
@@ -18,7 +18,8 @@ const tabs: Array<{ key: "All" | CustomerStatus; label: string }> = [
 
 function CustomersList() {
   const staff = useCurrentStaff();
-  const customers = useCustomers({ employeeId: staff?.id });
+  const seesAll = permissions.canViewAllCustomers(staff);
+  const customers = useCustomers({ employeeId: seesAll ? undefined : staff?.id });
   const [tab, setTab] = useState<"All" | CustomerStatus>("All");
   const [q, setQ] = useState("");
 

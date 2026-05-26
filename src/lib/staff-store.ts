@@ -10,7 +10,34 @@ const STAFF_SESSION_KEY = "agrikart.staff_session";
 const CUSTOMERS_KEY = "agrikart.customers";
 const REQUESTS_KEY = "agrikart.service_requests";
 const PAYMENTS_KEY = "agrikart.payments";
+const CUSTOMER_EDITS_KEY = "agrikart.customer_edits";
 const SEED_KEY = "agrikart.seeded_v1";
+
+// ---------- Permissions (role-based access control) ----------
+// Hard rules:
+//  • NO ONE can delete a customer entry (audit/compliance).
+//  • Employees can edit ONLY customers they themselves added.
+//  • Admins can edit any customer and change status.
+//  • Only admins can manage staff users.
+export const permissions = {
+  canEditCustomer(staff: Staff | null, c: Pick<Customer, "employeeId">): boolean {
+    if (!staff) return false;
+    if (staff.role === "admin") return true;
+    return staff.id === c.employeeId;
+  },
+  canDeleteCustomer(_staff: Staff | null): boolean {
+    return false; // never allowed
+  },
+  canChangeCustomerStatus(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+  canManageStaff(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+  canViewAllCustomers(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+};
 
 function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -147,11 +174,30 @@ export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt">)
   return item;
 }
 
-export function updateCustomerStatus(id: string, status: CustomerStatus, remarks?: string) {
+export function updateCustomerStatus(id: string, status: CustomerStatus, editor: Staff, remarks?: string) {
+  if (!permissions.canChangeCustomerStatus(editor)) {
+    throw new Error("Only admins can change customer status");
+  }
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
+  const current = all.find(c => c.id === id);
+  if (!current) throw new Error("Customer not found");
   const next = all.map(c => c.id === id ? { ...c, status, remarks } : c);
   write(CUSTOMERS_KEY, next);
+  // Log status change to audit
+  const changes: CustomerEditChange[] = [{ field: "status", from: current.status, to: status }];
+  if ((remarks ?? "") !== (current.remarks ?? "")) {
+    changes.push({ field: "remarks", from: current.remarks ?? "", to: remarks ?? "" });
+  }
+  const edit: CustomerEdit = {
+    id: crypto.randomUUID(), customerId: id,
+    editorId: editor.id, editorName: editor.name, editorRole: editor.role,
+    changes, at: Date.now(),
+  };
+  const log = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
+  log.unshift(edit);
+  write(CUSTOMER_EDITS_KEY, log);
   window.dispatchEvent(new Event("agrikart-customers"));
+  window.dispatchEvent(new Event("agrikart-customer-edits"));
 }
 
 export function getCustomer(id: string): Customer | undefined {
@@ -189,6 +235,86 @@ export function useCustomers(opts?: { employeeId?: string }) {
       window.removeEventListener("storage", sync);
     };
   }, [opts?.employeeId]);
+  return items;
+}
+
+// ---------- Customer edit history (audit log) ----------
+export type CustomerEditChange = { field: string; from: string; to: string };
+export type CustomerEdit = {
+  id: string;
+  customerId: string;
+  editorId: string;
+  editorName: string;
+  editorRole: StaffRole;
+  changes: CustomerEditChange[];
+  at: number;
+};
+
+const EDITABLE_FIELDS = [
+  "farmerName", "mobile", "aadhaar", "village", "district", "landSize", "crops", "remarks",
+] as const;
+type EditableField = (typeof EDITABLE_FIELDS)[number];
+
+export function editCustomer(
+  id: string,
+  patch: Partial<Pick<Customer, EditableField>>,
+  editor: Staff,
+): { customer: Customer; edit: CustomerEdit | null } {
+  const all = read<Customer[]>(CUSTOMERS_KEY, []);
+  const current = all.find(c => c.id === id);
+  if (!current) throw new Error("Customer not found");
+  if (!permissions.canEditCustomer(editor, current)) {
+    throw new Error("You don't have permission to edit this customer");
+  }
+
+  const changes: CustomerEditChange[] = [];
+  const next: Customer = { ...current };
+  for (const f of EDITABLE_FIELDS) {
+    if (!(f in patch)) continue;
+    const newVal = (patch[f] ?? "") as string;
+    const oldVal = ((current[f] as string | undefined) ?? "");
+    if (String(newVal).trim() !== String(oldVal).trim()) {
+      changes.push({ field: f, from: String(oldVal), to: String(newVal) });
+      (next[f] as string) = String(newVal);
+    }
+  }
+
+  if (changes.length === 0) return { customer: current, edit: null };
+
+  write(CUSTOMERS_KEY, all.map(c => c.id === id ? next : c));
+  const edit: CustomerEdit = {
+    id: crypto.randomUUID(),
+    customerId: id,
+    editorId: editor.id,
+    editorName: editor.name,
+    editorRole: editor.role,
+    changes,
+    at: Date.now(),
+  };
+  const log = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
+  log.unshift(edit);
+  write(CUSTOMER_EDITS_KEY, log);
+  window.dispatchEvent(new Event("agrikart-customers"));
+  window.dispatchEvent(new Event("agrikart-customer-edits"));
+  return { customer: next, edit };
+}
+
+export function useCustomerEdits(customerId: string | undefined) {
+  const [items, setItems] = useState<CustomerEdit[]>([]);
+  useEffect(() => {
+    if (!customerId) return;
+    const sync = () => {
+      const all = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
+      setItems(all.filter(e => e.customerId === customerId).sort((a, b) => b.at - a.at));
+    };
+    sync();
+    window.addEventListener("agrikart-customer-edits", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-customer-edits", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, [customerId]);
   return items;
 }
 
