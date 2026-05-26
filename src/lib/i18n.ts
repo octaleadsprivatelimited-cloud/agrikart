@@ -220,6 +220,37 @@ const en = {
     termsTitle: "Terms & Conditions",
     refundTitle: "Refund Policy",
     updated: "Last updated: May 2026",
+    privacy: {
+      intro: "AGRIKART FIN TECH PRIVATE LIMITED (\"we\", \"us\") respects your privacy. This policy explains what data we collect and how we use it.",
+      points: [
+        "We collect farmer name, mobile, Aadhaar (optional), village, district, land details, crop information, and payment details.",
+        "We use your data only to deliver services, process payments, verify identity, and share scheme/insurance updates.",
+        "We do not sell or rent your personal data to any third party for marketing purposes.",
+        "Your data is stored securely with industry-standard encryption and restricted employee access.",
+        "You may request deletion of your account and data anytime by emailing privacy@agrikartfin.com.",
+      ],
+    },
+    terms: {
+      intro: "By using AgriKart Fin services you agree to the following terms and conditions.",
+      points: [
+        "You must be 18 years or older and a resident of India to use our services.",
+        "AgriKart Fin is a facilitator only — loans, insurance and inputs are provided by partner NBFCs, insurers and dealers.",
+        "Joining fee ₹2,000 and annual renewal ₹1,499 must be paid via approved online channels (Rojaripay UPI / Cards / Net Banking).",
+        "Services are subject to availability in your district; we may refuse or delay any request without prior notice.",
+        "AgriKart Fin is not liable for crop loss, weather damage, NBFC decisions or third-party actions beyond our reasonable control.",
+        "Disputes are governed by Indian law and fall under the jurisdiction of courts in Hyderabad, Telangana.",
+      ],
+    },
+    refund: {
+      intro: "This policy explains how joining fees, renewals and service charges are refunded.",
+      points: [
+        "Joining fee and annual renewal fee are non-refundable once the Farmer ID is activated.",
+        "Service bookings (cold storage, drone, etc.) can be cancelled free of charge before they are marked Approved by our team.",
+        "Approved refunds are processed back to the original payment method within 7–10 working days.",
+        "Government fees, third-party insurance premiums and already-consumed services are non-refundable.",
+        "For refund queries contact support@agrikartfin.com or call +91 99999 99999.",
+      ],
+    },
   },
   footer: {
     company: "Company",
