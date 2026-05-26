@@ -10,7 +10,34 @@ const STAFF_SESSION_KEY = "agrikart.staff_session";
 const CUSTOMERS_KEY = "agrikart.customers";
 const REQUESTS_KEY = "agrikart.service_requests";
 const PAYMENTS_KEY = "agrikart.payments";
+const CUSTOMER_EDITS_KEY = "agrikart.customer_edits";
 const SEED_KEY = "agrikart.seeded_v1";
+
+// ---------- Permissions (role-based access control) ----------
+// Hard rules:
+//  • NO ONE can delete a customer entry (audit/compliance).
+//  • Employees can edit ONLY customers they themselves added.
+//  • Admins can edit any customer and change status.
+//  • Only admins can manage staff users.
+export const permissions = {
+  canEditCustomer(staff: Staff | null, c: Pick<Customer, "employeeId">): boolean {
+    if (!staff) return false;
+    if (staff.role === "admin") return true;
+    return staff.id === c.employeeId;
+  },
+  canDeleteCustomer(_staff: Staff | null): boolean {
+    return false; // never allowed
+  },
+  canChangeCustomerStatus(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+  canManageStaff(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+  canViewAllCustomers(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+};
 
 function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
