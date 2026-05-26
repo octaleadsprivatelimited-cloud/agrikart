@@ -2,8 +2,8 @@
 // LocalStorage-backed. Replace with backend later.
 import { useEffect, useState } from "react";
 
-export type Category = "Pesticides" | "Fertilizers" | "Seeds" | "Farming Tools" | "Crop Protection";
-export const CATEGORIES: Category[] = ["Pesticides", "Fertilizers", "Seeds", "Farming Tools", "Crop Protection"];
+export type Category = "Pesticides" | "Fertilisers" | "Implements" | "Organic" | "Speciality Nutrients" | "Veterinary" | "Seeds" | "Nano";
+export const CATEGORIES: Category[] = ["Pesticides", "Fertilisers", "Implements", "Organic", "Speciality Nutrients", "Veterinary", "Seeds", "Nano"];
 
 export type Product = {
   id: string;
