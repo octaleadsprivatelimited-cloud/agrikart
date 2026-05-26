@@ -129,7 +129,42 @@ function AdminCustomerDetail() {
           )}
         </CardContent>
       </Card>
+
+      <EditHistoryCard edits={edits} />
     </div>
+  );
+}
+
+export function EditHistoryCard({ edits }: { edits: ReturnType<typeof useCustomerEdits> }) {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="inline-flex items-center gap-2 text-lg font-semibold"><History className="h-4 w-4" /> Edit History</h2>
+        {edits.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">No edits recorded yet.</p>
+        ) : (
+          <ul className="mt-4 space-y-4">
+            {edits.map(e => (
+              <li key={e.id} className="border-l-2 border-primary/40 pl-4">
+                <p className="text-sm font-medium">
+                  {e.editorName} <span className="text-xs uppercase text-muted-foreground">({e.editorRole})</span>
+                </p>
+                <p className="text-xs text-muted-foreground">{new Date(e.at).toLocaleString()}</p>
+                <ul className="mt-2 space-y-1 text-xs">
+                  {e.changes.map((c, i) => (
+                    <li key={i}>
+                      <span className="font-medium">{c.field}:</span>{" "}
+                      <span className="line-through text-muted-foreground">{c.from || "—"}</span>{" → "}
+                      <span className="text-foreground">{c.to || "—"}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
