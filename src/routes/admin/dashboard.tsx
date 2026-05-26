@@ -1,19 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent } from "@/components/ui/card";
-import { useCustomers, useRequests } from "@/lib/staff-store";
-import { Users, CheckCircle2, Clock, XCircle, ClipboardList } from "lucide-react";
+import { useCustomers, useRequests, useStaffList, usePayments } from "@/lib/staff-store";
+import { Users, CheckCircle2, Clock, XCircle, ClipboardList, IndianRupee, UserCog } from "lucide-react";
 
 export const Route = createFileRoute("/admin/dashboard")({ component: AdminDashboard });
 
 function AdminDashboard() {
   const customers = useCustomers();
   const requests = useRequests();
+  const staff = useStaffList();
+  const payments = usePayments();
   const approved = customers.filter(c => c.status === "Approved").length;
   const pending = customers.filter(c => c.status === "Pending").length;
   const rejected = customers.filter(c => c.status === "Rejected").length;
+  const revenue = payments.reduce((s, p) => s + p.amount, 0);
+  const employees = staff.filter(s => s.role === "employee").length;
 
   const stats = [
+    { label: "Total Revenue", value: "₹" + revenue.toLocaleString("en-IN"), Icon: IndianRupee, tone: "bg-primary/10 text-primary" },
     { label: "Total Customers", value: customers.length, Icon: Users, tone: "bg-primary/10 text-primary" },
+    { label: "Employees", value: employees, Icon: UserCog, tone: "bg-accent/20 text-[oklch(0.45_0.15_75)]" },
     { label: "Approved", value: approved, Icon: CheckCircle2, tone: "bg-[oklch(0.93_0.08_145)] text-[oklch(0.40_0.13_150)]" },
     { label: "Pending", value: pending, Icon: Clock, tone: "bg-accent/20 text-[oklch(0.45_0.15_75)]" },
     { label: "Rejected", value: rejected, Icon: XCircle, tone: "bg-destructive/10 text-destructive" },
@@ -25,7 +31,7 @@ function AdminDashboard() {
       <h1 className="text-3xl font-bold">Admin Dashboard</h1>
       <p className="mt-1 text-sm text-muted-foreground">Overview of all customers and service requests across employees.</p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(({ label, value, Icon, tone }) => (
           <Card key={label}>
             <CardContent className="p-5">
