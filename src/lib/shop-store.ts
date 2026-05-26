@@ -231,7 +231,9 @@ seed();
 
 // ---------- Hooks helpers ----------
 function useStore<T>(key: string, eventName: string, fb: T): T {
-  const [v, set] = useState<T>(() => read<T>(key, fb));
+  // Start with fallback on both server and client first render to avoid
+  // hydration mismatches; populate from localStorage in an effect.
+  const [v, set] = useState<T>(fb);
   useEffect(() => {
     const sync = () => set(read<T>(key, fb));
     sync();
