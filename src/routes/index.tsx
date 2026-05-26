@@ -24,19 +24,20 @@ function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-hero-gradient">
-        <div className="container mx-auto grid gap-12 px-4 py-16 md:py-24 lg:grid-cols-2 lg:items-center">
-          <div>
+      <section className="relative overflow-hidden bg-hero-gradient">
+        <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" />
+        <div className="container relative mx-auto grid gap-12 px-4 py-16 md:py-24 lg:grid-cols-2 lg:items-center">
+          <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
               <Sprout className="h-3.5 w-3.5" /> {t("hero.eyebrow")}
             </span>
-            <h1 className="mt-5 text-balance text-3xl font-extrabold tracking-tight md:text-5xl">
-              {t("hero.title")}
+            <h1 className="mt-5 text-balance text-3xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
+              <span className="text-gradient-brand">{t("hero.title")}</span>
             </h1>
             <p className="mt-5 max-w-xl text-base text-muted-foreground md:text-lg">{t("hero.subtitle")}</p>
             <p className="mt-3 text-sm font-semibold text-primary">{t("hero.highlight")}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="gap-2">
+              <Button asChild size="lg" className="gap-2 shadow-elegant">
                 <Link to="/signup">{t("hero.ctaPrimary")} <ArrowRight className="h-4 w-4" /></Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="gap-2">
@@ -44,9 +45,10 @@ function Home() {
               </Button>
             </div>
           </div>
-          <div className="relative">
-            <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-border/60 bg-card shadow-xl">
-              <div className="h-full w-full bg-[linear-gradient(135deg,oklch(0.62_0.16_145)_0%,oklch(0.78_0.15_75)_100%)] p-8 text-white">
+          <div className="relative animate-rise">
+            <div className="absolute -inset-4 -z-10 rounded-3xl bg-cta-gradient opacity-20 blur-2xl" />
+            <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-border/60 bg-card shadow-glow">
+              <div className="h-full w-full bg-cta-gradient p-8 text-white">
                 <div className="flex h-full flex-col justify-between">
                   <div>
                     <p className="text-sm uppercase tracking-wider opacity-90">{t("brand")}</p>
@@ -61,7 +63,7 @@ function Home() {
                       { n: "6", l: t("services.title") },
                       { n: "3+", l: t("schemes.title") },
                     ].map((s, i) => (
-                      <div key={i} className="rounded-lg bg-white/15 p-3 backdrop-blur">
+                      <div key={i} className="rounded-lg bg-white/15 p-3 backdrop-blur transition-colors hover:bg-white/25">
                         <p className="text-xl font-bold">{s.n}</p>
                         <p className="text-xs opacity-90">{s.l}</p>
                       </div>
@@ -82,7 +84,7 @@ function Home() {
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {homeServices.map(({ key, Icon }) => (
-            <Card key={key} className="group transition-shadow hover:shadow-md">
+            <Card key={key} className="group card-lift border-border/60">
               <CardContent className="p-6">
                 <div className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="h-5 w-5" />
@@ -118,15 +120,16 @@ function Home() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-20">
-        <div className="relative overflow-hidden rounded-2xl bg-primary px-6 py-12 text-primary-foreground md:px-12 md:py-16">
+        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient px-6 py-12 text-primary-foreground shadow-glow md:px-12 md:py-16">
+          <div className="absolute inset-0 bg-grain opacity-25 pointer-events-none" />
           <div className="relative z-10 max-w-2xl">
             <h2 className="text-balance text-3xl font-bold md:text-4xl">{t("register.title")}</h2>
-            <p className="mt-3 text-primary-foreground/80">{t("register.subtitle")}</p>
+            <p className="mt-3 text-primary-foreground/85">{t("register.subtitle")}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg" variant="secondary">
+              <Button asChild size="lg" variant="secondary" className="shadow-elegant">
                 <Link to="/signup">{t("hero.ctaPrimary")}</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
+              <Button asChild size="lg" variant="outline" className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
                 <Link to="/pay">{t("hero.ctaSecondary")}</Link>
               </Button>
             </div>
