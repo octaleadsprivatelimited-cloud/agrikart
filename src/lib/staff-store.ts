@@ -219,6 +219,86 @@ export function useCustomers(opts?: { employeeId?: string }) {
   return items;
 }
 
+// ---------- Customer edit history (audit log) ----------
+export type CustomerEditChange = { field: string; from: string; to: string };
+export type CustomerEdit = {
+  id: string;
+  customerId: string;
+  editorId: string;
+  editorName: string;
+  editorRole: StaffRole;
+  changes: CustomerEditChange[];
+  at: number;
+};
+
+const EDITABLE_FIELDS = [
+  "farmerName", "mobile", "aadhaar", "village", "district", "landSize", "crops", "remarks",
+] as const;
+type EditableField = (typeof EDITABLE_FIELDS)[number];
+
+export function editCustomer(
+  id: string,
+  patch: Partial<Pick<Customer, EditableField>>,
+  editor: Staff,
+): { customer: Customer; edit: CustomerEdit | null } {
+  const all = read<Customer[]>(CUSTOMERS_KEY, []);
+  const current = all.find(c => c.id === id);
+  if (!current) throw new Error("Customer not found");
+  if (!permissions.canEditCustomer(editor, current)) {
+    throw new Error("You don't have permission to edit this customer");
+  }
+
+  const changes: CustomerEditChange[] = [];
+  const next: Customer = { ...current };
+  for (const f of EDITABLE_FIELDS) {
+    if (!(f in patch)) continue;
+    const newVal = (patch[f] ?? "") as string;
+    const oldVal = ((current[f] as string | undefined) ?? "");
+    if (String(newVal).trim() !== String(oldVal).trim()) {
+      changes.push({ field: f, from: String(oldVal), to: String(newVal) });
+      (next[f] as string) = String(newVal);
+    }
+  }
+
+  if (changes.length === 0) return { customer: current, edit: null };
+
+  write(CUSTOMERS_KEY, all.map(c => c.id === id ? next : c));
+  const edit: CustomerEdit = {
+    id: crypto.randomUUID(),
+    customerId: id,
+    editorId: editor.id,
+    editorName: editor.name,
+    editorRole: editor.role,
+    changes,
+    at: Date.now(),
+  };
+  const log = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
+  log.unshift(edit);
+  write(CUSTOMER_EDITS_KEY, log);
+  window.dispatchEvent(new Event("agrikart-customers"));
+  window.dispatchEvent(new Event("agrikart-customer-edits"));
+  return { customer: next, edit };
+}
+
+export function useCustomerEdits(customerId: string | undefined) {
+  const [items, setItems] = useState<CustomerEdit[]>([]);
+  useEffect(() => {
+    if (!customerId) return;
+    const sync = () => {
+      const all = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
+      setItems(all.filter(e => e.customerId === customerId).sort((a, b) => b.at - a.at));
+    };
+    sync();
+    window.addEventListener("agrikart-customer-edits", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-customer-edits", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, [customerId]);
+  return items;
+}
+
 // ---------- Service requests (per customer) ----------
 export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage";
 export type ServiceRequest = {
