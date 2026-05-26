@@ -79,7 +79,7 @@ function PayPage() {
   );
 }
 
-function PayCard({ label, amount, onPay, paid, btn }: { label: string; amount: string; onPay: () => void; paid: boolean; btn: string }) {
+function PayCard({ label, amount, onPay, paid, btn, paidLabel }: { label: string; amount: string; onPay: () => void; paid: boolean; btn: string; paidLabel: string }) {
   return (
     <Card>
       <CardContent className="p-6">
@@ -90,7 +90,7 @@ function PayCard({ label, amount, onPay, paid, btn }: { label: string; amount: s
         <p className="mt-1 text-3xl font-extrabold">{amount}</p>
         {paid ? (
           <p className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-            <CheckCircle2 className="h-4 w-4" /> Paid
+            <CheckCircle2 className="h-4 w-4" /> {paidLabel}
           </p>
         ) : (
           <Button onClick={onPay} className="mt-4 w-full">{btn}</Button>
