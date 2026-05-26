@@ -182,6 +182,8 @@ function CustomerDetail() {
           )}
         </CardContent>
       </Card>
+
+      <EditHistoryCard edits={edits} />
     </div>
   );
 }
