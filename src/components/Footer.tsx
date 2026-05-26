@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Sprout, ChevronDown } from "lucide-react";
 import { useState, type ReactNode } from "react";

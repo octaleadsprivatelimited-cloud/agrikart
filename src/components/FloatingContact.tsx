@@ -1,11 +1,11 @@
-import { useRouterState } from "@tanstack/react-router";
+import { useLocation } from "react-router-dom";
 import { Phone, MessageCircle } from "lucide-react";
 import { CONTACT, waLink, telLink } from "@/lib/contact";
 
 const HIDE_PREFIXES = ["/admin", "/staff", "/login", "/portal"];
 
 export function FloatingContact() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
   if (HIDE_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"))) return null;
 
   return (
