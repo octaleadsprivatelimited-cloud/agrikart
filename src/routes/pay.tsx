@@ -50,30 +50,30 @@ function PayPage() {
       <section className="container mx-auto max-w-3xl px-4 py-12">
         <Card className="mb-6">
           <CardContent className="grid gap-3 p-6 sm:grid-cols-2">
-            <div><Label>Farmer ID *</Label><Input value={farmerId} onChange={(e) => setFarmerId(e.target.value)} placeholder="AKFXXXXXX" maxLength={20} /></div>
-            <div><Label>Name</Label><Input value={farmerName} onChange={(e) => setFarmerName(e.target.value)} maxLength={100} /></div>
-            <div><Label>Mobile</Label><Input value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={10} placeholder="10-digit number" /></div>
-            <div><Label>Email</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} placeholder="you@example.com" /></div>
+            <div><Label>{t("pay.farmerIdLabel")}</Label><Input value={farmerId} onChange={(e) => setFarmerId(e.target.value)} placeholder={t("pay.farmerIdPlaceholder")} maxLength={20} /></div>
+            <div><Label>{t("pay.nameLabel")}</Label><Input value={farmerName} onChange={(e) => setFarmerName(e.target.value)} maxLength={100} /></div>
+            <div><Label>{t("pay.mobileLabel")}</Label><Input value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={10} placeholder={t("pay.mobilePlaceholder")} /></div>
+            <div><Label>{t("pay.emailLabel")}</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} placeholder={t("pay.emailPlaceholder")} /></div>
           </CardContent>
         </Card>
         {paid && (
           <Card className="mb-6 border-primary/30 bg-primary/5">
             <CardContent className="p-5 text-sm">
-              <p className="font-semibold text-primary inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> Payment successful</p>
+              <p className="font-semibold text-primary inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {t("pay.successHeading")}</p>
               <div className="mt-2 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
-                <p>Transaction ID: <span className="font-mono text-foreground">{paid.txnId}</span></p>
-                <p>Order ID: <span className="font-mono text-foreground">{paid.orderId}</span></p>
+                <p>{t("pay.txnId")}: <span className="font-mono text-foreground">{paid.txnId}</span></p>
+                <p>{t("pay.orderId")}: <span className="font-mono text-foreground">{paid.orderId}</span></p>
               </div>
             </CardContent>
           </Card>
         )}
         <div className="grid gap-5 md:grid-cols-2">
-          <PayCard label={t("pay.joining")} amount="₹2,000" onPay={() => pay("joining")} paid={paid?.kind === "joining"} btn={t("pay.payBtn")} />
-          <PayCard label={t("pay.renewal")} amount="₹1,499" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} />
+          <PayCard label={t("pay.joining")} amount="₹2,000" onPay={() => pay("joining")} paid={paid?.kind === "joining"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
+          <PayCard label={t("pay.renewal")} amount="₹1,499" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
         </div>
       </section>
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">
-        Powered by Rojaripay • UPI / Cards / Net Banking
+        {t("pay.poweredBy")}
       </p>
     </>
   );
