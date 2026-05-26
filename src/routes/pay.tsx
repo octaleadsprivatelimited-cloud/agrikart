@@ -22,20 +22,26 @@ export const Route = createFileRoute("/pay")({
 
 function PayPage() {
   const { t } = useTranslation();
-  const [paid, setPaid] = useState<"joining" | "renewal" | null>(null);
+  const [paid, setPaid] = useState<{ kind: "joining" | "renewal"; txnId: string; orderId: string } | null>(null);
   const [farmerId, setFarmerId] = useState("");
   const [farmerName, setFarmerName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
 
   const pay = (kind: "joining" | "renewal") => {
-    if (!farmerId.trim()) {
-      toast.error("Please enter your Farmer ID");
-      return;
-    }
+    if (!farmerId.trim()) return toast.error("Please enter your Farmer ID");
+    if (mobile && !/^\d{10}$/.test(mobile.trim())) return toast.error("Mobile must be 10 digits");
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return toast.error("Enter a valid email");
     const amount = kind === "joining" ? 2000 : 1499;
-    recordPayment({ farmerId: farmerId.trim().toUpperCase(), farmerName: farmerName.trim() || undefined, mobile: mobile.trim() || undefined, kind, amount });
+    const p = recordPayment({
+      farmerId: farmerId.trim().toUpperCase(),
+      farmerName: farmerName.trim() || undefined,
+      mobile: mobile.trim() || undefined,
+      email: email.trim().toLowerCase() || undefined,
+      kind, amount,
+    });
     toast.success(t("pay.success"));
-    setPaid(kind);
+    setPaid({ kind, txnId: p.id, orderId: p.orderId });
   };
 
   return (
@@ -43,15 +49,27 @@ function PayPage() {
       <PageHeader title={t("pay.title")} subtitle={t("pay.subtitle")} />
       <section className="container mx-auto max-w-3xl px-4 py-12">
         <Card className="mb-6">
-          <CardContent className="grid gap-3 p-6 sm:grid-cols-3">
-            <div><Label>Farmer ID *</Label><Input value={farmerId} onChange={(e) => setFarmerId(e.target.value)} placeholder="AKFXXXXXX" /></div>
-            <div><Label>Name (optional)</Label><Input value={farmerName} onChange={(e) => setFarmerName(e.target.value)} /></div>
-            <div><Label>Mobile (optional)</Label><Input value={mobile} onChange={(e) => setMobile(e.target.value)} /></div>
+          <CardContent className="grid gap-3 p-6 sm:grid-cols-2">
+            <div><Label>Farmer ID *</Label><Input value={farmerId} onChange={(e) => setFarmerId(e.target.value)} placeholder="AKFXXXXXX" maxLength={20} /></div>
+            <div><Label>Name</Label><Input value={farmerName} onChange={(e) => setFarmerName(e.target.value)} maxLength={100} /></div>
+            <div><Label>Mobile</Label><Input value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={10} placeholder="10-digit number" /></div>
+            <div><Label>Email</Label><Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} placeholder="you@example.com" /></div>
           </CardContent>
         </Card>
+        {paid && (
+          <Card className="mb-6 border-primary/30 bg-primary/5">
+            <CardContent className="p-5 text-sm">
+              <p className="font-semibold text-primary inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> Payment successful</p>
+              <div className="mt-2 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
+                <p>Transaction ID: <span className="font-mono text-foreground">{paid.txnId}</span></p>
+                <p>Order ID: <span className="font-mono text-foreground">{paid.orderId}</span></p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
         <div className="grid gap-5 md:grid-cols-2">
-          <PayCard label={t("pay.joining")} amount="₹2,000" onPay={() => pay("joining")} paid={paid === "joining"} btn={t("pay.payBtn")} />
-          <PayCard label={t("pay.renewal")} amount="₹1,499" onPay={() => pay("renewal")} paid={paid === "renewal"} btn={t("pay.payBtn")} />
+          <PayCard label={t("pay.joining")} amount="₹2,000" onPay={() => pay("joining")} paid={paid?.kind === "joining"} btn={t("pay.payBtn")} />
+          <PayCard label={t("pay.renewal")} amount="₹1,499" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} />
         </div>
       </section>
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">

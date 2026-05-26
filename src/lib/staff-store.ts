@@ -265,10 +265,12 @@ export function captureGps(): Promise<{ lat: number; lng: number; accuracy: numb
 export type PaymentKind = "joining" | "renewal";
 export type PaymentStatus = "Succeeded" | "Refunded" | "Failed";
 export type Payment = {
-  id: string;
+  id: string;          // Transaction ID
+  orderId: string;     // Order ID
   farmerId: string;
   farmerName?: string;
   mobile?: string;
+  email?: string;
   kind: PaymentKind;
   amount: number;
   status: PaymentStatus;
@@ -278,14 +280,15 @@ export type Payment = {
   createdAt: number;
 };
 
-export function recordPayment(p: Omit<Payment, "id" | "createdAt" | "status"> & { status?: PaymentStatus }): Payment {
+export function recordPayment(p: Omit<Payment, "id" | "orderId" | "createdAt" | "status"> & { status?: PaymentStatus }): Payment {
   const all = read<Payment[]>(PAYMENTS_KEY, []);
   const methods: Payment["method"][] = ["UPI", "Card", "NetBanking"];
   const item: Payment = {
     ...p,
     status: p.status ?? "Succeeded",
     method: p.method ?? methods[Math.floor(Math.random() * methods.length)],
-    id: "PAY-" + crypto.randomUUID().slice(0, 8).toUpperCase(),
+    id: "TXN-" + crypto.randomUUID().slice(0, 10).toUpperCase().replace(/-/g, ""),
+    orderId: "ORD-" + Date.now().toString(36).toUpperCase() + "-" + Math.floor(Math.random() * 9000 + 1000),
     createdAt: Date.now(),
   };
   all.unshift(item);
