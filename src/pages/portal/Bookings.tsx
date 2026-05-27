@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useBookings, useCurrentUser } from "@/lib/auth-store";
-import { StatusPill } from "./dashboard";
+import { StatusPill } from "../staff/Dashboard";
 import { ExternalLink, PlusCircle } from "lucide-react";
 
 

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCurrentStaff, useCustomers, type CustomerStatus, permissions } from "@/lib/staff-store";
-import { StatusPill } from "./dashboard";
+import { StatusPill } from "./Dashboard";
 import { Search, MapPin, ChevronRight } from "lucide-react";
 
 

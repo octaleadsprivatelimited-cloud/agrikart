@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCustomers, useRequests, updateRequestStatus, type CustomerStatus } from "@/lib/staff-store";
-import { StatusPill } from "../staff/dashboard";
+import { StatusPill } from "../staff/Dashboard";
 
 
 const tabs: Array<{ key: "All" | CustomerStatus; label: string }> = [

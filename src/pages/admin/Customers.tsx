@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useCustomers, type CustomerStatus } from "@/lib/staff-store";
-import { StatusPill } from "../staff/dashboard";
+import { StatusPill } from "../staff/Dashboard";
 import { Search, MapPin, ChevronRight } from "lucide-react";
 
 

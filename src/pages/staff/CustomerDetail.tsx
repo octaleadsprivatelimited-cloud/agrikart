@@ -12,7 +12,7 @@ import {
   permissions,
 } from "@/lib/staff-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
-import { StatusPill } from "./dashboard";
+import { StatusPill } from "./Dashboard";
 import { EditHistoryCard } from "../admin/CustomerDetail";
 import { ArrowLeft, MapPin, Phone, Sprout, Plus, Pencil, X, Save } from "lucide-react";
 import { toast } from "sonner";
