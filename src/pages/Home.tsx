@@ -49,7 +49,7 @@ export default function Home() {
                   <Link to="/products">Shop now <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
                 <Button asChild size="default" variant="outline" className="gap-2 border-white/60 bg-transparent text-white hover:bg-white/10">
-                  <Link to="/login">Login</Link>
+                  <Link to="/staff/login">Login</Link>
                 </Button>
                 <Button asChild size="default" variant="outline" className="gap-2 border-white/60 bg-transparent text-white hover:bg-white/10">
                   <Link to="/signup">{t("hero.ctaPrimary")}</Link>
