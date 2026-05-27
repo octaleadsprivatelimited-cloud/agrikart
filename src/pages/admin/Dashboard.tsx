@@ -252,10 +252,10 @@ export default function AdminDashboard() {
                 {pendingCustomers.map(c => (
                   <li key={c.id} className="flex items-center justify-between py-3 text-sm">
                     <div>
-                      <Link to="/admin/customers/$id" params={{ id: c.id }} className="font-medium hover:text-primary">{c.farmerName}</Link>
-                      <p className="text-xs text-muted-foreground">{c.village}, {c.district} Â· by {c.employeeName}</p>
+                      <Link to={`/admin/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
+                      <p className="text-xs text-muted-foreground">{c.village}, {c.district} · by {c.employeeName}</p>
                     </div>
-                    <Link to="/admin/customers/$id" params={{ id: c.id }} className="text-xs font-semibold text-primary hover:underline">Review â†’</Link>
+                    <Link to={`/admin/customers/${c.id}`} className="text-xs font-semibold text-primary hover:underline">Review →</Link>
                   </li>
                 ))}
               </ul>
