@@ -60,7 +60,7 @@ export default function CustomersList() {
       ) : (
         <div className="mt-6 grid gap-3">
           {filtered.map(c => (
-            <Link key={c.id} to="/staff/customers/$id" params={{ id: c.id }}>
+            <Link key={c.id} to={`/staff/customers/${c.id}`}>
               <Card className="transition-shadow hover:shadow-md">
                 <CardContent className="flex items-center gap-4 p-5">
                   <div className="grid h-11 w-11 place-items-center rounded-full bg-primary/10 text-primary font-bold">

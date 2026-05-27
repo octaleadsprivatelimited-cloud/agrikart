@@ -52,7 +52,7 @@ export default function Dashboard() {
               {customers.slice(0, 6).map(c => (
                 <li key={c.id} className="flex items-center justify-between py-3 text-sm">
                   <div>
-                    <Link to="/staff/customers/$id" params={{ id: c.id }} className="font-medium hover:text-primary">{c.farmerName}</Link>
+                    <Link to={`/staff/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
                     <p className="text-xs text-muted-foreground">{c.village}, {c.district}</p>
                   </div>
                   <StatusPill status={c.status} />

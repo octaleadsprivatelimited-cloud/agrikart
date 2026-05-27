@@ -19,7 +19,7 @@ export default function StaffLogin() {
     try {
       const s = staffLogin(email.trim(), password);
       toast.success(`Welcome, ${s.name}`);
-      void navigate({ to: s.role === "admin" ? "/admin/dashboard" : "/staff/dashboard" });
+      void navigate(s.role === "admin" ? "/admin/dashboard" : "/staff/dashboard");
     } catch {
       toast.error("Invalid email or password.");
     }
