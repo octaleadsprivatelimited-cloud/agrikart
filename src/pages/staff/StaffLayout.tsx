@@ -1,10 +1,11 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { staffLogout, useCurrentStaff } from "@/lib/staff-store";
-import { LayoutDashboard, UserPlus, Users, LogOut } from "lucide-react";
+import { LayoutDashboard, UserPlus, Users, LogOut, Inbox } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const items = [
   { to: "/staff/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { to: "/staff/submissions", label: "My Submissions", Icon: Inbox },
   { to: "/staff/add-customer", label: "Add Customer", Icon: UserPlus },
   { to: "/staff/customers", label: "Customers", Icon: Users },
 ] as const;

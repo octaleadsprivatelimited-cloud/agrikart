@@ -2,12 +2,13 @@ import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
 import { getCurrentStaff, staffLogout, useCurrentStaff } from "@/lib/staff-store";
 import {
   LayoutDashboard, Users, ClipboardList, LogOut, ShieldCheck, UserCog, IndianRupee,
-  Package, Boxes, ShoppingCart, Truck, CreditCard, LifeBuoy, FileBarChart, Settings,
+  Package, Boxes, ShoppingCart, Truck, CreditCard, LifeBuoy, FileBarChart, Settings, Inbox,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const items = [
   { to: "/admin/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { to: "/admin/submissions", label: "Submissions", Icon: Inbox },
   { to: "/admin/products", label: "Products", Icon: Package },
   { to: "/admin/inventory", label: "Inventory", Icon: Boxes },
   { to: "/admin/orders", label: "Orders", Icon: ShoppingCart },

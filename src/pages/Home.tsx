@@ -46,13 +46,10 @@ export default function Home() {
               </p>
               <div className="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
                 <Button asChild size="default" className="gap-2 bg-white text-foreground hover:bg-white/90">
-                  <Link to="/products">Shop now <ArrowRight className="h-4 w-4" /></Link>
+                  <Link to="/apply">Apply for a service <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
                 <Button asChild size="default" variant="outline" className="gap-2 border-white/60 bg-transparent text-white hover:bg-white/10">
-                  <Link to="/staff/login">Login</Link>
-                </Button>
-                <Button asChild size="default" variant="outline" className="gap-2 border-white/60 bg-transparent text-white hover:bg-white/10">
-                  <Link to="/signup">{t("hero.ctaPrimary")}</Link>
+                  <Link to="/products">Shop products</Link>
                 </Button>
               </div>
             </div>

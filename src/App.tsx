@@ -9,6 +9,7 @@ import { getCurrentStaff } from "@/lib/staff-store";
 // -- Lazy-loaded page components -----------------------------------------------
 const Home = lazy(() => import("@/pages/Home"));
 const About = lazy(() => import("@/pages/About"));
+const Apply = lazy(() => import("@/pages/Apply"));
 const Blog = lazy(() => import("@/pages/Blog"));
 const Careers = lazy(() => import("@/pages/Careers"));
 const Commission = lazy(() => import("@/pages/Commission"));
@@ -22,7 +23,6 @@ const Refund = lazy(() => import("@/pages/Refund"));
 const Schemes = lazy(() => import("@/pages/Schemes"));
 const Services = lazy(() => import("@/pages/Services"));
 const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
-const Signup = lazy(() => import("@/pages/Signup"));
 const Support = lazy(() => import("@/pages/Support"));
 const Terms = lazy(() => import("@/pages/Terms"));
 
@@ -39,6 +39,7 @@ const AdminReports = lazy(() => import("@/pages/admin/Reports"));
 const AdminCustomers = lazy(() => import("@/pages/admin/Customers"));
 const AdminCustomerDetail = lazy(() => import("@/pages/admin/CustomerDetail"));
 const AdminRequests = lazy(() => import("@/pages/admin/Requests"));
+const AdminSubmissions = lazy(() => import("@/pages/admin/Submissions"));
 const AdminStaff = lazy(() => import("@/pages/admin/Staff"));
 const AdminRevenue = lazy(() => import("@/pages/admin/Revenue"));
 const AdminSettings = lazy(() => import("@/pages/admin/Settings"));
@@ -49,6 +50,7 @@ const StaffDashboard = lazy(() => import("@/pages/staff/Dashboard"));
 const StaffAddCustomer = lazy(() => import("@/pages/staff/AddCustomer"));
 const StaffCustomers = lazy(() => import("@/pages/staff/Customers"));
 const StaffCustomerDetail = lazy(() => import("@/pages/staff/CustomerDetail"));
+const StaffSubmissions = lazy(() => import("@/pages/staff/Submissions"));
 
 const PortalDashboard = lazy(() => import("@/pages/portal/Dashboard"));
 const PortalBookings = lazy(() => import("@/pages/portal/Bookings"));
@@ -119,12 +121,15 @@ export default function App() {
         {/* Public pages */}
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
+        <Route path="apply" element={<Apply />} />
         <Route path="blog" element={<Blog />} />
         <Route path="careers" element={<Careers />} />
         <Route path="commission" element={<Commission />} />
         <Route path="contact" element={<Contact />} />
         <Route path="faq" element={<FAQ />} />
-        <Route path="login" element={<Navigate to="/signup" replace />} />
+        {/* Farmer login/signup removed — farmers submit requests via /apply */}
+        <Route path="login" element={<Navigate to="/apply" replace />} />
+        <Route path="signup" element={<Navigate to="/apply" replace />} />
         <Route path="pay" element={<Pay />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="products" element={<Products />} />
@@ -133,7 +138,6 @@ export default function App() {
         <Route path="schemes" element={<Schemes />} />
         <Route path="services" element={<Services />} />
         <Route path="services/:slug" element={<ServiceDetail />} />
-        <Route path="signup" element={<Signup />} />
         <Route path="support" element={<Support />} />
         <Route path="terms" element={<Terms />} />
 
@@ -155,6 +159,7 @@ export default function App() {
             <Route path="add-customer" element={<StaffAddCustomer />} />
             <Route path="customers" element={<StaffCustomers />} />
             <Route path="customers/:id" element={<StaffCustomerDetail />} />
+            <Route path="submissions" element={<StaffSubmissions />} />
           </Route>
         </Route>
 
@@ -173,6 +178,7 @@ export default function App() {
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="customers/:id" element={<AdminCustomerDetail />} />
             <Route path="requests" element={<AdminRequests />} />
+            <Route path="submissions" element={<AdminSubmissions />} />
             <Route path="staff" element={<AdminStaff />} />
             <Route path="revenue" element={<AdminRevenue />} />
             <Route path="settings" element={<AdminSettings />} />
