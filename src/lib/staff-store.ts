@@ -11,6 +11,7 @@ const CUSTOMERS_KEY = "agrikart.customers";
 const REQUESTS_KEY = "agrikart.service_requests";
 const PAYMENTS_KEY = "agrikart.payments";
 const CUSTOMER_EDITS_KEY = "agrikart.customer_edits";
+const SUBMISSIONS_KEY = "agrikart.submissions";
 const SEED_KEY = "agrikart.seeded_v1";
 
 // ---------- Permissions (role-based access control) ----------
@@ -441,6 +442,72 @@ export function usePayments() {
       window.removeEventListener("storage", sync);
     };
   }, []);
+  return items;
+}
+
+// ---------- Public submissions (farmers submit forms without login) ----------
+export type SubmissionStatus = "New" | "Assigned" | "In Progress" | "Completed" | "Rejected";
+export type Submission = {
+  id: string;
+  farmerName: string;
+  mobile: string;
+  village: string;
+  district: string;
+  serviceCategory: ServiceCategory;
+  message: string;
+  status: SubmissionStatus;
+  assignedStaffId?: string;
+  assignedStaffName?: string;
+  assignedAt?: number;
+  createdAt: number;
+};
+
+export function createSubmission(input: Omit<Submission, "id" | "status" | "createdAt" | "assignedStaffId" | "assignedStaffName" | "assignedAt">): Submission {
+  const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+  const item: Submission = {
+    ...input,
+    id: "SUB-" + crypto.randomUUID().slice(0, 8).toUpperCase(),
+    status: "New",
+    createdAt: Date.now(),
+  };
+  all.unshift(item);
+  write(SUBMISSIONS_KEY, all);
+  if (typeof window !== "undefined") window.dispatchEvent(new Event("agrikart-submissions"));
+  return item;
+}
+
+export function assignSubmission(id: string, staffId: string) {
+  const staffList = read<StoredStaff[]>(STAFF_KEY, []);
+  const target = staffList.find(s => s.id === staffId);
+  if (!target) throw new Error("Staff not found");
+  const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+  write(SUBMISSIONS_KEY, all.map(s => s.id === id
+    ? { ...s, assignedStaffId: target.id, assignedStaffName: target.name, assignedAt: Date.now(), status: s.status === "New" ? "Assigned" : s.status }
+    : s));
+  window.dispatchEvent(new Event("agrikart-submissions"));
+}
+
+export function updateSubmissionStatus(id: string, status: SubmissionStatus) {
+  const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+  write(SUBMISSIONS_KEY, all.map(s => s.id === id ? { ...s, status } : s));
+  window.dispatchEvent(new Event("agrikart-submissions"));
+}
+
+export function useSubmissions(opts?: { assignedStaffId?: string }) {
+  const [items, setItems] = useState<Submission[]>([]);
+  useEffect(() => {
+    const sync = () => {
+      const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+      setItems(opts?.assignedStaffId ? all.filter(s => s.assignedStaffId === opts.assignedStaffId) : all);
+    };
+    sync();
+    window.addEventListener("agrikart-submissions", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("agrikart-submissions", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, [opts?.assignedStaffId]);
   return items;
 }
 
