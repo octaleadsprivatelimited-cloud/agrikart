@@ -49,7 +49,7 @@ export default function AddCustomer() {
       employeeName: staff.name,
     });
     toast.success("Customer added!");
-    void navigate({ to: "/staff/customers/$id", params: { id: c.id } });
+    void navigate(`/staff/customers/${c.id}`);
   };
 
   return (

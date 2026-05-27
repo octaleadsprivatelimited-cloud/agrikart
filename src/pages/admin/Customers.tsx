@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useCustomers, type CustomerStatus } from "@/lib/staff-store";
-import { StatusPill } from "../staff/dashboard";
+import { StatusPill } from "../staff/Dashboard";
 import { Search, MapPin, ChevronRight } from "lucide-react";
 
 
@@ -74,7 +74,7 @@ export default function AdminCustomers() {
                 {filtered.map(c => (
                   <tr key={c.id} className="border-b border-border last:border-0 hover:bg-muted/40">
                     <td className="px-4 py-3">
-                      <Link to="/admin/customers/$id" params={{ id: c.id }} className="font-medium hover:text-primary">{c.farmerName}</Link>
+                      <Link to={`/admin/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
                       <p className="text-xs text-muted-foreground">{c.mobile}</p>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
@@ -83,7 +83,7 @@ export default function AdminCustomers() {
                     <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{c.employeeName}</td>
                     <td className="px-4 py-3"><StatusPill status={c.status} /></td>
                     <td className="px-4 py-3 text-right">
-                      <Link to="/admin/customers/$id" params={{ id: c.id }} className="inline-flex items-center text-xs font-semibold text-primary hover:underline">
+                      <Link to={`/admin/customers/${c.id}`} className="inline-flex items-center text-xs font-semibold text-primary hover:underline">
                         View <ChevronRight className="h-3 w-3" />
                       </Link>
                     </td>

@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCustomers, useRequests, updateRequestStatus, type CustomerStatus } from "@/lib/staff-store";
-import { StatusPill } from "../staff/dashboard";
+import { StatusPill } from "../staff/Dashboard";
 
 
 const tabs: Array<{ key: "All" | CustomerStatus; label: string }> = [
@@ -59,7 +59,7 @@ export default function AdminRequests() {
                     <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/40">
                       <td className="px-4 py-3">
                         {c ? (
-                          <Link to="/admin/customers/$id" params={{ id: c.id }} className="font-medium hover:text-primary">{c.farmerName}</Link>
+                          <Link to={`/admin/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
                         ) : <span className="text-muted-foreground">â€”</span>}
                         <p className="text-xs text-muted-foreground">{c?.village ?? ""}</p>
                       </td>
