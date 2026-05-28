@@ -24,9 +24,8 @@ const benefits = [
 ];
 
 const pricing = [
-  { name: "Basic Spray", price: "₹400", unit: "/ acre", features: ["Pesticide / fungicide spray", "Trained pilot & assistant", "Standard nozzle setup"] },
-  { name: "Nano Nutrient", price: "₹500", unit: "/ acre", features: ["Nano urea / DAP spray", "Foliar-grade atomisation", "Crop stage advisory"], featured: true },
-  { name: "Mapping & Imaging", price: "₹800", unit: "/ acre", features: ["Multispectral imagery", "Health & stress report", "Digital field map"] },
+  { name: "Basic Plan", price: "₹1,499", unit: "/ acre", features: ["Pesticide / fungicide spray", "Trained DGCA-certified pilot", "Standard nozzle setup", "Service report included"] },
+  { name: "Premium Plan", price: "₹4,999", unit: "/ acre", features: ["Nano nutrient + pesticide spray", "Multispectral crop imaging", "Digital field map & health report", "Priority scheduling & advisory"], featured: true },
 ];
 
 const steps = [
@@ -98,7 +97,7 @@ export default function DroneServices() {
       <section className="container mx-auto px-4 py-8 sm:py-12">
         <h2 className="text-xl font-bold sm:text-2xl">Transparent per-acre pricing</h2>
         <p className="mt-1 text-sm text-muted-foreground">Final pricing may vary based on crop, terrain and acreage.</p>
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 md:max-w-3xl md:mx-auto">
           {pricing.map(p => (
             <Card key={p.name} className={`relative border-border/60 ${p.featured ? "border-primary/60 shadow-elegant" : ""}`}>
               {p.featured && (
