@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { LanguageToggle } from "./LanguageToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Menu, Sprout, Search, ShoppingCart, User,
+  Menu, Search, ShoppingCart,
   Store, Bug, Beaker, Wrench, Leaf, FlaskConical, Stethoscope, Sparkles, Atom,
 } from "lucide-react";
+import agrikartLogo from "@/assets/agrikart-logo.png";
 
 const topLinks = [
   { to: "/", label: "Home" },
