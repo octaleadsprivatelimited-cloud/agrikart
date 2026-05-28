@@ -4,8 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, ArrowRight,
   Timer, BadgeCheck, Leaf, Users, Headphones, SprayCan, Package,
-  Handshake, MapPin, IndianRupee,
+  Handshake, MapPin, IndianRupee, Star, PlayCircle,
 } from "lucide-react";
+import { useTestimonials, useGallery, useVideos, usePartners } from "@/lib/content-store";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
