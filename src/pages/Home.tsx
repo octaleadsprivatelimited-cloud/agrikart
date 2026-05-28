@@ -49,6 +49,10 @@ const stats = [
 ] as const;
 
 export default function Home() {
+  const testimonials = useTestimonials();
+  const gallery = useGallery();
+  const videos = useVideos();
+  const partners = usePartners();
   return (
     <>
       {/* HERO — One Stop Digital Platform */}
