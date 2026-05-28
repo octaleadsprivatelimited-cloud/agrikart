@@ -135,6 +135,46 @@ export default function DroneServices() {
         </div>
       </section>
 
+      {/* Plan Selection */}
+      <section className="container mx-auto px-4 pb-8 sm:pb-12">
+        <Card className="border-border/60 md:max-w-3xl md:mx-auto">
+          <CardContent className="p-5 sm:p-6">
+            <h2 className="text-lg font-bold sm:text-xl">Choose your plan & proceed to booking</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Select a plan below and continue to fill in your farm details.</p>
+            <RadioGroup
+              value={selectedPlan}
+              onValueChange={(v) => setSelectedPlan(v as "basic" | "premium")}
+              className="mt-5 grid gap-3 sm:grid-cols-2"
+            >
+              {pricing.map(p => {
+                const value = p.name.toLowerCase().includes("premium") ? "premium" : "basic";
+                const active = selectedPlan === value;
+                return (
+                  <Label
+                    key={p.name}
+                    htmlFor={`plan-${value}`}
+                    className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${active ? "border-primary bg-primary/5 ring-1 ring-primary/40" : "border-border/60 hover:border-primary/40"}`}
+                  >
+                    <RadioGroupItem id={`plan-${value}`} value={value} className="mt-1" />
+                    <div className="flex-1">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-base font-semibold">{p.name}</span>
+                        <span className="text-sm font-bold text-primary">{p.price}<span className="text-xs font-normal text-muted-foreground">{p.unit}</span></span>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">{p.features[0]}</p>
+                    </div>
+                  </Label>
+                );
+              })}
+            </RadioGroup>
+            <Button onClick={proceed} size="lg" className="mt-5 w-full sm:w-auto">
+              Proceed to Booking <ArrowRight className="ml-1 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+
+
       {/* Process */}
       <section className="bg-muted/30 border-t border-border/60">
         <div className="container mx-auto px-4 py-8 sm:py-12">
