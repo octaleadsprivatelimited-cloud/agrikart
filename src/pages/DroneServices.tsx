@@ -24,9 +24,8 @@ const benefits = [
 ];
 
 const pricing = [
-  { name: "Basic Spray", price: "₹400", unit: "/ acre", features: ["Pesticide / fungicide spray", "Trained pilot & assistant", "Standard nozzle setup"] },
-  { name: "Nano Nutrient", price: "₹500", unit: "/ acre", features: ["Nano urea / DAP spray", "Foliar-grade atomisation", "Crop stage advisory"], featured: true },
-  { name: "Mapping & Imaging", price: "₹800", unit: "/ acre", features: ["Multispectral imagery", "Health & stress report", "Digital field map"] },
+  { name: "Basic Plan", price: "₹1,499", unit: "/ acre", features: ["Pesticide / fungicide spray", "Trained DGCA-certified pilot", "Standard nozzle setup", "Service report included"] },
+  { name: "Premium Plan", price: "₹4,999", unit: "/ acre", features: ["Nano nutrient + pesticide spray", "Multispectral crop imaging", "Digital field map & health report", "Priority scheduling & advisory"], featured: true },
 ];
 
 const steps = [
