@@ -67,9 +67,9 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/55 to-transparent md:from-background/80 md:via-background/30" />
           </div>
 
-          <div className="relative grid items-center gap-4 px-5 py-8 sm:px-8 sm:py-12 md:grid-cols-2 md:gap-6 md:px-12 md:py-14">
+          <div className="relative grid items-end gap-4 px-5 pt-8 sm:px-8 sm:pt-12 md:grid-cols-2 md:gap-6 md:px-12 md:pt-14">
             {/* Text */}
-            <div className="animate-fade-up max-w-xl">
+            <div className="animate-fade-up max-w-xl pb-8 sm:pb-12 md:pb-14">
               <h1 className="text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
                 One Stop Digital Platform{" "}
                 <span className="text-primary">for Farmers</span>
@@ -88,13 +88,13 @@ export default function Home() {
             </div>
 
             {/* Farmer cutout */}
-            <div className="relative hidden md:flex md:justify-end">
+            <div className="relative hidden md:flex md:justify-end md:items-end">
               <img
                 src={heroFarmer}
-                alt="Indian farmer standing confidently"
+                alt="Indian farmer holding paddy"
                 width={832}
                 height={1216}
-                className="h-[420px] w-auto object-contain drop-shadow-2xl lg:h-[480px]"
+                className="h-[460px] w-auto object-contain object-bottom drop-shadow-2xl lg:h-[540px] xl:h-[600px]"
               />
             </div>
           </div>
