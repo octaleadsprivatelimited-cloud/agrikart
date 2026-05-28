@@ -10,11 +10,12 @@ import {
 } from "lucide-react";
 
 const topLinks = [
-  { to: "/products", label: "Buy Products" },
-  { to: "/blog", label: "Crops Advisory" },
-  { to: "/services", label: "Our Store" },
-  { to: "/schemes", label: "Mandi Rates" },
+  { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
+  { to: "/services", label: "Services" },
+  { to: "/tools", label: "Tools" },
+  { to: "/products", label: "Store" },
+  { to: "/schemes", label: "Government" },
 ] as const;
 
 const categories = [
