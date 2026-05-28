@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Sprout, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import agrikartLogo from "@/assets/agrikart-logo.png";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -9,12 +10,14 @@ export function Footer() {
     <footer className="mt-16 border-t border-border/60 bg-muted/40 md:mt-24">
       <div className="container mx-auto grid gap-6 px-4 py-8 md:grid-cols-4 md:gap-10 md:py-12">
         <div>
-          <div className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">
-              <Sprout className="h-5 w-5" />
-            </div>
-            <span className="text-lg font-bold">{t("brand")}</span>
-          </div>
+          <img
+            src={agrikartLogo}
+            alt="Agrikart Fintech Pvt. Ltd."
+            loading="lazy"
+            width={200}
+            height={60}
+            className="h-14 w-auto"
+          />
           <p className="mt-3 text-sm text-muted-foreground">{t("footer.tagline")}</p>
           <p className="mt-4 text-xs text-muted-foreground">{t("brandFull")}</p>
           <p className="text-xs text-muted-foreground">{t("cin")}</p>

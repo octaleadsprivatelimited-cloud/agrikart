@@ -5,9 +5,10 @@ import { Input } from "@/components/ui/input";
 import { LanguageToggle } from "./LanguageToggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Menu, Sprout, Search, ShoppingCart, User,
+  Menu, Search, ShoppingCart,
   Store, Bug, Beaker, Wrench, Leaf, FlaskConical, Stethoscope, Sparkles, Atom,
 } from "lucide-react";
+import agrikartLogo from "@/assets/agrikart-logo.png";
 
 const topLinks = [
   { to: "/", label: "Home" },
@@ -38,11 +39,14 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background">
       {/* Top row */}
       <div className="container mx-auto flex h-16 items-center gap-3 px-3 sm:gap-4 sm:px-4">
-        <Link to="/" className="flex shrink-0 items-center gap-2 group">
-          <div className="grid h-9 w-9 place-items-center rounded-full bg-cta-gradient text-primary-foreground shadow-elegant transition-transform group-hover:scale-105">
-            <Sprout className="h-5 w-5" />
-          </div>
-          <span className="hidden text-lg font-bold tracking-tight sm:inline">{t("brand")}</span>
+        <Link to="/" className="flex shrink-0 items-center gap-2 group" aria-label={t("brand")}>
+          <img
+            src={agrikartLogo}
+            alt="Agrikart Fintech Pvt. Ltd."
+            width={160}
+            height={48}
+            className="h-10 w-auto sm:h-12 transition-transform group-hover:scale-105"
+          />
         </Link>
 
         <nav className="hidden items-center gap-5 lg:flex">
