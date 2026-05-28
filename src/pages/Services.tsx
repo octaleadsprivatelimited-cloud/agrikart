@@ -2,18 +2,20 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
-import { Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark, ArrowRight } from "lucide-react";
+import { Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark, TestTube2, ArrowRight } from "lucide-react";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
 import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
 import imgSchemes from "@/assets/service-schemes.jpg";
+import imgSoil from "@/assets/service-soil.jpg";
 
 const items = [
   { key: "loans", Icon: Banknote, img: imgLoans },
   { key: "insurance", Icon: ShieldCheck, img: imgInsurance },
   { key: "seeds", Icon: Sprout, img: imgSeeds },
+  { key: "soil", Icon: TestTube2, img: imgSoil },
   { key: "cold", Icon: Snowflake, img: imgCold },
   { key: "trade", Icon: Ship, img: imgTrade },
   { key: "schemes", Icon: Landmark, img: imgSchemes },

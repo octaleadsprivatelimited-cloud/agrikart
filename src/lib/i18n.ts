@@ -48,6 +48,11 @@ const en = {
         short: "Certified high-yield seeds and quality fertilizers.",
         desc: "Company-certified high-yield seeds, quality fertilizers and crop protection products with crop and season-wise recommendations.",
       },
+      soil: {
+        title: "Soil Testing",
+        short: "Lab-grade soil analysis with crop-wise fertilizer advisory.",
+        desc: "On-farm soil sample collection and lab-grade testing for pH, EC, organic carbon, primary nutrients (NPK) and key micro-nutrients. Get a digital Soil Health report with crop-specific fertilizer dose, amendment advice (lime / gypsum / organic matter) and an agronomist call-back — so every rupee on inputs returns better yield.",
+      },
       cold: {
         title: "Cold Storage",
         short: "Digital slot booking with transparent charges.",
@@ -436,6 +441,12 @@ const te: typeof en = {
         short: "సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు.",
         desc:
           "కంపెనీ సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు, పంట రక్షణ ఉత్పత్తులు, పంట & సీజన్–వైజ్ సూచనలు.",
+      },
+      soil: {
+        title: "మట్టి పరీక్ష",
+        short: "ల్యాబ్ స్థాయి మట్టి విశ్లేషణ, పంట వారీ ఎరువుల సూచనలు.",
+        desc:
+          "పొలంలోనే మట్టి నమూనా సేకరణ, pH, EC, ఆర్గానిక్ కార్బన్, NPK మరియు ముఖ్య సూక్ష్మపోషకాల కోసం ల్యాబ్ స్థాయి పరీక్షలు. పంటకు తగిన ఎరువుల మోతాదు, లైమ్/జిప్సం/సేంద్రియ సవరణలు మరియు అగ్రోనామిస్ట్ సలహాతో డిజిటల్ సాయిల్ హెల్త్ రిపోర్ట్ అందిస్తాము — ప్రతి రూపాయి ఇన్‌పుట్ మెరుగైన దిగుబడి ఇవ్వడానికి.",
       },
       cold: {
         title: "కోల్డ్ స్టోరేజ్",
