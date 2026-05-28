@@ -22,6 +22,7 @@ const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const Refund = lazy(() => import("@/pages/Refund"));
 const Schemes = lazy(() => import("@/pages/Schemes"));
 const Services = lazy(() => import("@/pages/Services"));
+const Tools = lazy(() => import("@/pages/Tools"));
 const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
 const Support = lazy(() => import("@/pages/Support"));
 const Terms = lazy(() => import("@/pages/Terms"));
@@ -138,6 +139,7 @@ export default function App() {
         <Route path="schemes" element={<Schemes />} />
         <Route path="services" element={<Services />} />
         <Route path="services/:slug" element={<ServiceDetail />} />
+        <Route path="tools" element={<Tools />} />
         <Route path="support" element={<Support />} />
         <Route path="terms" element={<Terms />} />
 
