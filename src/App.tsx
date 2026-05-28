@@ -14,6 +14,7 @@ const Blog = lazy(() => import("@/pages/Blog"));
 const Careers = lazy(() => import("@/pages/Careers"));
 const Commission = lazy(() => import("@/pages/Commission"));
 const Contact = lazy(() => import("@/pages/Contact"));
+const DroneServices = lazy(() => import("@/pages/DroneServices"));
 const FAQ = lazy(() => import("@/pages/FAQ"));
 const Pay = lazy(() => import("@/pages/Pay"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
