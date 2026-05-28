@@ -22,6 +22,7 @@ const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const Refund = lazy(() => import("@/pages/Refund"));
 const Schemes = lazy(() => import("@/pages/Schemes"));
 const Services = lazy(() => import("@/pages/Services"));
+const Tools = lazy(() => import("@/pages/Tools"));
 const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
 const Support = lazy(() => import("@/pages/Support"));
 const Terms = lazy(() => import("@/pages/Terms"));
