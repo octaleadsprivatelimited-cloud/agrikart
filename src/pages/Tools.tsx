@@ -5,7 +5,8 @@ import { SprayCan, Leaf, Stethoscope, Calculator, CloudSun, Sprout, Headphones, 
 
 const tools = [
   { label: "Crop Doctor", desc: "Diagnose crop diseases with expert guidance.", Icon: Leaf, to: "/services/seeds" },
-  { label: "Spraying Service", desc: "Book drone & manual spraying.", Icon: SprayCan, to: "/services/schemes" },
+  { label: "Drone Services", desc: "Aerial spraying, mapping & crop imaging.", Icon: SprayCan, to: "/drone-services" },
+  { label: "Spraying Service", desc: "Book drone & manual spraying.", Icon: SprayCan, to: "/drone-services" },
   { label: "Veterinary Help", desc: "Connect with vets for livestock care.", Icon: Stethoscope, to: "/support" },
   { label: "Cost Calculator", desc: "Estimate input costs for your farm.", Icon: Calculator, to: "/pay" },
   { label: "Weather Advisory", desc: "Local weather and crop guidance.", Icon: CloudSun, to: "/blog" },
