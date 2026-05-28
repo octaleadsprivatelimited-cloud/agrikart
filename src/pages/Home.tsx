@@ -4,8 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, ArrowRight,
   Timer, BadgeCheck, Leaf, Users, Headphones, SprayCan, Package,
-  Handshake, MapPin, IndianRupee,
+  Handshake, MapPin, IndianRupee, Star, PlayCircle,
 } from "lucide-react";
+import { useTestimonials, useGallery, useVideos, usePartners } from "@/lib/content-store";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
@@ -48,6 +49,10 @@ const stats = [
 ] as const;
 
 export default function Home() {
+  const testimonials = useTestimonials();
+  const gallery = useGallery();
+  const videos = useVideos();
+  const partners = usePartners();
   return (
     <>
       {/* HERO — One Stop Digital Platform */}
@@ -195,6 +200,122 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* TESTIMONIALS */}
+      {testimonials.length > 0 && (
+        <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">What Farmers Say</h2>
+              <p className="mt-2 text-sm text-muted-foreground sm:text-base">Real stories from farmers we've supported.</p>
+            </div>
+            <div className="mt-6 grid gap-3 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+              {testimonials.slice(0, 6).map(t => (
+                <Card key={t.id} className="h-full">
+                  <CardContent className="space-y-3 p-5">
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-yellow-400 text-yellow-400" : "text-muted"}`} />
+                      ))}
+                    </div>
+                    <p className="text-sm leading-relaxed text-foreground/85">"{t.quote}"</p>
+                    <div className="flex items-center gap-3 pt-2">
+                      {t.avatar ? (
+                        <img src={t.avatar} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
+                      ) : (
+                        <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                          {t.name.charAt(0)}
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{t.name}</p>
+                        <p className="truncate text-xs text-muted-foreground">{t.role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* GALLERY */}
+      {gallery.length > 0 && (
+        <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Gallery</h2>
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">Moments from the field.</p>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-10 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+            {gallery.slice(0, 8).map(g => (
+              <div key={g.id} className="group relative aspect-square overflow-hidden rounded-xl border border-border/60">
+                <img src={g.image} alt={g.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="absolute bottom-0 left-0 right-0 translate-y-2 p-3 text-white opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="text-xs font-semibold">{g.title}</p>
+                  {g.caption && <p className="text-[10px] opacity-90">{g.caption}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* VIDEOS */}
+      {videos.length > 0 && (
+        <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
+          <div className="container mx-auto px-4">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Watch & Learn</h2>
+              <p className="mt-2 text-sm text-muted-foreground sm:text-base">Short videos about our services and farmer stories.</p>
+            </div>
+            <div className="mt-6 grid gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
+              {videos.slice(0, 6).map(v => (
+                <Card key={v.id} className="overflow-hidden">
+                  <a href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noreferrer" className="group block">
+                    <div className="relative aspect-video bg-muted">
+                      <img src={`https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg`} alt={v.title} loading="lazy" className="h-full w-full object-cover" />
+                      <div className="absolute inset-0 grid place-items-center bg-black/30 transition group-hover:bg-black/50">
+                        <PlayCircle className="h-14 w-14 text-white drop-shadow-lg" />
+                      </div>
+                    </div>
+                    <CardContent className="p-4">
+                      <p className="font-semibold">{v.title}</p>
+                      {v.description && <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{v.description}</p>}
+                    </CardContent>
+                  </a>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* PARTNERS */}
+      {partners.length > 0 && (
+        <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Our Partners</h2>
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">Trusted institutions and brands we work with.</p>
+          </div>
+          <div className="mt-6 grid grid-cols-3 gap-3 sm:mt-10 sm:grid-cols-4 sm:gap-4 md:grid-cols-6">
+            {partners.map(p => {
+              const isImage = p.logo.startsWith("data:") || p.logo.startsWith("http");
+              const inner = (
+                <div className="grid h-20 w-full place-items-center rounded-xl border border-border/60 bg-card p-3 transition hover:border-primary/40 hover:shadow-elegant">
+                  {isImage
+                    ? <img src={p.logo} alt={p.name} className="max-h-12 max-w-full object-contain grayscale transition hover:grayscale-0" />
+                    : <span className="text-3xl">{p.logo}</span>}
+                </div>
+              );
+              return p.website
+                ? <a key={p.id} href={p.website} target="_blank" rel="noreferrer" title={p.name}>{inner}</a>
+                : <div key={p.id} title={p.name}>{inner}</div>;
+            })}
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="container mx-auto px-4 pb-10 sm:pb-14 md:pb-20">

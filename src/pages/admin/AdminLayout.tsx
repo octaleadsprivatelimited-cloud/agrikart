@@ -2,7 +2,7 @@ import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
 import { getCurrentStaff, staffLogout, useCurrentStaff } from "@/lib/staff-store";
 import {
   LayoutDashboard, Users, ClipboardList, LogOut, ShieldCheck, UserCog, IndianRupee,
-  Package, Boxes, ShoppingCart, Truck, CreditCard, LifeBuoy, FileBarChart, Settings, Inbox,
+  Package, Boxes, ShoppingCart, Truck, CreditCard, LifeBuoy, FileBarChart, Settings, Inbox, Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +20,7 @@ const items = [
   { to: "/admin/requests", label: "Service Requests", Icon: ClipboardList },
   { to: "/admin/staff", label: "Staff", Icon: UserCog },
   { to: "/admin/revenue", label: "Revenue", Icon: IndianRupee },
+  { to: "/admin/content", label: "Site Content", Icon: Sparkles },
   { to: "/admin/settings", label: "Settings", Icon: Settings },
 ] as const;
 
