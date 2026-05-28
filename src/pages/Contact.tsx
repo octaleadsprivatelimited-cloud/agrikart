@@ -15,23 +15,23 @@ export default function Contact() {
   return (
     <>
       <PageHeader title={t("contact.title")} subtitle={t("contact.subtitle")} />
-      <section className="container mx-auto grid gap-8 px-4 py-16 md:grid-cols-3">
-        <div className="space-y-4">
+      <section className="container mx-auto grid gap-6 px-4 py-10 sm:gap-8 sm:py-16 md:grid-cols-3">
+        <div className="space-y-3 sm:space-y-4">
           {[
             { Icon: MapPin, label: t("contact.address") },
             { Icon: Phone, label: "+91 99999 99999" },
             { Icon: Mail, label: "support@agrikartfin.com" },
           ].map(({ Icon, label }) => (
             <div key={label} className="flex items-start gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
                 <Icon className="h-5 w-5" />
               </div>
-              <p className="pt-2 text-sm">{label}</p>
+              <p className="pt-2 text-sm break-words">{label}</p>
             </div>
           ))}
         </div>
         <Card className="md:col-span-2">
-          <CardContent className="p-8">
+          <CardContent className="p-5 sm:p-8">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -52,21 +52,19 @@ export default function Contact() {
                 <Label htmlFor="message">{t("contact.messageLabel")}</Label>
                 <Textarea id="message" required maxLength={1000} rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
               </div>
-              <Button type="submit" size="lg">{t("contact.submit")}</Button>
+              <Button type="submit" size="lg" className="w-full sm:w-auto sm:justify-self-start">{t("contact.submit")}</Button>
             </form>
           </CardContent>
         </Card>
       </section>
-      <section className="container mx-auto px-4 pb-16">
+      <section className="container mx-auto px-4 pb-10 sm:pb-16">
         <div className="overflow-hidden rounded-2xl border border-border/60 shadow-elegant">
           <iframe
             title="AgriKart Fin location"
             src="https://www.google.com/maps?q=18.425097,79.135345&z=17&output=embed"
-            width="100%"
-            height="400"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            className="block w-full border-0"
+            className="block aspect-[4/3] w-full border-0 sm:aspect-[16/9] sm:h-[400px]"
           />
         </div>
         <div className="mt-3 text-center">

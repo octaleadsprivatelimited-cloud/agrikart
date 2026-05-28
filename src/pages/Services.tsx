@@ -24,7 +24,7 @@ export default function Services() {
   return (
     <>
       <PageHeader title={t("services.title")} subtitle={t("services.subtitle")} />
-      <section className="container mx-auto grid gap-5 px-4 py-12 md:grid-cols-2 md:py-16">
+      <section className="container mx-auto grid gap-4 px-4 py-8 sm:gap-5 sm:py-12 md:grid-cols-2 md:py-16">
         {items.map(({ key, Icon, img }) => (
           <Link key={key} to={`/services/${key}`} className="group block">
             <Card className="card-lift overflow-hidden border-border/60">
@@ -36,12 +36,12 @@ export default function Services() {
                   <Icon className="h-5 w-5" />
                 </div>
               </div>
-              <CardContent className="p-6">
-                <h3 className="flex items-center gap-2 text-lg font-semibold">
+              <CardContent className="p-4 sm:p-6">
+                <h3 className="flex items-center gap-2 text-base font-semibold sm:text-lg">
                   {t(`services.items.${key}.title`)}
                   <ArrowRight className="h-4 w-4 text-primary transition-transform group-hover:translate-x-1" />
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`services.items.${key}.short`)}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground sm:mt-2">{t(`services.items.${key}.short`)}</p>
               </CardContent>
             </Card>
           </Link>

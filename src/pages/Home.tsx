@@ -126,15 +126,15 @@ export default function Home() {
       </section>
 
       {/* Why AgriKart Fin */}
-      <section className="bg-muted/40 py-20">
+      <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-balance text-3xl font-bold md:text-4xl">{t("whyTitle")}</h2>
-            <p className="mt-4 text-muted-foreground md:text-lg">{t("why")}</p>
+            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">{t("whyTitle")}</h2>
+            <p className="mt-3 text-sm text-muted-foreground sm:mt-4 sm:text-base md:text-lg">{t("why")}</p>
           </div>
-          <ul className="mx-auto mt-10 grid max-w-3xl gap-3 sm:grid-cols-2">
+          <ul className="mx-auto mt-6 grid max-w-3xl gap-3 sm:mt-10 sm:grid-cols-2">
             {(t("why").split(",")).map((x, i) => (
-              <li key={i} className="flex items-start gap-2 rounded-lg border border-border/60 bg-card p-4">
+              <li key={i} className="flex items-start gap-2 rounded-lg border border-border/60 bg-card p-3 sm:p-4">
                 <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                 <span className="text-sm">{x.trim()}</span>
               </li>
@@ -144,17 +144,17 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient px-6 py-12 text-primary-foreground shadow-glow md:px-12 md:py-16">
+      <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
+        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient px-5 py-8 text-primary-foreground shadow-glow sm:px-6 sm:py-12 md:px-12 md:py-16">
           <div className="absolute inset-0 bg-grain opacity-25 pointer-events-none" />
           <div className="relative z-10 max-w-2xl">
-            <h2 className="text-balance text-3xl font-bold md:text-4xl">{t("register.title")}</h2>
-            <p className="mt-3 text-primary-foreground/85">{t("register.subtitle")}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg" variant="secondary" className="shadow-elegant">
-                <Link to="/signup">{t("hero.ctaPrimary")}</Link>
+            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">{t("register.title")}</h2>
+            <p className="mt-2 text-sm text-primary-foreground/85 sm:mt-3 sm:text-base">{t("register.subtitle")}</p>
+            <div className="mt-5 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
+              <Button asChild size="default" variant="secondary" className="shadow-elegant sm:size-lg">
+                <Link to="/apply">{t("hero.ctaPrimary")}</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
+              <Button asChild size="default" variant="outline" className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 sm:size-lg">
                 <Link to="/pay">{t("hero.ctaSecondary")}</Link>
               </Button>
             </div>
