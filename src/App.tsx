@@ -45,6 +45,7 @@ const AdminSubmissions = lazy(() => import("@/pages/admin/Submissions"));
 const AdminStaff = lazy(() => import("@/pages/admin/Staff"));
 const AdminRevenue = lazy(() => import("@/pages/admin/Revenue"));
 const AdminSettings = lazy(() => import("@/pages/admin/Settings"));
+const AdminContent = lazy(() => import("@/pages/admin/Content"));
 
 const StaffLayout = lazy(() => import("@/pages/staff/StaffLayout"));
 const StaffLogin = lazy(() => import("@/pages/staff/Login"));
@@ -187,6 +188,7 @@ export default function App() {
             <Route path="staff" element={<AdminStaff />} />
             <Route path="revenue" element={<AdminRevenue />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="content" element={<AdminContent />} />
           </Route>
         </Route>
 
