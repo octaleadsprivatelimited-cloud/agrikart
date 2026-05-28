@@ -39,6 +39,10 @@ const steps = [
 ];
 
 export default function DroneServices() {
+  const [selectedPlan, setSelectedPlan] = useState<"basic" | "premium">("premium");
+  const navigate = useNavigate();
+  const proceed = () => navigate(`/apply?service=drone&plan=${selectedPlan}`);
+
   return (
     <>
       <PageHeader
