@@ -57,6 +57,29 @@ export default function Contact() {
           </CardContent>
         </Card>
       </section>
+      <section className="container mx-auto px-4 pb-16">
+        <div className="overflow-hidden rounded-2xl border border-border/60 shadow-elegant">
+          <iframe
+            title="AgriKart Fin location"
+            src="https://www.google.com/maps?q=18.425097,79.135345&z=17&output=embed"
+            width="100%"
+            height="400"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="block w-full border-0"
+          />
+        </div>
+        <div className="mt-3 text-center">
+          <a
+            href="https://maps.app.goo.gl/i8H2cUypjBJYX5ay9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-primary hover:underline"
+          >
+            Open in Google Maps →
+          </a>
+        </div>
+      </section>
     </>
   );
 }
