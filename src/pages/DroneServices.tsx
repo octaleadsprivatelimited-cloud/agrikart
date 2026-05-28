@@ -97,7 +97,7 @@ export default function DroneServices() {
       <section className="container mx-auto px-4 py-8 sm:py-12">
         <h2 className="text-xl font-bold sm:text-2xl">Transparent per-acre pricing</h2>
         <p className="mt-1 text-sm text-muted-foreground">Final pricing may vary based on crop, terrain and acreage.</p>
-        <div class‌Name="mt-6 grid gap-4 md:grid-cols-2 md:max-w-3xl md:mx-auto">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 md:max-w-3xl md:mx-auto">
           {pricing.map(p => (
             <Card key={p.name} className={`relative border-border/60 ${p.featured ? "border-primary/60 shadow-elegant" : ""}`}>
               {p.featured && (
