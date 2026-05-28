@@ -120,6 +120,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PARTNER MARQUEE — auto-scrolling logos */}
+      {partners.length > 0 && (
+        <section className="border-y border-border/60 bg-muted/30 py-6 sm:py-8">
+          <div className="container mx-auto px-4">
+            <p className="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:mb-5 sm:text-sm">
+              Trusted by leading partners
+            </p>
+            <div className="group relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+              <div className="flex w-max animate-marquee gap-8 sm:gap-12 group-hover:[animation-play-state:paused]">
+                {[...partners, ...partners].map((p, idx) => {
+                  const isImage = p.logo.startsWith("data:") || p.logo.startsWith("http");
+                  const inner = (
+                    <div className="grid h-14 w-32 shrink-0 place-items-center sm:h-16 sm:w-40">
+                      {isImage
+                        ? <img src={p.logo} alt={p.name} className="max-h-12 max-w-full object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0" />
+                        : <span className="text-3xl opacity-80 transition hover:opacity-100 sm:text-4xl">{p.logo}</span>}
+                    </div>
+                  );
+                  return p.website && p.website !== "#"
+                    ? <a key={`${p.id}-${idx}`} href={p.website} target="_blank" rel="noreferrer" title={p.name}>{inner}</a>
+                    : <div key={`${p.id}-${idx}`} title={p.name}>{inner}</div>;
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* SERVICES — display in sequence */}
       <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
         <div className="mx-auto max-w-2xl text-center">

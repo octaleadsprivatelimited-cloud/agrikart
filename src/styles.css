@@ -144,6 +144,8 @@
   .text-balance { text-wrap: balance; }
   .animate-fade-up { animation: fade-up .55s cubic-bezier(.22,.61,.36,1) both; }
   .animate-rise { animation: rise .8s cubic-bezier(.22,.61,.36,1) both; }
+  .animate-marquee { animation: marquee 30s linear infinite; }
+
 }
 
 @keyframes fade-up {
@@ -154,3 +156,8 @@
   from { opacity: 0; transform: translateY(24px) scale(.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
