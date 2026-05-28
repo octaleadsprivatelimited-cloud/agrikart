@@ -48,6 +48,11 @@ const en = {
         short: "Certified high-yield seeds and quality fertilizers.",
         desc: "Company-certified high-yield seeds, quality fertilizers and crop protection products with crop and season-wise recommendations.",
       },
+      soil: {
+        title: "Soil Testing",
+        short: "Lab-grade soil analysis with crop-wise fertilizer advisory.",
+        desc: "On-farm soil sample collection and lab-grade testing for pH, EC, organic carbon, primary nutrients (NPK) and key micro-nutrients. Get a digital Soil Health report with crop-specific fertilizer dose, amendment advice (lime / gypsum / organic matter) and an agronomist call-back — so every rupee on inputs returns better yield.",
+      },
       cold: {
         title: "Cold Storage",
         short: "Digital slot booking with transparent charges.",
