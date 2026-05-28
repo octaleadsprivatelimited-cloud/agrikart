@@ -14,6 +14,7 @@ const Blog = lazy(() => import("@/pages/Blog"));
 const Careers = lazy(() => import("@/pages/Careers"));
 const Commission = lazy(() => import("@/pages/Commission"));
 const Contact = lazy(() => import("@/pages/Contact"));
+const DroneServices = lazy(() => import("@/pages/DroneServices"));
 const FAQ = lazy(() => import("@/pages/FAQ"));
 const Pay = lazy(() => import("@/pages/Pay"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
@@ -139,6 +140,8 @@ export default function App() {
         <Route path="schemes" element={<Schemes />} />
         <Route path="services" element={<Services />} />
         <Route path="services/:slug" element={<ServiceDetail />} />
+        <Route path="drone-services" element={<DroneServices />} />
+        <Route path="drones" element={<Navigate to="/drone-services" replace />} />
         <Route path="tools" element={<Tools />} />
         <Route path="support" element={<Support />} />
         <Route path="terms" element={<Terms />} />

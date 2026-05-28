@@ -13,6 +13,7 @@ const topLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
   { to: "/services", label: "Services" },
+  { to: "/drone-services", label: "Drone Services" },
   { to: "/tools", label: "Tools" },
   { to: "/products", label: "Store" },
   { to: "/schemes", label: "Government" },
