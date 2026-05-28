@@ -11,6 +11,7 @@ import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
 import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
+import heroFarmer from "@/assets/hero-farmer.jpg";
 
 const heroIcons = [
   { label: "Loans Assistance", Icon: Banknote, to: "/services/loans" },
@@ -73,11 +74,17 @@ export default function Home() {
               </div>
             </div>
             <div className="relative hidden md:block">
-              <div className="ml-auto grid aspect-square w-full max-w-sm place-items-center rounded-2xl bg-primary-foreground/10 p-6 backdrop-blur">
-                <div className="text-center">
-                  <Sprout className="mx-auto h-24 w-24 opacity-90" strokeWidth={1.4} />
-                  <p className="mt-4 text-2xl font-extrabold">Agrikart Fintech</p>
-                  <p className="mt-1 text-sm opacity-90">Everything Your Farm Needs,<br />One Click Away</p>
+              <div className="relative ml-auto aspect-square w-full max-w-sm overflow-hidden rounded-2xl bg-primary-foreground/10 shadow-elegant ring-1 ring-primary-foreground/20 backdrop-blur">
+                <img
+                  src={heroFarmer}
+                  alt="Indian farmer holding fresh crops in a green field"
+                  width={1024}
+                  height={1024}
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-center">
+                  <p className="text-lg font-extrabold text-white">Agrikart Fintech</p>
+                  <p className="text-xs text-white/90">Everything Your Farm Needs, One Click Away</p>
                 </div>
               </div>
             </div>
