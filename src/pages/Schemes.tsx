@@ -9,15 +9,15 @@ export default function Schemes() {
   return (
     <>
       <PageHeader title={t("schemes.title")} subtitle={t("schemes.intro")} />
-      <section className="container mx-auto grid gap-5 px-4 py-16 md:grid-cols-3">
+      <section className="container mx-auto grid gap-4 px-4 py-10 sm:gap-5 sm:py-16 sm:grid-cols-2 md:grid-cols-3">
         {items.map((it) => (
           <Card key={it.name} className="card-lift border-border/60">
-            <CardContent className="p-6">
-              <div className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10 text-primary">
-                <Landmark className="h-6 w-6" />
+            <CardContent className="p-5 sm:p-6">
+              <div className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary sm:h-12 sm:w-12">
+                <Landmark className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold">{it.name}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{it.desc}</p>
+              <h3 className="mt-3 text-base font-semibold sm:mt-4 sm:text-lg">{it.name}</h3>
+              <p className="mt-1.5 text-sm text-muted-foreground sm:mt-2">{it.desc}</p>
             </CardContent>
           </Card>
         ))}
