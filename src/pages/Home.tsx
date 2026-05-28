@@ -11,7 +11,8 @@ import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
 import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
-import heroFarmer from "@/assets/hero-farmer.jpg";
+import heroFarmer from "@/assets/farmer-cutout.png";
+import heroFieldBg from "@/assets/hero-field-bg.jpg";
 
 const heroIcons = [
   { label: "Loans Assistance", Icon: Banknote, to: "/services/loans" },
@@ -51,42 +52,50 @@ export default function Home() {
     <>
       {/* HERO — One Stop Digital Platform */}
       <section className="container mx-auto px-3 pt-4 sm:px-4 sm:pt-6">
-        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient text-primary-foreground shadow-elegant">
-          <div className="absolute inset-0 bg-grain opacity-20 pointer-events-none" />
-          <div className="relative grid items-center gap-6 p-6 sm:p-10 md:grid-cols-2 md:p-14">
-            <div className="animate-fade-up">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur sm:text-xs">
-                <Sprout className="h-3 w-3" /> Everything Your Farm Needs
-              </span>
-              <h1 className="mt-3 text-balance text-3xl font-extrabold leading-[1.05] tracking-tight drop-shadow-sm sm:text-5xl md:text-6xl">
-                One Stop Digital<br />Platform for Farmers
+        <div className="relative overflow-hidden rounded-2xl shadow-elegant ring-1 ring-border/60">
+          {/* Background field + sky */}
+          <div className="absolute inset-0">
+            <img
+              src={heroFieldBg}
+              alt=""
+              aria-hidden="true"
+              width={1536}
+              height={896}
+              className="h-full w-full object-cover"
+            />
+            {/* Soft left fade for text legibility */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/55 to-transparent md:from-background/80 md:via-background/30" />
+          </div>
+
+          <div className="relative grid items-center gap-4 px-5 py-8 sm:px-8 sm:py-12 md:grid-cols-2 md:gap-6 md:px-12 md:py-14">
+            {/* Text */}
+            <div className="animate-fade-up max-w-xl">
+              <h1 className="text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+                One Stop Digital Platform{" "}
+                <span className="text-primary">for Farmers</span>
               </h1>
-              <p className="mt-4 max-w-md text-sm text-primary-foreground/90 sm:text-base">
+              <p className="mt-4 max-w-md text-sm font-medium text-foreground/80 sm:text-base">
                 Loans, Insurance, Agri Inputs, Technology &amp; More — All in One Place.
               </p>
               <div className="mt-5 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
-                <Button asChild size="lg" variant="secondary" className="gap-2 shadow-elegant">
+                <Button asChild size="lg" className="gap-2 bg-primary text-primary-foreground shadow-elegant hover:bg-primary/90">
                   <Link to="/apply">Apply for Loan <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="gap-2 border-primary-foreground/50 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
+                <Button asChild size="lg" className="gap-2 bg-[hsl(45_95%_55%)] text-foreground shadow-elegant hover:bg-[hsl(45_95%_50%)]">
                   <Link to="/careers">Join as Field Executive</Link>
                 </Button>
               </div>
             </div>
-            <div className="relative hidden md:block">
-              <div className="relative ml-auto aspect-square w-full max-w-sm overflow-hidden rounded-2xl bg-primary-foreground/10 shadow-elegant ring-1 ring-primary-foreground/20 backdrop-blur">
-                <img
-                  src={heroFarmer}
-                  alt="Indian farmer holding fresh crops in a green field"
-                  width={1024}
-                  height={1024}
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-center">
-                  <p className="text-lg font-extrabold text-white">Agrikart Fintech</p>
-                  <p className="text-xs text-white/90">Everything Your Farm Needs, One Click Away</p>
-                </div>
-              </div>
+
+            {/* Farmer cutout */}
+            <div className="relative hidden md:flex md:justify-end">
+              <img
+                src={heroFarmer}
+                alt="Indian farmer standing confidently"
+                width={832}
+                height={1216}
+                className="h-[420px] w-auto object-contain drop-shadow-2xl lg:h-[480px]"
+              />
             </div>
           </div>
         </div>
@@ -95,11 +104,11 @@ export default function Home() {
         <div className="mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3 md:grid-cols-6">
           {heroIcons.map(({ label, Icon, to }) => (
             <Link key={label} to={to}>
-              <div className="flex h-full flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-4">
-                <span className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary sm:h-12 sm:w-12">
-                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+              <div className="flex h-full flex-col items-center gap-2 rounded-2xl border border-border/60 bg-primary/5 p-3 text-center transition hover:border-primary/40 hover:bg-primary/10 hover:shadow-elegant sm:p-4">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-background text-primary shadow-sm sm:h-14 sm:w-14">
+                  <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.75} />
                 </span>
-                <span className="text-[11px] font-semibold leading-tight sm:text-xs">{label}</span>
+                <span className="text-[11px] font-semibold leading-tight text-foreground sm:text-xs">{label}</span>
               </div>
             </Link>
           ))}
