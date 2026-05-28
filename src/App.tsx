@@ -140,6 +140,8 @@ export default function App() {
         <Route path="schemes" element={<Schemes />} />
         <Route path="services" element={<Services />} />
         <Route path="services/:slug" element={<ServiceDetail />} />
+        <Route path="drone-services" element={<DroneServices />} />
+        <Route path="drones" element={<Navigate to="/drone-services" replace />} />
         <Route path="tools" element={<Tools />} />
         <Route path="support" element={<Support />} />
         <Route path="terms" element={<Terms />} />
