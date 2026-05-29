@@ -5,7 +5,7 @@ import { Target, Eye, Building2, Users } from "lucide-react";
 
 export default function About() {
   const { t } = useTranslation();
-  const values = t("about.values", { returnObjects: true }) as string[];
+  const values = t("about.values", { returnObjects: true }) as { name: string; desc: string }[];
   return (
     <>
       <PageHeader title={t("about.title")} subtitle={t("about.who")} />
