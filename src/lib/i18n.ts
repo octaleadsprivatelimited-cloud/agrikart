@@ -71,17 +71,24 @@ const en = {
     },
   },
   about: {
-    title: "About AgriKart Fin",
+    title: "About AgriKart",
     whoTitle: "Who We Are",
     who:
-      "AgriKart Fin Pvt Ltd is a fintech–agri company focused on improving farmer income and reducing risk through finance support, insurance, quality inputs and market linkages.",
-    visionTitle: "Vision",
-    vision: "To become the most trusted digital partner for every Indian farmer.",
-    missionTitle: "Mission",
+      "AGRI KART is a rural agri-fintech company dedicated to supporting farmers with financial and agricultural solutions. We provide crop loan assistance, insurance services, seeds, fertilizers, pesticides, agri inputs, drone services, cold storage support, and digital agriculture solutions. Our goal is to connect farmers with modern technology, trusted financial services, and quality agricultural products through a single platform.",
+    visionTitle: "Our Vision",
+    vision:
+      "To become India's most trusted rural agri-fintech platform by transforming agriculture through finance, technology, innovation, and farmer-focused services.",
+    missionTitle: "Our Mission",
     mission:
-      "To provide simple, fast and transparent access to agri finance support and services at the village level.",
+      "To empower farmers by providing easy access to agricultural finance, insurance, quality agri inputs, and modern farming technology while improving rural livelihoods and agricultural productivity.",
     valuesTitle: "Our Values",
-    values: ["Trust", "Transparency", "Farmer First", "Innovation"],
+    values: [
+      { name: "Farmer First", desc: "Every service we provide is designed to support and benefit farmers." },
+      { name: "Trust & Transparency", desc: "We believe in honest communication, ethical business practices, and transparent services." },
+      { name: "Innovation", desc: "We use modern technology and digital solutions to simplify agriculture and rural finance." },
+      { name: "Commitment", desc: "We are committed to delivering quality services with dedication and responsibility." },
+      { name: "Growth Together", desc: "We grow along with farmers, partners, employees, and rural communities." },
+    ],
   },
   schemes: {
     title: "Government Schemes",
@@ -477,7 +484,13 @@ const te: typeof en = {
     missionTitle: "మిషన్",
     mission: "గ్రామ స్థాయిలోనే సులభ, శీఘ్ర, పారదర్శక అగ్రి ఫైనాన్స్ సహాయం & సేవలు అందించడం.",
     valuesTitle: "మా విలువలు",
-    values: ["నమ్మకం", "పారదర్శకత", "రైతు ముందుగా", "నూతనత"],
+    values: [
+      { name: "రైతు ముందుగా", desc: "మేము అందించే ప్రతి సేవ రైతులకు మద్దతు మరియు ప్రయోజనం కోసమే." },
+      { name: "నమ్మకం & పారదర్శకత", desc: "నిజాయితీ కమ్యూనికేషన్, నైతిక వ్యాపార పద్ధతులు, పారదర్శక సేవలను మేము నమ్ముతాం." },
+      { name: "నూతనత", desc: "వ్యవసాయం మరియు గ్రామీణ ఫైనాన్స్‌ను సులభతరం చేయడానికి ఆధునిక సాంకేతికత ఉపయోగిస్తాం." },
+      { name: "నిబద్ధత", desc: "అంకితభావం మరియు బాధ్యతతో నాణ్యమైన సేవలు అందించడానికి కట్టుబడి ఉన్నాం." },
+      { name: "కలిసి ఎదగడం", desc: "రైతులు, భాగస్వాములు, ఉద్యోగులు, గ్రామీణ సమాజాలతో కలిసి మేము ఎదుగుతాం." },
+    ],
   },
   schemes: {
     title: "ప్రభుత్వ పథకాలు",
