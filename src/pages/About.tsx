@@ -42,11 +42,12 @@ export default function About() {
         <Card className="md:col-span-2">
           <CardContent className="p-5 sm:p-8">
             <h2 className="text-lg font-bold sm:text-xl">{t("about.valuesTitle")}</h2>
-            <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
+            <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-2 lg:grid-cols-3">
               {values.map((v) => (
-                <span key={v} className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-medium text-primary sm:px-4 sm:py-1.5 sm:text-sm">
-                  {v}
-                </span>
+                <div key={v.name} className="rounded-xl border border-border/60 bg-card/50 p-4 transition hover:border-primary/40 hover:shadow-sm">
+                  <h3 className="text-sm font-semibold text-primary sm:text-base">{v.name}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{v.desc}</p>
+                </div>
               ))}
             </div>
           </CardContent>
