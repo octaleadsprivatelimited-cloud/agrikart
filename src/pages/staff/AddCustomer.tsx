@@ -235,7 +235,7 @@ export default function AddCustomer() {
     });
     if (collectPayment) {
       const p = recordPayment({
-        farmerId: c.farmerCode,
+        farmerId: c.id,
         farmerName: c.farmerName,
         mobile: c.mobile,
         kind: payKind,
@@ -246,9 +246,9 @@ export default function AddCustomer() {
         collectedById: staff.id,
         collectedByName: staff.name,
       });
-      toast.success(`Farmer ${c.farmerCode} enrolled · ₹${amountNum} collected (${p.id})`);
+      toast.success(`${c.farmerName} enrolled · ₹${amountNum} collected (${p.id}). Farmer ID will be issued after admin approval.`);
     } else {
-      toast.success(`Customer added! Farmer ID: ${c.farmerCode}`);
+      toast.success(`Enrollment submitted. Farmer ID will be issued after admin approval.`);
     }
     void navigate(`/staff/customers/${c.id}`);
   };

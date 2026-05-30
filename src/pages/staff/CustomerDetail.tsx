@@ -78,7 +78,7 @@ export default function CustomerDetail() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold">{customer.farmerName}</h1>
-              <p className="mt-1 text-xs"><span className="inline-block rounded bg-primary/10 px-2 py-0.5 font-mono font-bold text-primary">Farmer ID: {customer.farmerCode}</span></p>
+              <p className="mt-1 text-xs">{customer.farmerCode ? (<span className="inline-block rounded bg-primary/10 px-2 py-0.5 font-mono font-bold text-primary">Farmer ID: {customer.farmerCode}</span>) : (<span className="inline-block rounded bg-muted px-2 py-0.5 font-medium text-muted-foreground">Farmer ID will be issued after admin approval</span>)}</p>
               <p className="mt-1 text-sm text-muted-foreground inline-flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5" /> {customer.village}, {customer.district}
               </p>

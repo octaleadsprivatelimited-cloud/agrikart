@@ -201,24 +201,15 @@ function generateFarmerCode(existing: Pick<Customer, "farmerCode">[]): string {
 
 export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt" | "farmerCode">): Customer {
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
-  // Backfill legacy records missing farmerCode
-  let mutated = false;
-  for (const rec of all) {
-    if (!rec.farmerCode) {
-      rec.farmerCode = generateFarmerCode(all);
-      mutated = true;
-    }
-  }
   const item: Customer = {
     ...c,
     id: crypto.randomUUID(),
-    farmerCode: generateFarmerCode(all),
+    farmerCode: "", // assigned only when admin approves
     status: "Pending",
     createdAt: Date.now(),
   };
   all.unshift(item);
   write(CUSTOMERS_KEY, all);
-  if (mutated) { /* already written above */ }
   window.dispatchEvent(new Event("agrikart-customers"));
   return item;
 }
@@ -235,7 +226,9 @@ export function updateCustomerStatus(id: string, status: CustomerStatus, editor:
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
   const current = all.find(c => c.id === id);
   if (!current) throw new Error("Customer not found");
-  const next = all.map(c => c.id === id ? { ...c, status, remarks } : c);
+  // Assign permanent Farmer ID at first approval
+  const assignedCode = status === "Approved" && !current.farmerCode ? generateFarmerCode(all) : current.farmerCode;
+  const next = all.map(c => c.id === id ? { ...c, status, remarks, farmerCode: assignedCode } : c);
   write(CUSTOMERS_KEY, next);
   // Log status change to audit
   const changes: CustomerEditChange[] = [{ field: "status", from: current.status, to: status }];
