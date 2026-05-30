@@ -4,9 +4,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createCustomer, useCurrentStaff } from "@/lib/staff-store";
-import { MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { createCustomer, recordPayment, useCurrentStaff, type PaymentKind, type Payment } from "@/lib/staff-store";
+import { MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw, IndianRupee, Banknote } from "lucide-react";
 import { toast } from "sonner";
+
+type PayMethod = NonNullable<Payment["method"]>;
+const PAY_METHODS: { value: PayMethod; label: string }[] = [
+  { value: "Cash", label: "Cash" },
+  { value: "UPI", label: "UPI" },
+  { value: "Card", label: "Card" },
+  { value: "NetBanking", label: "Net Banking" },
+];
+const KIND_AMOUNTS: Record<PaymentKind, number> = { joining: 2000, renewal: 1499 };
+
 
 type Gps = { lat: number; lng: number; accuracy: number; timestamp: number };
 
