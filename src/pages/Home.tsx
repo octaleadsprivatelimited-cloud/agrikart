@@ -234,44 +234,157 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS — editorial bento */}
       {testimonials.length > 0 && (
-        <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">What Farmers Say</h2>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">Real stories from farmers we've supported.</p>
+        <section className="bg-[#fcfdfc] py-12 sm:py-20">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-12">
+              <div className="max-w-2xl">
+                <span className="inline-block rounded-full border border-[#a0c49d]/40 bg-[#a0c49d]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#1a3c2a]">
+                  Voices from the field
+                </span>
+                <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-[#1a3c2a] sm:text-4xl md:text-5xl">
+                  What farmers say
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-[#5a8a5c] sm:text-base">
+                  Real stories from the families we work with every day across South India.
+                </p>
+              </div>
+              <div className="h-1 w-16 rounded-full bg-[#a0c49d]" />
             </div>
-            <div className="mt-6 grid gap-3 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {testimonials.slice(0, 6).map(t => (
-                <Card key={t.id} className="h-full">
-                  <CardContent className="space-y-3 p-5">
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-yellow-400 text-yellow-400" : "text-muted"}`} />
-                      ))}
-                    </div>
-                    <p className="text-sm leading-relaxed text-foreground/85">"{t.quote}"</p>
-                    <div className="flex items-center gap-3 pt-2">
-                      {t.avatar ? (
-                        <img src={t.avatar} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
-                      ) : (
-                        <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                          {t.name.charAt(0)}
-                        </span>
-                      )}
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold">{t.name}</p>
-                        <p className="truncate text-xs text-muted-foreground">{t.role}</p>
+
+            <div className="grid auto-rows-min grid-cols-1 gap-4 sm:gap-6 md:grid-cols-4 lg:grid-cols-6">
+              {/* Featured testimonial — hero block */}
+              {testimonials[0] && (
+                <article className="group relative overflow-hidden rounded-3xl border border-[#a0c49d]/20 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl sm:rounded-[2.5rem] md:col-span-4 md:min-h-[380px] lg:col-span-4 lg:row-span-2 lg:min-h-[480px]">
+                  <img
+                    src={imgMission}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1a3c2a]/95 via-[#1a3c2a]/70 to-[#1a3c2a]/30" />
+                  <div className="relative flex h-full flex-col justify-between p-6 text-white sm:p-10 lg:p-12">
+                    <Quote className="h-10 w-10 text-[#a0c49d] sm:h-12 sm:w-12" strokeWidth={1.5} />
+                    <div>
+                      <p className="font-display text-xl font-medium leading-snug sm:text-2xl lg:text-3xl">
+                        "{testimonials[0].quote}"
+                      </p>
+                      <div className="mt-6 flex items-center gap-4 border-t border-white/15 pt-5 sm:mt-8 sm:pt-6">
+                        {testimonials[0].avatar ? (
+                          <img src={testimonials[0].avatar} alt={testimonials[0].name} className="h-12 w-12 rounded-full object-cover ring-2 ring-[#a0c49d]/40" />
+                        ) : (
+                          <span className="grid h-12 w-12 place-items-center rounded-full bg-[#a0c49d]/30 text-base font-bold text-white ring-2 ring-[#a0c49d]/40">
+                            {testimonials[0].name.charAt(0)}
+                          </span>
+                        )}
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold">{testimonials[0].name}</p>
+                          <p className="truncate text-xs text-white/70">{testimonials[0].role}</p>
+                        </div>
+                        <div className="ml-auto flex gap-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star key={i} className={`h-3.5 w-3.5 ${i < testimonials[0].rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-white/20"}`} />
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </article>
+              )}
+
+              {/* Side quotes — stacked */}
+              {testimonials.slice(1, 3).map((tt) => (
+                <article key={tt.id} className="overflow-hidden rounded-3xl border border-[#a0c49d]/20 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl sm:p-8 md:col-span-4 lg:col-span-2">
+                  <div className="mb-3 flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className={`h-3.5 w-3.5 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`} />
+                    ))}
+                  </div>
+                  <p className="font-display text-base leading-relaxed text-[#1a3c2a] sm:text-lg">
+                    "{tt.quote}"
+                  </p>
+                  <div className="mt-5 flex items-center gap-3 border-t border-[#a0c49d]/20 pt-4">
+                    {tt.avatar ? (
+                      <img src={tt.avatar} alt={tt.name} className="h-10 w-10 rounded-full object-cover" />
+                    ) : (
+                      <span className="grid h-10 w-10 place-items-center rounded-full bg-[#a0c49d]/20 text-sm font-bold text-[#1a3c2a]">
+                        {tt.name.charAt(0)}
+                      </span>
+                    )}
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-[#1a3c2a]">{tt.name}</p>
+                      <p className="truncate text-xs text-[#5a8a5c]">{tt.role}</p>
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
       )}
+
+      {/* FAQ PREVIEW — editorial split */}
+      <section className="bg-[#fcfdfc] py-12 sm:py-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <article className="overflow-hidden rounded-3xl border border-[#a0c49d]/20 bg-white shadow-sm sm:rounded-[3rem]">
+            <div className="grid grid-cols-1 lg:grid-cols-5">
+              {/* Left — title block */}
+              <div className="relative min-h-[280px] lg:col-span-2">
+                <img src={imgValues} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#1a3c2a]/90 via-[#1a3c2a]/75 to-[#2d5a3d]/60" />
+                <div className="relative flex h-full flex-col justify-between p-8 text-white sm:p-12 lg:p-14">
+                  <div>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#a0c49d]/25 px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+                      <HelpCircle className="h-3 w-3" /> Help center
+                    </span>
+                    <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                      Questions, answered.
+                    </h2>
+                    <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/85 sm:text-base">
+                      The most common things farmers ask before joining Agrikart. Still curious? Our team is one call away.
+                    </p>
+                  </div>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <Button asChild size="sm" className="bg-white text-[#1a3c2a] hover:bg-[#a0c49d]/30 hover:text-white">
+                      <Link to="/faq">All FAQs <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+                    </Button>
+                    <Button asChild size="sm" variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">
+                      <Link to="/contact">Talk to us</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right — accordion list */}
+              <div className="divide-y divide-[#a0c49d]/15 bg-white p-2 sm:p-4 lg:col-span-3">
+                {faqItems.map((item, i) => (
+                  <details key={i} className="group px-4 py-5 sm:px-6 sm:py-6">
+                    <summary className="flex cursor-pointer items-start justify-between gap-4 list-none">
+                      <div className="flex items-start gap-4">
+                        <span className="mt-0.5 font-display text-xs font-bold text-[#a0c49d]">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="font-display text-base font-semibold text-[#1a3c2a] sm:text-lg">
+                          {item.q}
+                        </h3>
+                      </div>
+                      <span className="mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-[#a0c49d]/40 text-[#1a3c2a] transition-transform duration-300 group-open:rotate-45 group-open:bg-[#1a3c2a] group-open:text-white">
+                        <Plus className="h-4 w-4" />
+                      </span>
+                    </summary>
+                    <p className="mt-3 pl-10 text-sm leading-relaxed text-[#5a8a5c]">
+                      {item.a}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
 
       {/* GALLERY */}
       {gallery.length > 0 && (
