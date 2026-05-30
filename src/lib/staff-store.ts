@@ -151,6 +151,7 @@ export function updateStaffRole(id: string, role: StaffRole) {
 export type CustomerStatus = "Pending" | "Approved" | "Rejected";
 export type Customer = {
   id: string;
+  farmerCode: string;
   farmerName: string;
   mobile: string;
   aadhaar?: string;
@@ -166,11 +167,35 @@ export type Customer = {
   createdAt: number;
 };
 
-export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt">): Customer {
+function generateFarmerCode(existing: Pick<Customer, "farmerCode">[]): string {
+  const used = new Set(existing.map(c => c.farmerCode).filter(Boolean));
+  let code = "";
+  do {
+    code = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
+  } while (used.has(code));
+  return code;
+}
+
+export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt" | "farmerCode">): Customer {
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
-  const item: Customer = { ...c, id: crypto.randomUUID(), status: "Pending", createdAt: Date.now() };
+  // Backfill legacy records missing farmerCode
+  let mutated = false;
+  for (const rec of all) {
+    if (!rec.farmerCode) {
+      rec.farmerCode = generateFarmerCode(all);
+      mutated = true;
+    }
+  }
+  const item: Customer = {
+    ...c,
+    id: crypto.randomUUID(),
+    farmerCode: generateFarmerCode(all),
+    status: "Pending",
+    createdAt: Date.now(),
+  };
   all.unshift(item);
   write(CUSTOMERS_KEY, all);
+  if (mutated) { /* already written above */ }
   window.dispatchEvent(new Event("agrikart-customers"));
   return item;
 }
