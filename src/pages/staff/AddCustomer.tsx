@@ -534,4 +534,3 @@ function DocBlock(props: {
     </div>
   );
 }
-}
