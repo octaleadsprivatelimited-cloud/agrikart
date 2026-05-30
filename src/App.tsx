@@ -29,6 +29,7 @@ const Support = lazy(() => import("@/pages/Support"));
 const Terms = lazy(() => import("@/pages/Terms"));
 
 // -- Layouts / Auth sections ---------------------------------------------------
+const AdminLogin = lazy(() => import("@/pages/admin/Login"));
 const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
 const AdminProducts = lazy(() => import("@/pages/admin/Products"));
