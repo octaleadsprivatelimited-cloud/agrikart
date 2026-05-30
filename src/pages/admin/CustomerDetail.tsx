@@ -35,8 +35,12 @@ export default function AdminCustomerDetail() {
     );
   }
 
+  const verified = isFarmerVerified(customer);
+  const hasDocs = !!customer.documents;
+
   const approve = () => {
     if (!staff) return;
+    if (!hasDocs) { toast.error("Cannot approve: farmer has not submitted KYC documents."); return; }
     try { updateCustomerStatus(customer.id, "Approved", staff, remarks.trim() || undefined); toast.success(`${customer.farmerName} approved`); setRemarks(""); }
     catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
