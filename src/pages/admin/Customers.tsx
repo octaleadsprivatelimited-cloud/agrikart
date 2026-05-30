@@ -27,6 +27,7 @@ export default function AdminCustomers() {
       r = r.filter(c =>
         c.farmerName.toLowerCase().includes(s) ||
         c.mobile.includes(q) ||
+        (c.farmerCode ?? "").toLowerCase().includes(s) ||
         c.village.toLowerCase().includes(s) ||
         c.district.toLowerCase().includes(s) ||
         c.employeeName.toLowerCase().includes(s)
@@ -75,7 +76,7 @@ export default function AdminCustomers() {
                   <tr key={c.id} className="border-b border-border last:border-0 hover:bg-muted/40">
                     <td className="px-4 py-3">
                       <Link to={`/admin/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
-                      <p className="text-xs text-muted-foreground">{c.mobile}</p>
+                      <p className="text-xs text-muted-foreground"><span className="font-mono font-semibold text-primary">{c.farmerCode}</span> · {c.mobile}</p>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
                       <span className="inline-flex items-center gap-1 text-xs"><MapPin className="h-3 w-3" />{c.village}, {c.district}</span>
