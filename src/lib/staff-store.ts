@@ -149,12 +149,27 @@ export function updateStaffRole(id: string, role: StaffRole) {
 
 // ---------- Customers ----------
 export type CustomerStatus = "Pending" | "Approved" | "Rejected";
+// Base64 data URL upload (kept small — single doc, max ~1.5 MB).
+export type DocFile = {
+  name: string;
+  type: string;       // MIME
+  size: number;       // bytes
+  dataUrl: string;    // data:...;base64,...
+};
+export type CustomerDocuments = {
+  aadhaar: { number: string; file: DocFile };
+  pan:     { number: string; file: DocFile };
+  land:    { surveyNo: string; file: DocFile };
+};
+export const DOC_MAX_BYTES = 1_500_000; // ~1.5 MB per file (localStorage safety)
+export const DOC_ACCEPT_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+
 export type Customer = {
   id: string;
   farmerCode: string;
   farmerName: string;
   mobile: string;
-  aadhaar?: string;
+  aadhaar?: string;        // legacy plain number (deprecated, kept for old records)
   village: string;
   district: string;
   landSize: string;
@@ -165,7 +180,15 @@ export type Customer = {
   employeeId: string;
   employeeName: string;
   createdAt: number;
+  documents?: CustomerDocuments;
 };
+
+export function isFarmerVerified(c: Pick<Customer, "status" | "documents"> | null | undefined): boolean {
+  if (!c) return false;
+  if (c.status !== "Approved") return false;
+  const d = c.documents;
+  return !!(d?.aadhaar?.file?.dataUrl && d?.pan?.file?.dataUrl && d?.land?.file?.dataUrl);
+}
 
 function generateFarmerCode(existing: Pick<Customer, "farmerCode">[]): string {
   const used = new Set(existing.map(c => c.farmerCode).filter(Boolean));
@@ -198,6 +221,11 @@ export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt" |
   if (mutated) { /* already written above */ }
   window.dispatchEvent(new Event("agrikart-customers"));
   return item;
+}
+
+export function findCustomerByCode(code: string): Customer | undefined {
+  const q = code.trim().toUpperCase();
+  return read<Customer[]>(CUSTOMERS_KEY, []).find(c => c.farmerCode?.toUpperCase() === q);
 }
 
 export function updateCustomerStatus(id: string, status: CustomerStatus, editor: Staff, remarks?: string) {
