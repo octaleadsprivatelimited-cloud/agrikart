@@ -276,9 +276,83 @@ export default function AddCustomer() {
             </div>
           </div>
 
+          {/* ---------- Payment collection ---------- */}
+          <div className="sm:col-span-2">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="grid h-9 w-9 place-items-center rounded-md bg-primary/10 text-primary">
+                    <IndianRupee className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">Collect enrollment payment</p>
+                    <p className="text-xs text-muted-foreground">Record cash, UPI, card, or net-banking payment now.</p>
+                  </div>
+                </div>
+                <label className="inline-flex items-center gap-2 text-xs">
+                  <Checkbox checked={collectPayment} onCheckedChange={(v) => setCollectPayment(v === true)} />
+                  <span className="font-medium">{collectPayment ? "Enabled" : "Skip"}</span>
+                </label>
+              </div>
+
+              {collectPayment && (
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Plan</Label>
+                    <Select value={payKind} onValueChange={(v) => onKindChange(v as PaymentKind)}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="joining">Joining fee · ₹2,000</SelectItem>
+                        <SelectItem value="renewal">Annual renewal · ₹1,499</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Amount (₹)</Label>
+                    <Input type="number" min="0" step="1" value={payAmount} onChange={(e) => setPayAmount(e.target.value)} required={collectPayment} />
+                  </div>
+                  <div>
+                    <Label>Method</Label>
+                    <Select value={payMethod} onValueChange={(v) => setPayMethod(v as PayMethod)}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {PAY_METHODS.map((m) => (
+                          <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>
+                      {payMethod === "Cash" ? "Receipt no. (optional)"
+                        : payMethod === "UPI" ? "UPI ref / txn ID"
+                        : payMethod === "Card" ? "Card last 4 / auth code"
+                        : "Bank ref no."}
+                    </Label>
+                    <Input
+                      value={payReference}
+                      onChange={(e) => setPayReference(e.target.value)}
+                      placeholder={payMethod === "UPI" ? "e.g. 4123ABCD56" : ""}
+                      required={collectPayment && payMethod === "UPI"}
+                      maxLength={64}
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Label>Note (optional)</Label>
+                    <Input value={payNote} onChange={(e) => setPayNote(e.target.value)} maxLength={200} placeholder="Any remark for this collection" />
+                  </div>
+                  <div className="sm:col-span-2 inline-flex items-center gap-2 rounded-md bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
+                    <Banknote className="h-3.5 w-3.5" />
+                    Collected by <span className="font-semibold text-foreground">{staff?.name}</span>. A receipt with txn ID is generated on save.
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="sm:col-span-2">
             <Button type="submit" size="lg" className="w-full" disabled={!gps}>
-              {gps ? "Save Customer" : "Waiting for GPS…"}
+              {!gps ? "Waiting for GPS…" : collectPayment ? `Enroll farmer & collect ₹${payAmount || 0}` : "Save Customer"}
             </Button>
           </div>
         </form>
