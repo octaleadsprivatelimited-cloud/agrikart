@@ -72,7 +72,7 @@ function PageLoader() {
 // -- Guard components ----------------------------------------------------------
 function RequireAdmin() {
   const s = getCurrentStaff();
-  if (!s) return <Navigate to="/staff/login" replace />;
+  if (!s) return <Navigate to="/admin/login" replace />;
   if (s.role !== "admin") return <Navigate to="/staff/dashboard" replace />;
   return <Outlet />;
 }
