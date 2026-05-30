@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, ArrowRight,
   Timer, BadgeCheck, Leaf, Users, Headphones, SprayCan, Package,
-  Handshake, MapPin, IndianRupee, Star, PlayCircle,
+  Handshake, MapPin, IndianRupee, Star, PlayCircle, Quote, HelpCircle, Plus,
 } from "lucide-react";
 import { useTestimonials, useGallery, useVideos, usePartners } from "@/lib/content-store";
+import imgValues from "@/assets/about-values.jpg";
+import imgMission from "@/assets/about-mission.jpg";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
