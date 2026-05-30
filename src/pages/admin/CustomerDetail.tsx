@@ -4,10 +4,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useCustomer, useRequests, updateCustomerStatus, updateRequestStatus, useCurrentStaff, useCustomerEdits } from "@/lib/staff-store";
+import {
+  useCustomer, useRequests, updateCustomerStatus, updateRequestStatus,
+  useCurrentStaff, useCustomerEdits, isFarmerVerified,
+  type Customer, type CustomerDocuments, type DocFile,
+} from "@/lib/staff-store";
+import { useOrders, type Order } from "@/lib/shop-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
 import { StatusPill } from "../staff/Dashboard";
-import { ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle, History } from "lucide-react";
+import {
+  ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle, History,
+  FileText, ShieldCheck, ShieldAlert, Download, ShoppingBag,
+} from "lucide-react";
 import { toast } from "sonner";
 
 
