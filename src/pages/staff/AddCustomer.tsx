@@ -6,8 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { createCustomer, recordPayment, useCurrentStaff, type PaymentKind, type Payment } from "@/lib/staff-store";
-import { MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw, IndianRupee, Banknote } from "lucide-react";
+import {
+  createCustomer, recordPayment, useCurrentStaff,
+  type PaymentKind, type Payment, type DocFile, type CustomerDocuments,
+  DOC_MAX_BYTES, DOC_ACCEPT_MIME,
+} from "@/lib/staff-store";
+import {
+  MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw, IndianRupee, Banknote,
+  FileText, Upload, ShieldCheck,
+} from "lucide-react";
 import { toast } from "sonner";
 
 type PayMethod = NonNullable<Payment["method"]>;
