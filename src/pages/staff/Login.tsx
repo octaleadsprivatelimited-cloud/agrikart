@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield } from "lucide-react";
-import { staffLogin } from "@/lib/staff-store";
+import { staffLogin, staffLogout } from "@/lib/staff-store";
 import { toast } from "sonner";
 
 
@@ -18,8 +18,14 @@ export default function StaffLogin() {
     e.preventDefault();
     try {
       const s = staffLogin(email.trim(), password);
+      if (s.role !== "employee") {
+        staffLogout();
+        toast.error("Admins must sign in at the admin portal.");
+        void navigate("/admin/login");
+        return;
+      }
       toast.success(`Welcome, ${s.name}`);
-      void navigate(s.role === "admin" ? "/admin/dashboard" : "/staff/dashboard");
+      void navigate("/staff/dashboard");
     } catch {
       toast.error("Invalid email or password.");
     }
