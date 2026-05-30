@@ -149,6 +149,17 @@ export default function AddCustomer() {
       toast.error("GPS location is mandatory. Please allow location access.");
       return;
     }
+    const amountNum = Number(payAmount);
+    if (collectPayment) {
+      if (!Number.isFinite(amountNum) || amountNum <= 0) {
+        toast.error("Enter a valid payment amount.");
+        return;
+      }
+      if (payMethod === "UPI" && !payReference.trim()) {
+        toast.error("UPI reference / txn ID is required.");
+        return;
+      }
+    }
     const c = createCustomer({
       ...formRef.current,
       farmerName: formRef.current.farmerName.trim(),
@@ -156,7 +167,23 @@ export default function AddCustomer() {
       employeeId: staff.id,
       employeeName: staff.name,
     });
-    toast.success(`Customer added! Farmer ID: ${c.farmerCode}`);
+    if (collectPayment) {
+      const p = recordPayment({
+        farmerId: c.farmerCode,
+        farmerName: c.farmerName,
+        mobile: c.mobile,
+        kind: payKind,
+        amount: amountNum,
+        method: payMethod,
+        reference: payReference.trim() || undefined,
+        note: payNote.trim() || undefined,
+        collectedById: staff.id,
+        collectedByName: staff.name,
+      });
+      toast.success(`Farmer ${c.farmerCode} enrolled · ₹${amountNum} collected (${p.id})`);
+    } else {
+      toast.success(`Customer added! Farmer ID: ${c.farmerCode}`);
+    }
     void navigate(`/staff/customers/${c.id}`);
   };
 
