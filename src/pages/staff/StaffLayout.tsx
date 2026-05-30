@@ -1,6 +1,6 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { staffLogout, useCurrentStaff } from "@/lib/staff-store";
-import { LayoutDashboard, UserPlus, Users, LogOut, Inbox } from "lucide-react";
+import { LayoutDashboard, UserPlus, Users, LogOut, Inbox, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const items = [
@@ -8,6 +8,7 @@ const items = [
   { to: "/staff/submissions", label: "My Submissions", Icon: Inbox },
   { to: "/staff/add-customer", label: "Add Customer", Icon: UserPlus },
   { to: "/staff/customers", label: "Customers", Icon: Users },
+  { to: "/staff/place-order", label: "Place Order", Icon: ShoppingCart },
 ] as const;
 
 export default function StaffLayout() {

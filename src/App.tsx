@@ -55,6 +55,7 @@ const StaffAddCustomer = lazy(() => import("@/pages/staff/AddCustomer"));
 const StaffCustomers = lazy(() => import("@/pages/staff/Customers"));
 const StaffCustomerDetail = lazy(() => import("@/pages/staff/CustomerDetail"));
 const StaffSubmissions = lazy(() => import("@/pages/staff/Submissions"));
+const StaffPlaceOrder = lazy(() => import("@/pages/staff/PlaceOrder"));
 
 const PortalDashboard = lazy(() => import("@/pages/portal/Dashboard"));
 const PortalBookings = lazy(() => import("@/pages/portal/Bookings"));
@@ -167,6 +168,7 @@ export default function App() {
             <Route path="customers" element={<StaffCustomers />} />
             <Route path="customers/:id" element={<StaffCustomerDetail />} />
             <Route path="submissions" element={<StaffSubmissions />} />
+            <Route path="place-order" element={<StaffPlaceOrder />} />
           </Route>
         </Route>
 
