@@ -226,7 +226,9 @@ export function updateCustomerStatus(id: string, status: CustomerStatus, editor:
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
   const current = all.find(c => c.id === id);
   if (!current) throw new Error("Customer not found");
-  const next = all.map(c => c.id === id ? { ...c, status, remarks } : c);
+  // Assign permanent Farmer ID at first approval
+  const assignedCode = status === "Approved" && !current.farmerCode ? generateFarmerCode(all) : current.farmerCode;
+  const next = all.map(c => c.id === id ? { ...c, status, remarks, farmerCode: assignedCode } : c);
   write(CUSTOMERS_KEY, next);
   // Log status change to audit
   const changes: CustomerEditChange[] = [{ field: "status", from: current.status, to: status }];
