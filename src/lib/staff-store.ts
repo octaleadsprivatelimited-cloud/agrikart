@@ -426,7 +426,11 @@ export type Payment = {
   kind: PaymentKind;
   amount: number;
   status: PaymentStatus;
-  method?: "UPI" | "Card" | "NetBanking";
+  method?: "Cash" | "UPI" | "Card" | "NetBanking";
+  reference?: string;   // UPI ref / cheque no / receipt no
+  note?: string;
+  collectedById?: string;   // staff id who collected
+  collectedByName?: string;
   refundedAt?: number;
   refundReason?: string;
   createdAt: number;
@@ -434,7 +438,7 @@ export type Payment = {
 
 export function recordPayment(p: Omit<Payment, "id" | "orderId" | "createdAt" | "status"> & { status?: PaymentStatus }): Payment {
   const all = read<Payment[]>(PAYMENTS_KEY, []);
-  const methods: Payment["method"][] = ["UPI", "Card", "NetBanking"];
+  const methods: NonNullable<Payment["method"]>[] = ["UPI", "Card", "NetBanking"];
   const item: Payment = {
     ...p,
     status: p.status ?? "Succeeded",
