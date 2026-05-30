@@ -4,10 +4,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { useCustomer, useRequests, updateCustomerStatus, updateRequestStatus, useCurrentStaff, useCustomerEdits } from "@/lib/staff-store";
+import {
+  useCustomer, useRequests, updateCustomerStatus, updateRequestStatus,
+  useCurrentStaff, useCustomerEdits, isFarmerVerified,
+  type Customer, type CustomerDocuments, type DocFile,
+} from "@/lib/staff-store";
+import { useOrders, type Order } from "@/lib/shop-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
 import { StatusPill } from "../staff/Dashboard";
-import { ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle, History } from "lucide-react";
+import {
+  ArrowLeft, MapPin, Phone, Sprout, CheckCircle2, XCircle, History,
+  FileText, ShieldCheck, ShieldAlert, Download, ShoppingBag,
+} from "lucide-react";
 import { toast } from "sonner";
 
 
@@ -27,8 +35,12 @@ export default function AdminCustomerDetail() {
     );
   }
 
+  const verified = isFarmerVerified(customer);
+  const hasDocs = !!customer.documents;
+
   const approve = () => {
     if (!staff) return;
+    if (!hasDocs) { toast.error("Cannot approve: farmer has not submitted KYC documents."); return; }
     try { updateCustomerStatus(customer.id, "Approved", staff, remarks.trim() || undefined); toast.success(`${customer.farmerName} approved`); setRemarks(""); }
     catch (e) { toast.error(e instanceof Error ? e.message : "Failed"); }
   };
@@ -130,6 +142,8 @@ export default function AdminCustomerDetail() {
         </CardContent>
       </Card>
 
+      <DocumentsCard customer={customer} verified={verified} />
+      <OrderHistoryCard farmerCode={customer.farmerCode} />
       <EditHistoryCard edits={edits} />
     </div>
   );
@@ -177,5 +191,95 @@ function Info({ Icon, label, value }: { Icon?: typeof MapPin; label: string; val
         <p className="font-medium">{value}</p>
       </div>
     </div>
+  );
+}
+
+export function DocumentsCard({ customer, verified }: { customer: Customer; verified: boolean }) {
+  const d = customer.documents;
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="inline-flex items-center gap-2 text-lg font-semibold">
+            <FileText className="h-4 w-4" /> KYC Documents
+          </h2>
+          {verified ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+              <ShieldCheck className="h-3.5 w-3.5" /> Verified — can purchase
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+              <ShieldAlert className="h-3.5 w-3.5" /> Not yet verified
+            </span>
+          )}
+        </div>
+        {!d ? (
+          <p className="mt-3 text-sm text-muted-foreground">No documents on file (legacy record). Ask the farmer to re-enroll to upload Aadhaar, PAN and land proof.</p>
+        ) : (
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <DocTile title="Aadhaar" subtitle={d.aadhaar.number} file={d.aadhaar.file} />
+            <DocTile title="PAN" subtitle={d.pan.number} file={d.pan.file} />
+            <DocTile title="Land record" subtitle={d.land.surveyNo} file={d.land.file} />
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function DocTile({ title, subtitle, file }: { title: string; subtitle: string; file: DocFile }) {
+  const isImage = file.type.startsWith("image/");
+  return (
+    <div className="rounded-md border border-border bg-card p-3">
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">{title}</p>
+      <p className="mt-0.5 font-mono text-sm font-medium">{subtitle}</p>
+      <div className="mt-2 overflow-hidden rounded border border-border bg-muted/40">
+        {isImage ? (
+          <img src={file.dataUrl} alt={title} className="h-32 w-full object-cover" />
+        ) : (
+          <div className="grid h-32 place-items-center text-xs text-muted-foreground">
+            <FileText className="mb-1 h-6 w-6" /> PDF document
+          </div>
+        )}
+      </div>
+      <div className="mt-2 flex items-center justify-between text-xs">
+        <span className="truncate text-muted-foreground">{file.name}</span>
+        <a href={file.dataUrl} download={file.name} className="inline-flex items-center gap-1 font-medium text-primary hover:underline">
+          <Download className="h-3 w-3" /> Open
+        </a>
+      </div>
+    </div>
+  );
+}
+
+export function OrderHistoryCard({ farmerCode }: { farmerCode: string }) {
+  const orders = useOrders().filter((o: Order) => o.userId === farmerCode);
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="inline-flex items-center gap-2 text-lg font-semibold">
+          <ShoppingBag className="h-4 w-4" /> Purchase History
+        </h2>
+        {orders.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">No purchases yet for this farmer.</p>
+        ) : (
+          <ul className="mt-3 divide-y">
+            {orders.map((o) => (
+              <li key={o.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
+                <div>
+                  <p className="font-mono text-xs text-muted-foreground">{o.id}</p>
+                  <p className="font-medium">{o.lines.map(l => `${l.name} ×${l.qty}`).join(", ")}</p>
+                  <p className="text-xs text-muted-foreground">{new Date(o.createdAt).toLocaleString()} · {o.paymentMode} · {o.paymentState}</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold">₹{o.total.toLocaleString()}</p>
+                  <StatusPill status={o.status as never} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
 }

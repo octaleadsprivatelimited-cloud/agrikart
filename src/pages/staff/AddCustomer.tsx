@@ -6,8 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { createCustomer, recordPayment, useCurrentStaff, type PaymentKind, type Payment } from "@/lib/staff-store";
-import { MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw, IndianRupee, Banknote } from "lucide-react";
+import {
+  createCustomer, recordPayment, useCurrentStaff,
+  type PaymentKind, type Payment, type DocFile, type CustomerDocuments,
+  DOC_MAX_BYTES, DOC_ACCEPT_MIME,
+} from "@/lib/staff-store";
+import {
+  MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw, IndianRupee, Banknote,
+  FileText, Upload, ShieldCheck,
+} from "lucide-react";
 import { toast } from "sonner";
 
 type PayMethod = NonNullable<Payment["method"]>;
@@ -29,9 +36,18 @@ export default function AddCustomer() {
   const staff = useCurrentStaff();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    farmerName: "", mobile: "", aadhaar: "", village: "", district: "",
+    farmerName: "", mobile: "", village: "", district: "",
     landSize: "", crops: "",
   });
+
+  // Documents (KYC + land proof) — all mandatory
+  const [aadhaarNo, setAadhaarNo] = useState("");
+  const [panNo, setPanNo] = useState("");
+  const [surveyNo, setSurveyNo] = useState("");
+  const [aadhaarFile, setAadhaarFile] = useState<DocFile | null>(null);
+  const [panFile, setPanFile] = useState<DocFile | null>(null);
+  const [landFile, setLandFile] = useState<DocFile | null>(null);
+
   const [gps, setGps] = useState<Gps | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [gpsErr, setGpsErr] = useState<string | null>(null);
@@ -56,6 +72,32 @@ export default function AddCustomer() {
   const onKindChange = (k: PaymentKind) => {
     setPayKind(k);
     setPayAmount(String(KIND_AMOUNTS[k]));
+  };
+
+  const pickFile = (setter: (f: DocFile | null) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) { setter(null); return; }
+    if (!DOC_ACCEPT_MIME.includes(file.type)) {
+      toast.error("Only JPG, PNG, WEBP or PDF allowed.");
+      e.target.value = "";
+      return;
+    }
+    if (file.size > DOC_MAX_BYTES) {
+      toast.error(`File is too large (max ${Math.round(DOC_MAX_BYTES / 1024)} KB).`);
+      e.target.value = "";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setter({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        dataUrl: String(reader.result ?? ""),
+      });
+    };
+    reader.onerror = () => toast.error("Could not read file. Try a smaller one.");
+    reader.readAsDataURL(file);
   };
 
   const stopWatch = () => {
@@ -149,6 +191,23 @@ export default function AddCustomer() {
       toast.error("GPS location is mandatory. Please allow location access.");
       return;
     }
+    // KYC validation
+    if (!/^\d{12}$/.test(aadhaarNo.trim())) {
+      toast.error("Enter a valid 12-digit Aadhaar number.");
+      return;
+    }
+    if (!/^[A-Z]{5}\d{4}[A-Z]$/.test(panNo.trim().toUpperCase())) {
+      toast.error("Enter a valid PAN (e.g. ABCDE1234F).");
+      return;
+    }
+    if (!surveyNo.trim()) {
+      toast.error("Land survey / pattadar number is required.");
+      return;
+    }
+    if (!aadhaarFile || !panFile || !landFile) {
+      toast.error("Upload all three documents: Aadhaar, PAN, and land proof.");
+      return;
+    }
     const amountNum = Number(payAmount);
     if (collectPayment) {
       if (!Number.isFinite(amountNum) || amountNum <= 0) {
@@ -160,10 +219,17 @@ export default function AddCustomer() {
         return;
       }
     }
+    const documents: CustomerDocuments = {
+      aadhaar: { number: aadhaarNo.trim(), file: aadhaarFile },
+      pan:     { number: panNo.trim().toUpperCase(), file: panFile },
+      land:    { surveyNo: surveyNo.trim(), file: landFile },
+    };
     const c = createCustomer({
       ...formRef.current,
       farmerName: formRef.current.farmerName.trim(),
+      aadhaar: aadhaarNo.trim(),
       gps,
+      documents,
       employeeId: staff.id,
       employeeName: staff.name,
     });
@@ -206,11 +272,61 @@ export default function AddCustomer() {
         <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
           <Field label="Farmer Name"><Input required maxLength={100} value={form.farmerName} onChange={update("farmerName")} /></Field>
           <Field label="Mobile Number"><Input required pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={update("mobile")} /></Field>
-          <Field label="Aadhaar (optional)" className="sm:col-span-2"><Input pattern="[0-9]{12}" maxLength={12} value={form.aadhaar} onChange={update("aadhaar")} /></Field>
+          
           <Field label="Village"><Input required maxLength={100} value={form.village} onChange={update("village")} /></Field>
           <Field label="District"><Input required maxLength={100} value={form.district} onChange={update("district")} /></Field>
           <Field label="Land Size (acres)"><Input required type="number" min="0" step="0.1" value={form.landSize} onChange={update("landSize")} /></Field>
           <Field label="Crops Grown"><Input required maxLength={200} value={form.crops} onChange={update("crops")} placeholder="Cotton, Paddy" /></Field>
+
+          {/* ---------- KYC Documents (mandatory) ---------- */}
+          <div className="sm:col-span-2">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex items-center gap-2">
+                <div className="grid h-9 w-9 place-items-center rounded-md bg-primary/10 text-primary">
+                  <ShieldCheck className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">KYC & land documents <span className="text-destructive">*</span></p>
+                  <p className="text-xs text-muted-foreground">
+                    Aadhaar, PAN and a land record are required. JPG / PNG / PDF, max {Math.round(DOC_MAX_BYTES / 1024)} KB each.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <DocBlock
+                  label="Aadhaar"
+                  numberLabel="Aadhaar number (12 digits)"
+                  numberValue={aadhaarNo}
+                  onNumberChange={setAadhaarNo}
+                  numberInputProps={{ pattern: "[0-9]{12}", maxLength: 12, inputMode: "numeric" }}
+                  file={aadhaarFile}
+                  onFileChange={pickFile(setAadhaarFile)}
+                />
+                <DocBlock
+                  label="PAN"
+                  numberLabel="PAN (ABCDE1234F)"
+                  numberValue={panNo}
+                  onNumberChange={(v) => setPanNo(v.toUpperCase())}
+                  numberInputProps={{ pattern: "[A-Z]{5}[0-9]{4}[A-Z]", maxLength: 10 }}
+                  file={panFile}
+                  onFileChange={pickFile(setPanFile)}
+                />
+                <div className="sm:col-span-2">
+                  <DocBlock
+                    label="Land record"
+                    numberLabel="Survey / Pattadar passbook no."
+                    numberValue={surveyNo}
+                    onNumberChange={setSurveyNo}
+                    numberInputProps={{ maxLength: 40 }}
+                    file={landFile}
+                    onFileChange={pickFile(setLandFile)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
 
           <div className="sm:col-span-2">
             <div className="flex items-center justify-between">
@@ -366,6 +482,55 @@ function Field({ label, className, children }: { label: string; className?: stri
     <div className={className}>
       <Label>{label}</Label>
       {children}
+    </div>
+  );
+}
+
+function DocBlock(props: {
+  label: string;
+  numberLabel: string;
+  numberValue: string;
+  onNumberChange: (v: string) => void;
+  numberInputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  file: DocFile | null;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const { label, numberLabel, numberValue, onNumberChange, numberInputProps, file, onFileChange } = props;
+  return (
+    <div className="rounded-md border border-border bg-background p-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold">{label}</p>
+        {file && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+            <CheckCircle2 className="h-3 w-3" /> Attached
+          </span>
+        )}
+      </div>
+      <div className="mt-2">
+        <Label className="text-xs">{numberLabel}</Label>
+        <Input
+          required
+          value={numberValue}
+          onChange={(e) => onNumberChange(e.target.value)}
+          {...numberInputProps}
+        />
+      </div>
+      <div className="mt-2">
+        <Label className="text-xs">Upload file</Label>
+        <label className="mt-1 flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-muted/40 px-3 py-2 text-xs hover:bg-muted">
+          <Upload className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="flex-1 truncate text-foreground">
+            {file ? <><FileText className="mr-1 inline h-3 w-3" />{file.name} <span className="text-muted-foreground">· {(file.size / 1024).toFixed(0)} KB</span></> : "Choose JPG / PNG / PDF…"}
+          </span>
+          <input
+            type="file"
+            accept={DOC_ACCEPT_MIME.join(",")}
+            className="sr-only"
+            onChange={onFileChange}
+            required={!file}
+          />
+        </label>
+      </div>
     </div>
   );
 }
