@@ -142,6 +142,8 @@ export default function AdminCustomerDetail() {
         </CardContent>
       </Card>
 
+      <DocumentsCard customer={customer} verified={verified} />
+      <OrderHistoryCard farmerCode={customer.farmerCode} />
       <EditHistoryCard edits={edits} />
     </div>
   );
