@@ -278,6 +278,56 @@ export default function AddCustomer() {
           <Field label="Land Size (acres)"><Input required type="number" min="0" step="0.1" value={form.landSize} onChange={update("landSize")} /></Field>
           <Field label="Crops Grown"><Input required maxLength={200} value={form.crops} onChange={update("crops")} placeholder="Cotton, Paddy" /></Field>
 
+          {/* ---------- KYC Documents (mandatory) ---------- */}
+          <div className="sm:col-span-2">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex items-center gap-2">
+                <div className="grid h-9 w-9 place-items-center rounded-md bg-primary/10 text-primary">
+                  <ShieldCheck className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">KYC & land documents <span className="text-destructive">*</span></p>
+                  <p className="text-xs text-muted-foreground">
+                    Aadhaar, PAN and a land record are required. JPG / PNG / PDF, max {Math.round(DOC_MAX_BYTES / 1024)} KB each.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <DocBlock
+                  label="Aadhaar"
+                  numberLabel="Aadhaar number (12 digits)"
+                  numberValue={aadhaarNo}
+                  onNumberChange={setAadhaarNo}
+                  numberInputProps={{ pattern: "[0-9]{12}", maxLength: 12, inputMode: "numeric" }}
+                  file={aadhaarFile}
+                  onFileChange={pickFile(setAadhaarFile)}
+                />
+                <DocBlock
+                  label="PAN"
+                  numberLabel="PAN (ABCDE1234F)"
+                  numberValue={panNo}
+                  onNumberChange={(v) => setPanNo(v.toUpperCase())}
+                  numberInputProps={{ pattern: "[A-Z]{5}[0-9]{4}[A-Z]", maxLength: 10 }}
+                  file={panFile}
+                  onFileChange={pickFile(setPanFile)}
+                />
+                <div className="sm:col-span-2">
+                  <DocBlock
+                    label="Land record"
+                    numberLabel="Survey / Pattadar passbook no."
+                    numberValue={surveyNo}
+                    onNumberChange={setSurveyNo}
+                    numberInputProps={{ maxLength: 40 }}
+                    file={landFile}
+                    onFileChange={pickFile(setLandFile)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+
           <div className="sm:col-span-2">
             <div className="flex items-center justify-between">
               <Label>GPS Location <span className="text-destructive">*</span></Label>
