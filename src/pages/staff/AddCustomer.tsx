@@ -485,3 +485,53 @@ function Field({ label, className, children }: { label: string; className?: stri
     </div>
   );
 }
+
+function DocBlock(props: {
+  label: string;
+  numberLabel: string;
+  numberValue: string;
+  onNumberChange: (v: string) => void;
+  numberInputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  file: DocFile | null;
+  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  const { label, numberLabel, numberValue, onNumberChange, numberInputProps, file, onFileChange } = props;
+  return (
+    <div className="rounded-md border border-border bg-background p-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold">{label}</p>
+        {file && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+            <CheckCircle2 className="h-3 w-3" /> Attached
+          </span>
+        )}
+      </div>
+      <div className="mt-2">
+        <Label className="text-xs">{numberLabel}</Label>
+        <Input
+          required
+          value={numberValue}
+          onChange={(e) => onNumberChange(e.target.value)}
+          {...numberInputProps}
+        />
+      </div>
+      <div className="mt-2">
+        <Label className="text-xs">Upload file</Label>
+        <label className="mt-1 flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-muted/40 px-3 py-2 text-xs hover:bg-muted">
+          <Upload className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="flex-1 truncate text-foreground">
+            {file ? <><FileText className="mr-1 inline h-3 w-3" />{file.name} <span className="text-muted-foreground">· {(file.size / 1024).toFixed(0)} KB</span></> : "Choose JPG / PNG / PDF…"}
+          </span>
+          <input
+            type="file"
+            accept={DOC_ACCEPT_MIME.join(",")}
+            className="sr-only"
+            onChange={onFileChange}
+            required={!file}
+          />
+        </label>
+      </div>
+    </div>
+  );
+}
+}
