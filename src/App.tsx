@@ -170,6 +170,9 @@ export default function App() {
           </Route>
         </Route>
 
+        {/* Admin login — no guard */}
+        <Route path="admin/login" element={<AdminLogin />} />
+
         {/* Admin — guarded */}
         <Route path="admin" element={<RequireAdmin />}>
           <Route element={<AdminLayout />}>
