@@ -42,7 +42,7 @@ export default function CustomersList() {
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search name, mobile or villageâ€¦" value={q} onChange={(e) => setQ(e.target.value)} className="pl-9" />
+          <Input placeholder="Search name, mobile or village…" value={q} onChange={(e) => setQ(e.target.value)} className="pl-9" />
         </div>
         <div className="flex flex-wrap gap-1 rounded-md border border-border bg-card p-1">
           {tabs.map(t => (

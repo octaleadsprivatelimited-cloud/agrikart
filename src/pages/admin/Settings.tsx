@@ -58,8 +58,8 @@ export default function AdminSettings() {
       <Card><CardContent className="space-y-3 p-6">
         <h2 className="text-base font-semibold">Shipping</h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Free shipping above (â‚¹)"><Input type="number" value={s.freeShippingAbove} onChange={e => setS({ ...s, freeShippingAbove: +e.target.value })} /></Field>
-          <Field label="Shipping fee (â‚¹)"><Input type="number" value={s.shippingFee} onChange={e => setS({ ...s, shippingFee: +e.target.value })} /></Field>
+          <Field label="Free shipping above (₹)"><Input type="number" value={s.freeShippingAbove} onChange={e => setS({ ...s, freeShippingAbove: +e.target.value })} /></Field>
+          <Field label="Shipping fee (₹)"><Input type="number" value={s.shippingFee} onChange={e => setS({ ...s, shippingFee: +e.target.value })} /></Field>
         </div>
       </CardContent></Card>
 
@@ -67,9 +67,9 @@ export default function AdminSettings() {
         <h2 className="text-base font-semibold">Roles & permissions</h2>
         <p className="text-sm text-muted-foreground">Roles are managed in <a href="/admin/staff" className="text-primary hover:underline">Staff</a>. Current roles: Admin, Employee, Farmer.</p>
         <ul className="text-sm space-y-1 text-muted-foreground list-disc pl-5">
-          <li><strong>Admin</strong> â€” full access to all modules.</li>
-          <li><strong>Employee</strong> â€” customers, requests, payments collection.</li>
-          <li><strong>Farmer</strong> â€” customer portal only.</li>
+          <li><strong>Admin</strong> — full access to all modules.</li>
+          <li><strong>Employee</strong> — customers, requests, payments collection.</li>
+          <li><strong>Farmer</strong> — customer portal only.</li>
         </ul>
       </CardContent></Card>
 

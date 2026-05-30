@@ -18,7 +18,7 @@ import {
 } from "recharts";
 
 
-const fmt = (n: number) => "â‚¹" + Math.round(n).toLocaleString("en-IN");
+const fmt = (n: number) => "₹" + Math.round(n).toLocaleString("en-IN");
 const dayKey = (ts: number) => new Date(ts).toISOString().slice(0, 10);
 
 export default function AdminDashboard() {
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                   <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "â‚¹" + v} />
+                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "₹" + v} />
                   <Tooltip contentStyle={{ borderRadius: 8, fontSize: 12 }} formatter={(v: number) => fmt(v)} />
                   <Area type="monotone" dataKey="revenue" stroke="oklch(0.55 0.18 145)" fill="url(#rev)" strokeWidth={2} />
                   <Area type="monotone" dataKey="refunds" stroke="oklch(0.55 0.20 25)" fill="url(#ref)" strokeWidth={2} />
@@ -277,7 +277,7 @@ export default function AdminDashboard() {
               <Detail Icon={Receipt} label="Order ID" value={viewing.orderId} mono />
               <div className="grid grid-cols-2 gap-3">
                 <Detail label="Type" value={viewing.kind} />
-                <Detail label="Method" value={viewing.method ?? "â€”"} />
+                <Detail label="Method" value={viewing.method ?? "—"} />
                 <Detail label="Amount" value={fmt(viewing.amount)} />
                 <Detail label="Status" value={viewing.status} />
               </div>
@@ -285,9 +285,9 @@ export default function AdminDashboard() {
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Customer</p>
                 <div className="mt-2 grid gap-2">
                   <Detail label="Farmer ID" value={viewing.farmerId} mono />
-                  <Detail label="Name" value={viewing.farmerName ?? "â€”"} />
-                  <Detail Icon={Phone} label="Mobile" value={viewing.mobile ?? "â€”"} />
-                  <Detail Icon={Mail} label="Email" value={viewing.email ?? "â€”"} />
+                  <Detail label="Name" value={viewing.farmerName ?? "—"} />
+                  <Detail Icon={Phone} label="Mobile" value={viewing.mobile ?? "—"} />
+                  <Detail Icon={Mail} label="Email" value={viewing.email ?? "—"} />
                 </div>
               </div>
               <Detail label="Date" value={new Date(viewing.createdAt).toLocaleString()} />
@@ -321,7 +321,7 @@ export default function AdminDashboard() {
           </DialogHeader>
           <div className="space-y-2">
             <Label htmlFor="reason">Reason</Label>
-            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not deliveredâ€¦" />
+            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not delivered…" />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setRefunding(null); setReason(""); }}>Cancel</Button>

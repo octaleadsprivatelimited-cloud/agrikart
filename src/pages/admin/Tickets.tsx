@@ -76,7 +76,7 @@ export default function AdminTickets() {
                   </div>
                 ))}
               </div>
-              <Textarea rows={3} value={msg} onChange={e => setMsg(e.target.value)} placeholder="Write a replyâ€¦" />
+              <Textarea rows={3} value={msg} onChange={e => setMsg(e.target.value)} placeholder="Write a reply…" />
               <Select value={status} onValueChange={(v) => setStatus(v as Ticket["status"])}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>

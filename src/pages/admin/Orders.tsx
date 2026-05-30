@@ -62,7 +62,7 @@ export default function AdminOrders() {
         <CardContent className="p-4 flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input className="pl-9" placeholder="Search by order, customer, mobileâ€¦" value={q} onChange={e => setQ(e.target.value)} />
+            <Input className="pl-9" placeholder="Search by order, customer, mobile…" value={q} onChange={e => setQ(e.target.value)} />
           </div>
           <Select value={status} onValueChange={(v) => setStatus(v as OrderStatus | "All")}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
@@ -148,7 +148,7 @@ export default function AdminOrders() {
                 <p className="mb-2 text-xs font-semibold uppercase text-muted-foreground">History</p>
                 <ul className="space-y-1 text-xs">
                   {view.history.map((h, i) => (
-                    <li key={i} className="text-muted-foreground">{new Date(h.ts).toLocaleString()} â€” {h.note}</li>
+                    <li key={i} className="text-muted-foreground">{new Date(h.ts).toLocaleString()} — {h.note}</li>
                   ))}
                 </ul>
               </div>

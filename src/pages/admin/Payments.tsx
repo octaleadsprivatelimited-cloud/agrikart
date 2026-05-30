@@ -31,7 +31,7 @@ export default function AdminPayments() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Payments</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Order payments â€” COD collection, online txns, refunds.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Order payments — COD collection, online txns, refunds.</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-3">
         <KPI tone="bg-primary/10 text-primary" label="Collected" value={fmt(totals.paid)} />
@@ -43,7 +43,7 @@ export default function AdminPayments() {
         <CardContent className="p-4 flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input className="pl-9" placeholder="Searchâ€¦" value={q} onChange={e => setQ(e.target.value)} />
+            <Input className="pl-9" placeholder="Search…" value={q} onChange={e => setQ(e.target.value)} />
           </div>
           <Select value={state} onValueChange={(v) => setState(v as PaymentState | "All")}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>

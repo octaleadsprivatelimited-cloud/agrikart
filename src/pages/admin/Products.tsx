@@ -65,7 +65,7 @@ export default function AdminProducts() {
           <div className="flex flex-wrap gap-3">
             <div className="relative flex-1 min-w-[200px]">
               <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input className="pl-9" placeholder="Search name, brand, batchâ€¦" value={q} onChange={e => setQ(e.target.value)} />
+              <Input className="pl-9" placeholder="Search name, brand, batch…" value={q} onChange={e => setQ(e.target.value)} />
             </div>
             <Select value={cat} onValueChange={(v) => setCat(v as Category | "All")}>
               <SelectTrigger className="w-[200px]"><SelectValue /></SelectTrigger>
@@ -152,8 +152,8 @@ export default function AdminProducts() {
             </Field>
             <Field label="Brand"><Input value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} /></Field>
             <Field label="Manufacturer"><Input value={form.manufacturer} onChange={e => setForm({ ...form, manufacturer: e.target.value })} /></Field>
-            <Field label="Price (â‚¹)"><Input type="number" value={form.price} onChange={e => setForm({ ...form, price: +e.target.value })} /></Field>
-            <Field label="Discount Price (â‚¹)"><Input type="number" value={form.discountPrice ?? ""} onChange={e => setForm({ ...form, discountPrice: e.target.value ? +e.target.value : undefined })} /></Field>
+            <Field label="Price (₹)"><Input type="number" value={form.price} onChange={e => setForm({ ...form, price: +e.target.value })} /></Field>
+            <Field label="Discount Price (₹)"><Input type="number" value={form.discountPrice ?? ""} onChange={e => setForm({ ...form, discountPrice: e.target.value ? +e.target.value : undefined })} /></Field>
             <Field label="Stock"><Input type="number" value={form.stock} onChange={e => setForm({ ...form, stock: +e.target.value })} /></Field>
             <Field label="Reorder Level"><Input type="number" value={form.reorderLevel} onChange={e => setForm({ ...form, reorderLevel: +e.target.value })} /></Field>
             <Field label="Batch Number"><Input value={form.batchNumber} onChange={e => setForm({ ...form, batchNumber: e.target.value })} /></Field>

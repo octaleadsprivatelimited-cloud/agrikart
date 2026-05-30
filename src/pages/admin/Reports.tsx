@@ -70,7 +70,7 @@ export default function AdminReports() {
               <BarChart data={data.days}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "â‚¹" + v} />
+                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "₹" + v} />
                 <Tooltip formatter={(v: number) => fmt(v)} contentStyle={{ borderRadius: 8, fontSize: 12 }} />
                 <Bar dataKey="revenue" fill="oklch(0.55 0.18 145)" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -87,7 +87,7 @@ export default function AdminReports() {
               <LineChart data={data.monthly}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                 <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "â‚¹" + v} />
+                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "₹" + v} />
                 <Tooltip formatter={(v: number) => fmt(v)} contentStyle={{ borderRadius: 8, fontSize: 12 }} />
                 <Line type="monotone" dataKey="revenue" stroke="oklch(0.55 0.18 145)" strokeWidth={2} />
               </LineChart>
