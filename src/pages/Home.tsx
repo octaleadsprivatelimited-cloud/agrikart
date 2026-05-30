@@ -463,26 +463,62 @@ export default function Home() {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="container mx-auto px-4 pb-10 sm:pb-14 md:pb-20">
-        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient px-5 py-8 text-primary-foreground shadow-glow sm:px-6 sm:py-12 md:px-12 md:py-16">
-          <div className="absolute inset-0 bg-grain opacity-25 pointer-events-none" />
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Ready to grow with Agrikart?</h2>
-            <p className="mt-2 text-sm text-primary-foreground/85 sm:mt-3 sm:text-base">
-              Apply for a service in minutes — our team will reach out to assist you.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
-              <Button asChild size="lg" variant="secondary" className="shadow-elegant">
-                <Link to="/apply">Apply Now</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/contact">Contact Us</Link>
-              </Button>
-            </div>
+      {/* CTA — editorial bento */}
+      <section className="bg-[#fcfdfc] pb-12 sm:pb-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid auto-rows-min grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-6">
+            {/* Primary CTA — large dark block */}
+            <article className="group relative overflow-hidden rounded-3xl shadow-sm transition-all duration-500 hover:shadow-2xl sm:rounded-[2.5rem] lg:col-span-4 lg:min-h-[360px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1a3c2a] via-[#2d5a3d] to-[#1a3c2a]" />
+              <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#a0c49d]/20 blur-3xl transition-transform duration-700 group-hover:scale-125" />
+              <div className="absolute -bottom-16 -left-10 h-56 w-56 rounded-full bg-[#5a8a5c]/30 blur-3xl" />
+              <div className="relative flex h-full flex-col justify-between gap-8 p-8 text-white sm:p-12 lg:p-14">
+                <div>
+                  <span className="inline-block rounded-full border border-white/20 bg-[#a0c49d]/25 px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+                    Get started today
+                  </span>
+                  <h2 className="mt-4 max-w-xl font-display text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
+                    Ready to grow with <span className="text-[#a0c49d]">Agrikart?</span>
+                  </h2>
+                  <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/85 sm:text-base">
+                    Apply in minutes. A village-level field executive will reach out to walk you through every step — loans, insurance, inputs, or drone services.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild size="lg" className="gap-2 bg-white text-[#1a3c2a] shadow-elegant hover:bg-[#a0c49d]/40 hover:text-white">
+                    <Link to="/apply">Apply Now <ArrowRight className="h-4 w-4" /></Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10">
+                    <Link to="/contact">Contact Us</Link>
+                  </Button>
+                </div>
+              </div>
+            </article>
+
+            {/* Secondary CTA — light block with field executive pitch */}
+            <article className="relative overflow-hidden rounded-3xl border border-[#a0c49d]/25 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl sm:rounded-[2.5rem] lg:col-span-2 lg:min-h-[360px]">
+              <div className="flex h-full flex-col justify-between p-8 sm:p-10">
+                <div>
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#1a3c2a] text-[#a0c49d]">
+                    <Handshake className="h-6 w-6" strokeWidth={1.75} />
+                  </span>
+                  <h3 className="mt-5 font-display text-2xl font-bold leading-tight text-[#1a3c2a] sm:text-3xl">
+                    Become a village field executive.
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#5a8a5c]">
+                    Earn commissions while serving farmers in your own village. Training and tools included.
+                  </p>
+                </div>
+                <Button asChild variant="ghost" className="mt-6 w-fit gap-2 px-0 text-[#1a3c2a] hover:bg-transparent hover:text-[#5a8a5c]">
+                  <Link to="/careers">Join the team <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+              </div>
+              <div className="absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-[#a0c49d]/15 blur-2xl" />
+            </article>
           </div>
         </div>
       </section>
+
     </>
   );
 }
