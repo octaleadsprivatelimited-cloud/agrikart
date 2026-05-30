@@ -438,7 +438,7 @@ export type Payment = {
 
 export function recordPayment(p: Omit<Payment, "id" | "orderId" | "createdAt" | "status"> & { status?: PaymentStatus }): Payment {
   const all = read<Payment[]>(PAYMENTS_KEY, []);
-  const methods: Payment["method"][] = ["UPI", "Card", "NetBanking"];
+  const methods: NonNullable<Payment["method"]>[] = ["UPI", "Card", "NetBanking"];
   const item: Payment = {
     ...p,
     status: p.status ?? "Succeeded",
