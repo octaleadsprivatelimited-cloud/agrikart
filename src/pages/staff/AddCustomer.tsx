@@ -74,6 +74,32 @@ export default function AddCustomer() {
     setPayAmount(String(KIND_AMOUNTS[k]));
   };
 
+  const pickFile = (setter: (f: DocFile | null) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) { setter(null); return; }
+    if (!DOC_ACCEPT_MIME.includes(file.type)) {
+      toast.error("Only JPG, PNG, WEBP or PDF allowed.");
+      e.target.value = "";
+      return;
+    }
+    if (file.size > DOC_MAX_BYTES) {
+      toast.error(`File is too large (max ${Math.round(DOC_MAX_BYTES / 1024)} KB).`);
+      e.target.value = "";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setter({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        dataUrl: String(reader.result ?? ""),
+      });
+    };
+    reader.onerror = () => toast.error("Could not read file. Try a smaller one.");
+    reader.readAsDataURL(file);
+  };
+
   const stopWatch = () => {
     if (watchRef.current !== null && navigator.geolocation) {
       navigator.geolocation.clearWatch(watchRef.current);
