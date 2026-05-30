@@ -52,10 +52,12 @@ const stats = [
 ] as const;
 
 export default function Home() {
+  const { t } = useTranslation();
   const testimonials = useTestimonials();
   const gallery = useGallery();
   const videos = useVideos();
   const partners = usePartners();
+  const faqItems = (t("faq.items", { returnObjects: true }) as Array<{ q: string; a: string }>).slice(0, 4);
   return (
     <>
       {/* HERO — One Stop Digital Platform */}
