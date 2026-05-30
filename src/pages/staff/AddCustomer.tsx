@@ -48,7 +48,7 @@ export default function AddCustomer() {
       employeeId: staff.id,
       employeeName: staff.name,
     });
-    toast.success("Customer added!");
+    toast.success(`Customer added! Farmer ID: ${c.farmerCode}`);
     void navigate(`/staff/customers/${c.id}`);
   };
 
