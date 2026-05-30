@@ -36,6 +36,15 @@ export default function AddCustomer() {
   const [address, setAddress] = useState<string | null>(null);
   const [gpsErr, setGpsErr] = useState<string | null>(null);
   const [capturing, setCapturing] = useState(false);
+
+  // Payment collection
+  const [collectPayment, setCollectPayment] = useState(true);
+  const [payKind, setPayKind] = useState<PaymentKind>("joining");
+  const [payMethod, setPayMethod] = useState<PayMethod>("Cash");
+  const [payAmount, setPayAmount] = useState<string>(String(KIND_AMOUNTS.joining));
+  const [payReference, setPayReference] = useState("");
+  const [payNote, setPayNote] = useState("");
+
   const watchRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
   const formRef = useRef(form);
@@ -43,6 +52,11 @@ export default function AddCustomer() {
 
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [k]: e.target.value });
+
+  const onKindChange = (k: PaymentKind) => {
+    setPayKind(k);
+    setPayAmount(String(KIND_AMOUNTS[k]));
+  };
 
   const stopWatch = () => {
     if (watchRef.current !== null && navigator.geolocation) {
