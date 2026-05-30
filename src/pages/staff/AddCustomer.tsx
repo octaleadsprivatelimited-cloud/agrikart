@@ -165,6 +165,23 @@ export default function AddCustomer() {
       toast.error("GPS location is mandatory. Please allow location access.");
       return;
     }
+    // KYC validation
+    if (!/^\d{12}$/.test(aadhaarNo.trim())) {
+      toast.error("Enter a valid 12-digit Aadhaar number.");
+      return;
+    }
+    if (!/^[A-Z]{5}\d{4}[A-Z]$/.test(panNo.trim().toUpperCase())) {
+      toast.error("Enter a valid PAN (e.g. ABCDE1234F).");
+      return;
+    }
+    if (!surveyNo.trim()) {
+      toast.error("Land survey / pattadar number is required.");
+      return;
+    }
+    if (!aadhaarFile || !panFile || !landFile) {
+      toast.error("Upload all three documents: Aadhaar, PAN, and land proof.");
+      return;
+    }
     const amountNum = Number(payAmount);
     if (collectPayment) {
       if (!Number.isFinite(amountNum) || amountNum <= 0) {
@@ -176,10 +193,17 @@ export default function AddCustomer() {
         return;
       }
     }
+    const documents: CustomerDocuments = {
+      aadhaar: { number: aadhaarNo.trim(), file: aadhaarFile },
+      pan:     { number: panNo.trim().toUpperCase(), file: panFile },
+      land:    { surveyNo: surveyNo.trim(), file: landFile },
+    };
     const c = createCustomer({
       ...formRef.current,
       farmerName: formRef.current.farmerName.trim(),
+      aadhaar: aadhaarNo.trim(),
       gps,
+      documents,
       employeeId: staff.id,
       employeeName: staff.name,
     });
