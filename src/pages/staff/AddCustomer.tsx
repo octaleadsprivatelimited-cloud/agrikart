@@ -36,9 +36,18 @@ export default function AddCustomer() {
   const staff = useCurrentStaff();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    farmerName: "", mobile: "", aadhaar: "", village: "", district: "",
+    farmerName: "", mobile: "", village: "", district: "",
     landSize: "", crops: "",
   });
+
+  // Documents (KYC + land proof) — all mandatory
+  const [aadhaarNo, setAadhaarNo] = useState("");
+  const [panNo, setPanNo] = useState("");
+  const [surveyNo, setSurveyNo] = useState("");
+  const [aadhaarFile, setAadhaarFile] = useState<DocFile | null>(null);
+  const [panFile, setPanFile] = useState<DocFile | null>(null);
+  const [landFile, setLandFile] = useState<DocFile | null>(null);
+
   const [gps, setGps] = useState<Gps | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [gpsErr, setGpsErr] = useState<string | null>(null);
