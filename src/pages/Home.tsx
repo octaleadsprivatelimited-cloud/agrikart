@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, ArrowRight,
   Timer, BadgeCheck, Leaf, Users, Headphones, SprayCan, Package,
-  Handshake, MapPin, IndianRupee, Star, PlayCircle,
+  Handshake, MapPin, IndianRupee, Star, PlayCircle, Quote, HelpCircle, Plus,
 } from "lucide-react";
 import { useTestimonials, useGallery, useVideos, usePartners } from "@/lib/content-store";
+import imgValues from "@/assets/about-values.jpg";
+import imgMission from "@/assets/about-mission.jpg";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
@@ -49,10 +52,12 @@ const stats = [
 ] as const;
 
 export default function Home() {
+  const { t } = useTranslation();
   const testimonials = useTestimonials();
   const gallery = useGallery();
   const videos = useVideos();
   const partners = usePartners();
+  const faqItems = (t("faq.items", { returnObjects: true }) as Array<{ q: string; a: string }>).slice(0, 4);
   return (
     <>
       {/* HERO — One Stop Digital Platform */}
@@ -229,44 +234,157 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS — editorial bento */}
       {testimonials.length > 0 && (
-        <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">What Farmers Say</h2>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">Real stories from farmers we've supported.</p>
+        <section className="bg-[#fcfdfc] py-12 sm:py-20">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4 sm:mb-12">
+              <div className="max-w-2xl">
+                <span className="inline-block rounded-full border border-[#a0c49d]/40 bg-[#a0c49d]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#1a3c2a]">
+                  Voices from the field
+                </span>
+                <h2 className="mt-3 font-display text-3xl font-bold leading-tight text-[#1a3c2a] sm:text-4xl md:text-5xl">
+                  What farmers say
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-[#5a8a5c] sm:text-base">
+                  Real stories from the families we work with every day across South India.
+                </p>
+              </div>
+              <div className="h-1 w-16 rounded-full bg-[#a0c49d]" />
             </div>
-            <div className="mt-6 grid gap-3 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {testimonials.slice(0, 6).map(t => (
-                <Card key={t.id} className="h-full">
-                  <CardContent className="space-y-3 p-5">
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-yellow-400 text-yellow-400" : "text-muted"}`} />
-                      ))}
-                    </div>
-                    <p className="text-sm leading-relaxed text-foreground/85">"{t.quote}"</p>
-                    <div className="flex items-center gap-3 pt-2">
-                      {t.avatar ? (
-                        <img src={t.avatar} alt={t.name} className="h-10 w-10 rounded-full object-cover" />
-                      ) : (
-                        <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                          {t.name.charAt(0)}
-                        </span>
-                      )}
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold">{t.name}</p>
-                        <p className="truncate text-xs text-muted-foreground">{t.role}</p>
+
+            <div className="grid auto-rows-min grid-cols-1 gap-4 sm:gap-6 md:grid-cols-4 lg:grid-cols-6">
+              {/* Featured testimonial — hero block */}
+              {testimonials[0] && (
+                <article className="group relative overflow-hidden rounded-3xl border border-[#a0c49d]/20 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl sm:rounded-[2.5rem] md:col-span-4 md:min-h-[380px] lg:col-span-4 lg:row-span-2 lg:min-h-[480px]">
+                  <img
+                    src={imgMission}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1a3c2a]/95 via-[#1a3c2a]/70 to-[#1a3c2a]/30" />
+                  <div className="relative flex h-full flex-col justify-between p-6 text-white sm:p-10 lg:p-12">
+                    <Quote className="h-10 w-10 text-[#a0c49d] sm:h-12 sm:w-12" strokeWidth={1.5} />
+                    <div>
+                      <p className="font-display text-xl font-medium leading-snug sm:text-2xl lg:text-3xl">
+                        "{testimonials[0].quote}"
+                      </p>
+                      <div className="mt-6 flex items-center gap-4 border-t border-white/15 pt-5 sm:mt-8 sm:pt-6">
+                        {testimonials[0].avatar ? (
+                          <img src={testimonials[0].avatar} alt={testimonials[0].name} className="h-12 w-12 rounded-full object-cover ring-2 ring-[#a0c49d]/40" />
+                        ) : (
+                          <span className="grid h-12 w-12 place-items-center rounded-full bg-[#a0c49d]/30 text-base font-bold text-white ring-2 ring-[#a0c49d]/40">
+                            {testimonials[0].name.charAt(0)}
+                          </span>
+                        )}
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold">{testimonials[0].name}</p>
+                          <p className="truncate text-xs text-white/70">{testimonials[0].role}</p>
+                        </div>
+                        <div className="ml-auto flex gap-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star key={i} className={`h-3.5 w-3.5 ${i < testimonials[0].rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-white/20"}`} />
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </article>
+              )}
+
+              {/* Side quotes — stacked */}
+              {testimonials.slice(1, 3).map((tt) => (
+                <article key={tt.id} className="overflow-hidden rounded-3xl border border-[#a0c49d]/20 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl sm:p-8 md:col-span-4 lg:col-span-2">
+                  <div className="mb-3 flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className={`h-3.5 w-3.5 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`} />
+                    ))}
+                  </div>
+                  <p className="font-display text-base leading-relaxed text-[#1a3c2a] sm:text-lg">
+                    "{tt.quote}"
+                  </p>
+                  <div className="mt-5 flex items-center gap-3 border-t border-[#a0c49d]/20 pt-4">
+                    {tt.avatar ? (
+                      <img src={tt.avatar} alt={tt.name} className="h-10 w-10 rounded-full object-cover" />
+                    ) : (
+                      <span className="grid h-10 w-10 place-items-center rounded-full bg-[#a0c49d]/20 text-sm font-bold text-[#1a3c2a]">
+                        {tt.name.charAt(0)}
+                      </span>
+                    )}
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-[#1a3c2a]">{tt.name}</p>
+                      <p className="truncate text-xs text-[#5a8a5c]">{tt.role}</p>
+                    </div>
+                  </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
       )}
+
+      {/* FAQ PREVIEW — editorial split */}
+      <section className="bg-[#fcfdfc] py-12 sm:py-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <article className="overflow-hidden rounded-3xl border border-[#a0c49d]/20 bg-white shadow-sm sm:rounded-[3rem]">
+            <div className="grid grid-cols-1 lg:grid-cols-5">
+              {/* Left — title block */}
+              <div className="relative min-h-[280px] lg:col-span-2">
+                <img src={imgValues} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#1a3c2a]/90 via-[#1a3c2a]/75 to-[#2d5a3d]/60" />
+                <div className="relative flex h-full flex-col justify-between p-8 text-white sm:p-12 lg:p-14">
+                  <div>
+                    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#a0c49d]/25 px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+                      <HelpCircle className="h-3 w-3" /> Help center
+                    </span>
+                    <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+                      Questions, answered.
+                    </h2>
+                    <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/85 sm:text-base">
+                      The most common things farmers ask before joining Agrikart. Still curious? Our team is one call away.
+                    </p>
+                  </div>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <Button asChild size="sm" className="bg-white text-[#1a3c2a] hover:bg-[#a0c49d]/30 hover:text-white">
+                      <Link to="/faq">All FAQs <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+                    </Button>
+                    <Button asChild size="sm" variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">
+                      <Link to="/contact">Talk to us</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right — accordion list */}
+              <div className="divide-y divide-[#a0c49d]/15 bg-white p-2 sm:p-4 lg:col-span-3">
+                {faqItems.map((item, i) => (
+                  <details key={i} className="group px-4 py-5 sm:px-6 sm:py-6">
+                    <summary className="flex cursor-pointer items-start justify-between gap-4 list-none">
+                      <div className="flex items-start gap-4">
+                        <span className="mt-0.5 font-display text-xs font-bold text-[#a0c49d]">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="font-display text-base font-semibold text-[#1a3c2a] sm:text-lg">
+                          {item.q}
+                        </h3>
+                      </div>
+                      <span className="mt-1 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-[#a0c49d]/40 text-[#1a3c2a] transition-transform duration-300 group-open:rotate-45 group-open:bg-[#1a3c2a] group-open:text-white">
+                        <Plus className="h-4 w-4" />
+                      </span>
+                    </summary>
+                    <p className="mt-3 pl-10 text-sm leading-relaxed text-[#5a8a5c]">
+                      {item.a}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
 
       {/* GALLERY */}
       {gallery.length > 0 && (
@@ -345,26 +463,62 @@ export default function Home() {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="container mx-auto px-4 pb-10 sm:pb-14 md:pb-20">
-        <div className="relative overflow-hidden rounded-2xl bg-cta-gradient px-5 py-8 text-primary-foreground shadow-glow sm:px-6 sm:py-12 md:px-12 md:py-16">
-          <div className="absolute inset-0 bg-grain opacity-25 pointer-events-none" />
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Ready to grow with Agrikart?</h2>
-            <p className="mt-2 text-sm text-primary-foreground/85 sm:mt-3 sm:text-base">
-              Apply for a service in minutes — our team will reach out to assist you.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
-              <Button asChild size="lg" variant="secondary" className="shadow-elegant">
-                <Link to="/apply">Apply Now</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/contact">Contact Us</Link>
-              </Button>
-            </div>
+      {/* CTA — editorial bento */}
+      <section className="bg-[#fcfdfc] pb-12 sm:pb-20">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid auto-rows-min grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-6">
+            {/* Primary CTA — large dark block */}
+            <article className="group relative overflow-hidden rounded-3xl shadow-sm transition-all duration-500 hover:shadow-2xl sm:rounded-[2.5rem] lg:col-span-4 lg:min-h-[360px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1a3c2a] via-[#2d5a3d] to-[#1a3c2a]" />
+              <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#a0c49d]/20 blur-3xl transition-transform duration-700 group-hover:scale-125" />
+              <div className="absolute -bottom-16 -left-10 h-56 w-56 rounded-full bg-[#5a8a5c]/30 blur-3xl" />
+              <div className="relative flex h-full flex-col justify-between gap-8 p-8 text-white sm:p-12 lg:p-14">
+                <div>
+                  <span className="inline-block rounded-full border border-white/20 bg-[#a0c49d]/25 px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md">
+                    Get started today
+                  </span>
+                  <h2 className="mt-4 max-w-xl font-display text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
+                    Ready to grow with <span className="text-[#a0c49d]">Agrikart?</span>
+                  </h2>
+                  <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/85 sm:text-base">
+                    Apply in minutes. A village-level field executive will reach out to walk you through every step — loans, insurance, inputs, or drone services.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild size="lg" className="gap-2 bg-white text-[#1a3c2a] shadow-elegant hover:bg-[#a0c49d]/40 hover:text-white">
+                    <Link to="/apply">Apply Now <ArrowRight className="h-4 w-4" /></Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10">
+                    <Link to="/contact">Contact Us</Link>
+                  </Button>
+                </div>
+              </div>
+            </article>
+
+            {/* Secondary CTA — light block with field executive pitch */}
+            <article className="relative overflow-hidden rounded-3xl border border-[#a0c49d]/25 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl sm:rounded-[2.5rem] lg:col-span-2 lg:min-h-[360px]">
+              <div className="flex h-full flex-col justify-between p-8 sm:p-10">
+                <div>
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#1a3c2a] text-[#a0c49d]">
+                    <Handshake className="h-6 w-6" strokeWidth={1.75} />
+                  </span>
+                  <h3 className="mt-5 font-display text-2xl font-bold leading-tight text-[#1a3c2a] sm:text-3xl">
+                    Become a village field executive.
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#5a8a5c]">
+                    Earn commissions while serving farmers in your own village. Training and tools included.
+                  </p>
+                </div>
+                <Button asChild variant="ghost" className="mt-6 w-fit gap-2 px-0 text-[#1a3c2a] hover:bg-transparent hover:text-[#5a8a5c]">
+                  <Link to="/careers">Join the team <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+              </div>
+              <div className="absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-[#a0c49d]/15 blur-2xl" />
+            </article>
           </div>
         </div>
       </section>
+
     </>
   );
 }
