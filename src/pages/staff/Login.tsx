@@ -40,7 +40,7 @@ export default function StaffLogin() {
               <Shield className="h-6 w-6" />
             </div>
             <h1 className="mt-4 text-2xl font-bold">Staff Login</h1>
-            <p className="mt-1 text-sm text-muted-foreground">For employees and administrators.</p>
+            <p className="mt-1 text-sm text-muted-foreground">For field employees.</p>
           </div>
           <form onSubmit={onSubmit} className="grid gap-4">
             <div>
@@ -56,10 +56,9 @@ export default function StaffLogin() {
           <div className="mt-6 rounded-lg border border-dashed border-border bg-muted/40 p-3 text-xs text-muted-foreground">
             <p className="font-semibold text-foreground">Demo credentials</p>
             <p className="mt-1">Employee: employee@agrikartfin.com / password123</p>
-            <p>Admin: admin@agrikartfin.com / password123</p>
           </div>
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Farmer? <Link to="/login" className="font-semibold text-primary hover:underline">Login here</Link>
+            Administrator? <Link to="/admin/login" className="font-semibold text-primary hover:underline">Admin login</Link>
           </p>
         </CardContent>
       </Card>
