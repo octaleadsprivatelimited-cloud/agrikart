@@ -67,7 +67,7 @@ export default function CustomersList() {
                     {c.farmerName.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold">{c.farmerName} <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-mono font-bold text-primary">{c.farmerCode}</span></p>
+                    <p className="font-semibold">{c.farmerName} {c.farmerCode ? (<span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-mono font-bold text-primary">{c.farmerCode}</span>) : (<span className="ml-1 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">ID pending</span>)}</p>
                     <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
                       <MapPin className="h-3 w-3" />{c.village}, {c.district} · {c.mobile}
                     </p>
