@@ -27,6 +27,7 @@ export default function AdminCustomers() {
       r = r.filter(c =>
         c.farmerName.toLowerCase().includes(s) ||
         c.mobile.includes(q) ||
+        (c.farmerCode ?? "").toLowerCase().includes(s) ||
         c.village.toLowerCase().includes(s) ||
         c.district.toLowerCase().includes(s) ||
         c.employeeName.toLowerCase().includes(s)
