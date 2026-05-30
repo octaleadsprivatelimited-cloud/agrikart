@@ -29,6 +29,7 @@ const Support = lazy(() => import("@/pages/Support"));
 const Terms = lazy(() => import("@/pages/Terms"));
 
 // -- Layouts / Auth sections ---------------------------------------------------
+const AdminLogin = lazy(() => import("@/pages/admin/Login"));
 const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
 const AdminProducts = lazy(() => import("@/pages/admin/Products"));
@@ -71,7 +72,7 @@ function PageLoader() {
 // -- Guard components ----------------------------------------------------------
 function RequireAdmin() {
   const s = getCurrentStaff();
-  if (!s) return <Navigate to="/staff/login" replace />;
+  if (!s) return <Navigate to="/admin/login" replace />;
   if (s.role !== "admin") return <Navigate to="/staff/dashboard" replace />;
   return <Outlet />;
 }
@@ -168,6 +169,9 @@ export default function App() {
             <Route path="submissions" element={<StaffSubmissions />} />
           </Route>
         </Route>
+
+        {/* Admin login — no guard */}
+        <Route path="admin/login" element={<AdminLogin />} />
 
         {/* Admin — guarded */}
         <Route path="admin" element={<RequireAdmin />}>
