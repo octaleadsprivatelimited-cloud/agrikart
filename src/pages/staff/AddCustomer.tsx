@@ -222,7 +222,7 @@ export default function AddCustomer() {
         <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
           <Field label="Farmer Name"><Input required maxLength={100} value={form.farmerName} onChange={update("farmerName")} /></Field>
           <Field label="Mobile Number"><Input required pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={update("mobile")} /></Field>
-          <Field label="Aadhaar (optional)" className="sm:col-span-2"><Input pattern="[0-9]{12}" maxLength={12} value={form.aadhaar} onChange={update("aadhaar")} /></Field>
+          
           <Field label="Village"><Input required maxLength={100} value={form.village} onChange={update("village")} /></Field>
           <Field label="District"><Input required maxLength={100} value={form.district} onChange={update("district")} /></Field>
           <Field label="Land Size (acres)"><Input required type="number" min="0" step="0.1" value={form.landSize} onChange={update("landSize")} /></Field>
