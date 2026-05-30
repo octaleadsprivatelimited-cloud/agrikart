@@ -63,7 +63,7 @@ export default function AdminCustomerDetail() {
             <Info Icon={Phone} label="Mobile" value={customer.mobile} />
             <Info Icon={Sprout} label="Crops" value={customer.crops} />
             <Info label="Land size" value={`${customer.landSize} acres`} />
-            <Info label="Aadhaar" value={customer.aadhaar || "â€”"} />
+            <Info label="Aadhaar" value={customer.aadhaar || "—"} />
             <Info label="Added by" value={customer.employeeName} />
             <Info label="Date" value={new Date(customer.createdAt).toLocaleString()} />
           </div>
@@ -93,7 +93,7 @@ export default function AdminCustomerDetail() {
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold">GPS Location</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} Â· Â±{Math.round(customer.gps.accuracy)}m Â· {new Date(customer.gps.timestamp).toLocaleString()}
+            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} · ±{Math.round(customer.gps.accuracy)}m · {new Date(customer.gps.timestamp).toLocaleString()}
           </p>
           <div className="mt-4">
             <CustomerMapClient lat={customer.gps.lat} lng={customer.gps.lng} label={customer.farmerName} />
@@ -112,7 +112,7 @@ export default function AdminCustomerDetail() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
                   <div>
                     <p className="font-medium">{r.category}</p>
-                    <p className="text-xs text-muted-foreground">{r.description || "â€”"} Â· {new Date(r.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">{r.description || "—"} · {new Date(r.createdAt).toLocaleDateString()}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <StatusPill status={r.status} />
@@ -154,8 +154,8 @@ export function EditHistoryCard({ edits }: { edits: ReturnType<typeof useCustome
                   {e.changes.map((c, i) => (
                     <li key={i}>
                       <span className="font-medium">{c.field}:</span>{" "}
-                      <span className="line-through text-muted-foreground">{c.from || "â€”"}</span>{" â†’ "}
-                      <span className="text-foreground">{c.to || "â€”"}</span>
+                      <span className="line-through text-muted-foreground">{c.from || "—"}</span>{" → "}
+                      <span className="text-foreground">{c.to || "—"}</span>
                     </li>
                   ))}
                 </ul>

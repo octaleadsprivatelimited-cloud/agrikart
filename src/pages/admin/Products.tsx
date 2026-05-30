@@ -104,7 +104,7 @@ export default function AdminProducts() {
                           <span className="grid h-9 w-9 place-items-center rounded-md bg-muted text-lg">{p.image}</span>
                           <div>
                             <p className="font-medium">{p.name}</p>
-                            <p className="text-xs text-muted-foreground">{p.brand} Â· {p.batchNumber}</p>
+                            <p className="text-xs text-muted-foreground">{p.brand} · {p.batchNumber}</p>
                           </div>
                         </div>
                       </td>

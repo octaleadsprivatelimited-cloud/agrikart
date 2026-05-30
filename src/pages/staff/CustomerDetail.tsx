@@ -135,7 +135,7 @@ export default function CustomerDetail() {
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold">GPS Location</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} Â· Â±{Math.round(customer.gps.accuracy)}m
+            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} · ±{Math.round(customer.gps.accuracy)}m
           </p>
           <div className="mt-4">
             <CustomerMapClient lat={customer.gps.lat} lng={customer.gps.lng} label={customer.farmerName} />
@@ -173,7 +173,7 @@ export default function CustomerDetail() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
                   <div>
                     <p className="font-medium">{r.category}</p>
-                    <p className="text-xs text-muted-foreground">{r.description || "—"} Â· {new Date(r.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">{r.description || "—"} · {new Date(r.createdAt).toLocaleDateString()}</p>
                   </div>
                   <StatusPill status={r.status} />
                 </li>

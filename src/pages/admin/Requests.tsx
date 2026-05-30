@@ -60,12 +60,12 @@ export default function AdminRequests() {
                       <td className="px-4 py-3">
                         {c ? (
                           <Link to={`/admin/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
-                        ) : <span className="text-muted-foreground">â€”</span>}
+                        ) : <span className="text-muted-foreground">—</span>}
                         <p className="text-xs text-muted-foreground">{c?.village ?? ""}</p>
                       </td>
                       <td className="px-4 py-3 font-medium">{r.category}</td>
-                      <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground max-w-xs truncate">{r.description || "â€”"}</td>
-                      <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{c?.employeeName ?? "â€”"}</td>
+                      <td className="px-4 py-3 hidden md:table-cell text-xs text-muted-foreground max-w-xs truncate">{r.description || "—"}</td>
+                      <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{c?.employeeName ?? "—"}</td>
                       <td className="px-4 py-3"><StatusPill status={r.status} /></td>
                       <td className="px-4 py-3 text-right">
                         {r.status === "Pending" && (

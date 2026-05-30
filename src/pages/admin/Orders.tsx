@@ -120,7 +120,7 @@ export default function AdminOrders() {
               <div className="grid grid-cols-2 gap-3">
                 <Info label="Customer" value={view.userName} />
                 <Info label="Mobile" value={view.mobile} />
-                <Info label="Payment" value={`${view.paymentMode} Â· ${view.paymentState}`} />
+                <Info label="Payment" value={`${view.paymentMode} · ${view.paymentState}`} />
                 <Info label="Total" value={fmt(view.total)} />
               </div>
               <div className="rounded-md border bg-muted/30 p-3">

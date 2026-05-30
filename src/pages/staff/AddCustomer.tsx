@@ -75,8 +75,8 @@ export default function AddCustomer() {
                   <CheckCircle2 className="mt-0.5 h-5 w-5 text-primary" />
                   <div className="text-sm">
                     <p className="font-semibold">Location captured</p>
-                    <p className="text-muted-foreground">Lat: {gps.lat.toFixed(6)} Â· Lng: {gps.lng.toFixed(6)}</p>
-                    <p className="text-xs text-muted-foreground">Accuracy: Â±{Math.round(gps.accuracy)}m Â· {new Date(gps.timestamp).toLocaleString()}</p>
+                    <p className="text-muted-foreground">Lat: {gps.lat.toFixed(6)} · Lng: {gps.lng.toFixed(6)}</p>
+                    <p className="text-xs text-muted-foreground">Accuracy: ±{Math.round(gps.accuracy)}m · {new Date(gps.timestamp).toLocaleString()}</p>
                   </div>
                 </div>
               ) : gpsErr ? (

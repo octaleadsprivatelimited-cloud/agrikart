@@ -66,7 +66,7 @@ export default function AdminDeliveries() {
                     <td className="px-4 py-3 text-xs text-muted-foreground">{o.address.village}, {o.address.district}</td>
                     <td className="px-4 py-3 font-medium">{fmt(o.total)}</td>
                     <td className="px-4 py-3"><Badge variant="outline">{o.status}</Badge></td>
-                    <td className="px-4 py-3 text-xs">{o.deliveryPerson ?? "â€”"}{o.expectedDelivery ? ` Â· ETA ${new Date(o.expectedDelivery).toLocaleDateString()}` : ""}</td>
+                    <td className="px-4 py-3 text-xs">{o.deliveryPerson ?? "—"}{o.expectedDelivery ? ` · ETA ${new Date(o.expectedDelivery).toLocaleDateString()}` : ""}</td>
                     <td className="px-4 py-3 text-right space-x-1">
                       {o.status !== "Delivered" && (
                         <Button size="sm" variant="outline" onClick={() => { setOpen(o); setPerson(o.deliveryPerson ?? ""); }}><Truck className="h-3.5 w-3.5" /> Assign</Button>
@@ -88,7 +88,7 @@ export default function AdminDeliveries() {
 
       <Dialog open={!!open} onOpenChange={(v) => !v && setOpen(null)}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Assign delivery â€” {open?.id}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Assign delivery — {open?.id}</DialogTitle></DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5"><Label className="text-xs">Delivery person</Label><Input value={person} onChange={e => setPerson(e.target.value)} placeholder="e.g. Ramesh K." /></div>
             <div className="space-y-1.5"><Label className="text-xs">Expected delivery date</Label><Input type="date" value={eta} onChange={e => setEta(e.target.value)} /></div>
@@ -99,7 +99,7 @@ export default function AdminDeliveries() {
 
       <Dialog open={!!proofOpen} onOpenChange={(v) => !v && setProofOpen(null)}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Delivery proof â€” {proofOpen?.id}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Delivery proof — {proofOpen?.id}</DialogTitle></DialogHeader>
           <div className="space-y-1.5">
             <Label className="text-xs">Signature / OTP / photo reference</Label>
             <Input value={proof} onChange={e => setProof(e.target.value)} placeholder="e.g. OTP 4821, signed by farmer" />
