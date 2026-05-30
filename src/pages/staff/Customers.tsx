@@ -27,7 +27,7 @@ export default function CustomersList() {
     if (tab !== "All") r = r.filter(c => c.status === tab);
     if (q) {
       const s = q.toLowerCase();
-      r = r.filter(c => c.farmerName.toLowerCase().includes(s) || c.mobile.includes(q) || c.village.toLowerCase().includes(s));
+      r = r.filter(c => c.farmerName.toLowerCase().includes(s) || c.mobile.includes(q) || c.village.toLowerCase().includes(s) || (c.farmerCode ?? "").toLowerCase().includes(s));
     }
     return r;
   }, [customers, tab, q]);
