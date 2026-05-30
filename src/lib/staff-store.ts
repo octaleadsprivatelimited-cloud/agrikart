@@ -426,7 +426,11 @@ export type Payment = {
   kind: PaymentKind;
   amount: number;
   status: PaymentStatus;
-  method?: "UPI" | "Card" | "NetBanking";
+  method?: "Cash" | "UPI" | "Card" | "NetBanking";
+  reference?: string;   // UPI ref / cheque no / receipt no
+  note?: string;
+  collectedById?: string;   // staff id who collected
+  collectedByName?: string;
   refundedAt?: number;
   refundReason?: string;
   createdAt: number;
