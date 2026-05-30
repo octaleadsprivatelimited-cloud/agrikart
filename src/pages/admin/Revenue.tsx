@@ -13,7 +13,7 @@ import { IndianRupee, TrendingUp, RotateCcw, Wallet, Search, Download, MoreHoriz
 import { toast } from "sonner";
 
 
-const fmt = (n: number) => "â‚¹" + Math.round(n).toLocaleString("en-IN");
+const fmt = (n: number) => "₹" + Math.round(n).toLocaleString("en-IN");
 const tabs: Array<{ key: "All" | PaymentStatus; label: string }> = [
   { key: "All", label: "All" },
   { key: "Succeeded", label: "Succeeded" },
@@ -100,7 +100,7 @@ export default function AdminRevenue() {
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[220px]">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search txn id, farmer id, name, mobileâ€¦" className="pl-9" value={q} onChange={(e) => setQ(e.target.value)} />
+          <Input placeholder="Search txn id, farmer id, name, mobile…" className="pl-9" value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
         <div className="flex flex-wrap gap-1 rounded-md border border-border bg-card p-1">
           {tabs.map(t => (
@@ -140,13 +140,13 @@ export default function AdminRevenue() {
                     </td>
                     <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(p.createdAt).toLocaleString()}</td>
                     <td className="px-4 py-3">
-                      <p className="font-medium">{p.farmerName ?? "â€”"}</p>
+                      <p className="font-medium">{p.farmerName ?? "—"}</p>
                       <p className="text-[11px] text-muted-foreground">{p.farmerId}</p>
                     </td>
                     <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">
                       {p.mobile && <p>{p.mobile}</p>}
                       {p.email && <p className="truncate max-w-[180px]" title={p.email}>{p.email}</p>}
-                      {!p.mobile && !p.email && "â€”"}
+                      {!p.mobile && !p.email && "—"}
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell capitalize">{p.kind}</td>
                     <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{p.method}</td>
@@ -183,7 +183,7 @@ export default function AdminRevenue() {
           </DialogHeader>
           <div className="space-y-2">
             <Label htmlFor="reason">Reason</Label>
-            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not deliveredâ€¦" />
+            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not delivered…" />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setRefunding(null); setReason(""); }}>Cancel</Button>

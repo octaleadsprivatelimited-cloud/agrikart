@@ -122,7 +122,7 @@ export default function CustomerDetail() {
                 <Info Icon={Phone} label="Mobile" value={customer.mobile} />
                 <Info Icon={Sprout} label="Crops" value={customer.crops} />
                 <Info label="Land size" value={`${customer.landSize} acres`} />
-                <Info label="Aadhaar" value={customer.aadhaar || "â€”"} />
+                <Info label="Aadhaar" value={customer.aadhaar || "—"} />
                 <Info label="Added by" value={customer.employeeName} />
                 <Info label="Date" value={new Date(customer.createdAt).toLocaleString()} />
               </div>
@@ -135,7 +135,7 @@ export default function CustomerDetail() {
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold">GPS Location</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} Â· Â±{Math.round(customer.gps.accuracy)}m
+            {customer.gps.lat.toFixed(6)}, {customer.gps.lng.toFixed(6)} · ±{Math.round(customer.gps.accuracy)}m
           </p>
           <div className="mt-4">
             <CustomerMapClient lat={customer.gps.lat} lng={customer.gps.lng} label={customer.farmerName} />
@@ -150,7 +150,7 @@ export default function CustomerDetail() {
             <div>
               <Label>Category</Label>
               <Select value={cat} onValueChange={(v) => setCat(v as ServiceCategory)} required>
-                <SelectTrigger><SelectValue placeholder="Selectâ€¦" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Select…" /></SelectTrigger>
                 <SelectContent>
                   {serviceCategories.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                 </SelectContent>
@@ -173,7 +173,7 @@ export default function CustomerDetail() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
                   <div>
                     <p className="font-medium">{r.category}</p>
-                    <p className="text-xs text-muted-foreground">{r.description || "â€”"} Â· {new Date(r.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">{r.description || "—"} · {new Date(r.createdAt).toLocaleDateString()}</p>
                   </div>
                   <StatusPill status={r.status} />
                 </li>

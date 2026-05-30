@@ -29,7 +29,7 @@ export default function AdminTickets() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Support Tickets</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{tickets.length} tickets Â· {tickets.filter(t => t.status !== "Closed").length} open</p>
+        <p className="mt-1 text-sm text-muted-foreground">{tickets.length} tickets · {tickets.filter(t => t.status !== "Closed").length} open</p>
       </div>
       <Card>
         <CardContent className="p-0">
@@ -65,18 +65,18 @@ export default function AdminTickets() {
           {view && (
             <div className="space-y-3 text-sm">
               <div className="rounded-md border bg-muted/30 p-3">
-                <p className="text-xs text-muted-foreground">{view.userName} Â· {view.topic} {view.orderId ? `Â· ${view.orderId}` : ""}</p>
+                <p className="text-xs text-muted-foreground">{view.userName} · {view.topic} {view.orderId ? `· ${view.orderId}` : ""}</p>
                 <p className="mt-1">{view.message}</p>
               </div>
               <div className="space-y-2">
                 {view.replies.map((r, i) => (
                   <div key={i} className={`rounded-md p-3 text-sm ${r.author === view.userName ? "bg-muted" : "bg-primary/5"}`}>
-                    <p className="text-xs text-muted-foreground">{r.author} Â· {new Date(r.ts).toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">{r.author} · {new Date(r.ts).toLocaleString()}</p>
                     <p className="mt-1">{r.message}</p>
                   </div>
                 ))}
               </div>
-              <Textarea rows={3} value={msg} onChange={e => setMsg(e.target.value)} placeholder="Write a replyâ€¦" />
+              <Textarea rows={3} value={msg} onChange={e => setMsg(e.target.value)} placeholder="Write a reply…" />
               <Select value={status} onValueChange={(v) => setStatus(v as Ticket["status"])}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>

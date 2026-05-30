@@ -18,7 +18,7 @@ import {
 } from "recharts";
 
 
-const fmt = (n: number) => "â‚¹" + Math.round(n).toLocaleString("en-IN");
+const fmt = (n: number) => "₹" + Math.round(n).toLocaleString("en-IN");
 const dayKey = (ts: number) => new Date(ts).toISOString().slice(0, 10);
 
 export default function AdminDashboard() {
@@ -34,7 +34,7 @@ export default function AdminDashboard() {
     if (!refunding) return;
     if (!reason.trim()) return toast.error("Refund reason is required");
     refundPayment(refunding.id, reason.trim());
-    toast.success(`Refunded ${fmt(refunding.amount)} Â· ${refunding.id}`);
+    toast.success(`Refunded ${fmt(refunding.amount)} · ${refunding.id}`);
     setRefunding(null);
     setReason("");
   };
@@ -106,13 +106,13 @@ export default function AdminDashboard() {
 
       {/* KPI row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Kpi label="Net Revenue" value={fmt(m.net)} sub={`${m.succCount} successful Â· ATV ${fmt(m.avgTicket)}`}
+        <Kpi label="Net Revenue" value={fmt(m.net)} sub={`${m.succCount} successful · ATV ${fmt(m.avgTicket)}`}
           Icon={IndianRupee} delta={m.delta} tone="bg-primary/10 text-primary" />
         <Kpi label="Last 30 Days" value={fmt(m.last30)} sub="vs previous 30 days"
           Icon={TrendingUp} delta={m.delta} tone="bg-[oklch(0.93_0.08_145)] text-[oklch(0.40_0.13_150)]" />
-        <Kpi label="Refunds" value={fmt(m.refundsTotal)} sub={`${m.refundCount} txns Â· ${m.refundRate.toFixed(1)}% rate`}
+        <Kpi label="Refunds" value={fmt(m.refundsTotal)} sub={`${m.refundCount} txns · ${m.refundRate.toFixed(1)}% rate`}
           Icon={RotateCcw} tone="bg-destructive/10 text-destructive" />
-        <Kpi label="Active Customers" value={String(customers.length)} sub={`${approved} approved Â· ${pending} pending`}
+        <Kpi label="Active Customers" value={String(customers.length)} sub={`${approved} approved · ${pending} pending`}
           Icon={Users} tone="bg-accent/20 text-[oklch(0.45_0.15_75)]" />
       </div>
 
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
                   <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "â‚¹" + v} />
+                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => "₹" + v} />
                   <Tooltip contentStyle={{ borderRadius: 8, fontSize: 12 }} formatter={(v: number) => fmt(v)} />
                   <Area type="monotone" dataKey="revenue" stroke="oklch(0.55 0.18 145)" fill="url(#rev)" strokeWidth={2} />
                   <Area type="monotone" dataKey="refunds" stroke="oklch(0.55 0.20 25)" fill="url(#ref)" strokeWidth={2} />
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
           <CardContent className="p-6">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-base font-semibold">Recent Payments</h2>
-              <Link to="/admin/revenue" className="text-xs font-semibold text-primary hover:underline">View all â†’</Link>
+              <Link to="/admin/revenue" className="text-xs font-semibold text-primary hover:underline">View all →</Link>
             </div>
             {recentPayments.length === 0 ? (
               <p className="py-6 text-center text-sm text-muted-foreground">No payments recorded yet.</p>
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
           <CardContent className="p-6">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-base font-semibold">Pending Approvals</h2>
-              <Link to="/admin/customers" className="text-xs font-semibold text-primary hover:underline">View all â†’</Link>
+              <Link to="/admin/customers" className="text-xs font-semibold text-primary hover:underline">View all →</Link>
             </div>
             {pendingCustomers.length === 0 ? (
               <p className="py-6 text-center text-sm text-muted-foreground">No pending customers.</p>
@@ -277,7 +277,7 @@ export default function AdminDashboard() {
               <Detail Icon={Receipt} label="Order ID" value={viewing.orderId} mono />
               <div className="grid grid-cols-2 gap-3">
                 <Detail label="Type" value={viewing.kind} />
-                <Detail label="Method" value={viewing.method ?? "â€”"} />
+                <Detail label="Method" value={viewing.method ?? "—"} />
                 <Detail label="Amount" value={fmt(viewing.amount)} />
                 <Detail label="Status" value={viewing.status} />
               </div>
@@ -285,9 +285,9 @@ export default function AdminDashboard() {
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Customer</p>
                 <div className="mt-2 grid gap-2">
                   <Detail label="Farmer ID" value={viewing.farmerId} mono />
-                  <Detail label="Name" value={viewing.farmerName ?? "â€”"} />
-                  <Detail Icon={Phone} label="Mobile" value={viewing.mobile ?? "â€”"} />
-                  <Detail Icon={Mail} label="Email" value={viewing.email ?? "â€”"} />
+                  <Detail label="Name" value={viewing.farmerName ?? "—"} />
+                  <Detail Icon={Phone} label="Mobile" value={viewing.mobile ?? "—"} />
+                  <Detail Icon={Mail} label="Email" value={viewing.email ?? "—"} />
                 </div>
               </div>
               <Detail label="Date" value={new Date(viewing.createdAt).toLocaleString()} />
@@ -316,12 +316,12 @@ export default function AdminDashboard() {
           <DialogHeader>
             <DialogTitle>Issue refund</DialogTitle>
             <DialogDescription>
-              Refunding {refunding && fmt(refunding.amount)} Â· {refunding?.id}. This action cannot be undone.
+              Refunding {refunding && fmt(refunding.amount)} · {refunding?.id}. This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
             <Label htmlFor="reason">Reason</Label>
-            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not deliveredâ€¦" />
+            <Textarea id="reason" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Duplicate payment, customer request, service not delivered…" />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => { setRefunding(null); setReason(""); }}>Cancel</Button>
@@ -401,9 +401,9 @@ function PaymentRow({ p, onView, onRefund }: { p: Payment; onView: () => void; o
   return (
     <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
       <div className="min-w-0 flex-1">
-        <p className="truncate font-medium">{p.farmerName ?? p.farmerId} <span className="ml-1 text-[11px] font-normal text-muted-foreground">Â· {p.kind}</span></p>
+        <p className="truncate font-medium">{p.farmerName ?? p.farmerId} <span className="ml-1 text-[11px] font-normal text-muted-foreground">· {p.kind}</span></p>
         <p className="truncate text-[11px] text-muted-foreground font-mono">{p.id}</p>
-        <p className="text-[11px] text-muted-foreground">{new Date(p.createdAt).toLocaleString()} Â· {p.method}</p>
+        <p className="text-[11px] text-muted-foreground">{new Date(p.createdAt).toLocaleString()} · {p.method}</p>
       </div>
       <div className="text-right">
         <p className={`font-semibold ${p.status === "Refunded" ? "text-destructive line-through" : ""}`}>{fmt(p.amount)}</p>
