@@ -77,6 +77,9 @@ export function Navbar() {
           <Link to="/portal/bookings" aria-label="Cart" className="relative grid h-9 w-9 place-items-center rounded-full text-foreground/80 hover:bg-muted">
             <ShoppingCart className="h-5 w-5" />
           </Link>
+          <Button asChild variant="outline" size="sm" className="hidden gap-1.5 sm:inline-flex">
+            <Link to="/portal/dashboard">Login</Link>
+          </Button>
           <Button asChild size="sm" className="hidden gap-1.5 sm:inline-flex">
             <Link to="/apply">Apply Now</Link>
           </Button>
@@ -96,6 +99,7 @@ export function Navbar() {
                 ))}
                 <div className="mt-4 border-t pt-4 flex flex-col gap-2">
                   <LanguageToggle />
+                  <Button asChild variant="outline"><Link to="/portal/dashboard">Login</Link></Button>
                   <Button asChild><Link to="/apply">Apply Now</Link></Button>
                 </div>
               </div>
