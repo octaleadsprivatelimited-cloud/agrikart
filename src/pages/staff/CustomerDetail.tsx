@@ -31,7 +31,7 @@ export default function CustomerDetail() {
 
   if (!customer) {
     return (
-      <Card><CardContent className="p-8 text-center text-muted-foreground">
+      <Card><CardContent className="p-5 sm:p-8 text-center text-muted-foreground">
         Customer not found. <Link to="/staff/customers" className="text-primary underline">Back to list</Link>
       </CardContent></Card>
     );

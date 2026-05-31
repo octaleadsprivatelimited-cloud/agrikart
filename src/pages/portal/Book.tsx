@@ -29,7 +29,7 @@ export default function BookService() {
 
   return (
     <Card>
-      <CardContent className="p-8">
+      <CardContent className="p-5 sm:p-8">
         <h1 className="text-2xl font-bold">{t("portal.bookService")}</h1>
         <form onSubmit={onSubmit} className="mt-6 grid gap-5">
           <div>
