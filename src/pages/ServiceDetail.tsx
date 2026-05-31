@@ -7,7 +7,7 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
-  Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark, TestTube2,
+  Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark, TestTube2, Handshake,
   ArrowLeft, ArrowRight, CheckCircle2, FileText, Phone, IndianRupee,
 } from "lucide-react";
 import imgLoans from "@/assets/service-loans.jpg";
@@ -17,6 +17,7 @@ import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
 import imgSchemes from "@/assets/service-schemes.jpg";
 import imgSoil from "@/assets/service-soil.jpg";
+import imgMarket from "@/assets/service-market.jpg";
 
 type ServiceContent = {
   Icon: typeof Banknote;
@@ -60,6 +61,31 @@ const SERVICES: Record<string, ServiceContent> = {
   cold: { Icon: Snowflake, img: imgCold, features: ["Temperature & humidity controlled storage","Online slot booking with live availability","Transparent daily / weekly / monthly charges","QR-coded bag tracking","Insurance for stored produce (optional)"], process: [{ title: "Book Slot", desc: "Enter Farmer ID, crop name, number of bags and expected storage days." },{ title: "Drop-off", desc: "Bring produce to the facility. Bags are weighed, tagged and stored." },{ title: "Storage", desc: "Produce is kept under recommended conditions for your crop." },{ title: "Pickup", desc: "Pay storage charges and collect, or list for sale through our buyer network." }], docs: ["Farmer ID","Crop & quantity declaration","ID proof at pickup"], pricing: "From ₹2 per kg per month for grains; ₹4 per kg per month for fruits & vegetables. Final rate depends on crop & duration.", faqs: [{ q: "Can I store partial bags?", a: "Minimum booking is 10 bags or 200 kg, whichever is higher." },{ q: "What if produce gets damaged?", a: "If damage is due to facility issue, you are compensated as per our storage terms. Optional insurance covers wider risks." }] },
   trade: { Icon: Ship, img: imgTrade, features: ["Domestic mandi & corporate buyer linkages","Export readiness — quality, packing & docs","Buyer discovery for FPOs & aggregators","Logistics & cold-chain support","Payment escrow for first-time buyers"], process: [{ title: "Register Lot", desc: "Submit crop, grade, quantity and location through the app." },{ title: "Buyer Match", desc: "We match with verified domestic / export buyers and share quotes." },{ title: "Quality & Packing", desc: "Sample testing, grading and export-grade packing as per buyer spec." },{ title: "Dispatch & Payment", desc: "Logistics arranged; payment released against documents." }], docs: ["FPO / Farmer ID","GSTIN (if applicable)","Crop grade & lab report","Bank details for payout"], pricing: "Service fee 1–3% of trade value depending on crop and destination. No upfront charges.", faqs: [{ q: "Which countries do you export to?", a: "Primarily Middle East, Southeast Asia and select EU markets. Crop list varies by season." },{ q: "Do you handle customs?", a: "Yes, through our partner CHA — included in the service fee." }] },
   schemes: { Icon: Landmark, img: imgSchemes, features: ["PM-KISAN, PMFBY, KCC, PMKSY enrolment help","State scheme awareness in Telugu","Documentation & online application","Status tracking & grievance support","Subsidy & DBT credit verification"], process: [{ title: "Eligibility Screening", desc: "We check which central & state schemes you qualify for." },{ title: "Document Collection", desc: "Aadhaar, land record, bank details and scheme-specific papers." },{ title: "Online Application", desc: "We submit the application on the official portal on your behalf." },{ title: "Follow-up", desc: "We track status and help resolve issues until benefit is credited." }], docs: ["Aadhaar","Pattadar passbook / 1B record","Bank passbook with IFSC","Mobile number linked to Aadhaar"], pricing: "Nominal service fee from ₹199 per scheme application. Government fee, if any, is paid directly to the portal.", faqs: [{ q: "Can you guarantee scheme approval?", a: "No. Approval depends on government eligibility rules. We ensure your application is complete and submitted on time." },{ q: "How long for PM-KISAN credit?", a: "Usually 1–3 months after Aadhaar–bank–land seeding is validated." }] },
+  market: {
+    Icon: Handshake,
+    img: imgMarket,
+    features: [
+      "Connect farmers with trusted buyers, processors and agri companies",
+      "Support buy-back arrangements through partner organizations",
+      "Help farmers get better market access and competitive prices",
+      "Facilitate crop procurement opportunities through our network",
+      "Transparent price discovery and weighment",
+      "Timely payment release through escrow / direct credit",
+    ],
+    process: [
+      { title: "Register Your Crop", desc: "Share crop, grade, expected quantity and harvest window through the app or field officer." },
+      { title: "Buyer Match", desc: "We match your produce with verified buyers, processors and agri companies in our network." },
+      { title: "Buy-Back Agreement", desc: "Where available, partner organizations offer a pre-agreed buy-back price for your crop." },
+      { title: "Procurement & Payment", desc: "Produce is procured at the agreed location, weighed transparently and payment is released to your bank." },
+    ],
+    docs: ["Farmer ID / Aadhaar", "Land / crop details", "Bank passbook for payment", "GSTIN (for FPOs, if applicable)"],
+    pricing: "No upfront charge for farmers. A small facilitation fee (1–2% of trade value) is collected from the buyer / FPO on successful procurement.",
+    faqs: [
+      { q: "Do you guarantee a fixed price?", a: "Where a partner buy-back is available, the price is pre-agreed in writing. Otherwise prices follow prevailing mandi / corporate buyer rates." },
+      { q: "Who pays me for my crop?", a: "Payment is released directly by the buyer (or via our escrow) to your registered bank account after weighment and quality check." },
+      { q: "Which crops are covered?", a: "Cotton, paddy, maize, chilli, turmeric, pulses and select fruits & vegetables. Coverage expands with the partner network." },
+    ],
+  },
 };
 
 const SLUGS = Object.keys(SERVICES);
