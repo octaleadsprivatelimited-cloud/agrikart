@@ -252,10 +252,8 @@ export default function Membership() {
               {selectedPlan.name}
             </div>
             <div className="text-lg font-bold leading-none">
-              ₹{(cycle === "year" ? selectedPlan.priceYear : selectedPlan.priceMonth).toLocaleString("en-IN")}
-              <span className="ml-1 text-xs font-normal text-muted-foreground">
-                {cycle === "year" ? "/yr" : "/mo"}
-              </span>
+              ₹{selectedPlan.priceYear.toLocaleString("en-IN")}
+              <span className="ml-1 text-xs font-normal text-muted-foreground">/yr</span>
             </div>
           </div>
           <Button asChild size="lg" className="flex-1 gap-2 shadow-elegant">
