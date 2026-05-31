@@ -1,4 +1,3 @@
-import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,6 @@ type Plan = {
   name: string;
   tagline: string;
   priceYear: number;
-  priceMonth: number;
   badge?: string;
   highlight?: boolean;
   cta: string;
@@ -28,7 +26,6 @@ const PLANS: Plan[] = [
     name: "Basic Plan",
     tagline: "Everything a farmer needs to get started.",
     priceYear: 1499,
-    priceMonth: 149,
     cta: "Join Basic Plan",
     Icon: Sprout,
     features: [
@@ -50,7 +47,6 @@ const PLANS: Plan[] = [
     name: "Premium Plus Plan",
     tagline: "Full-service membership with a dedicated executive.",
     priceYear: 4999,
-    priceMonth: 449,
     badge: "Most Popular",
     highlight: true,
     cta: "Join Premium Plus",
@@ -82,9 +78,7 @@ const TRUST = [
 type Cycle = "year" | "month";
 
 export default function Membership() {
-  const [cycle, setCycle] = useState<Cycle>("year");
-
-  const selectedPlan = useMemo(() => PLANS.find((p) => p.highlight)!, []);
+  const selectedPlan = PLANS.find((p) => p.highlight)!;
 
   return (
     <>
@@ -95,35 +89,11 @@ export default function Membership() {
       />
 
       <section className="container mx-auto px-4 py-10 sm:py-14">
-        {/* Billing toggle */}
-        <div className="mx-auto mb-8 flex w-full max-w-xs items-center justify-center rounded-full border border-border bg-muted/50 p-1">
-          {(["year", "month"] as Cycle[]).map((c) => (
-            <button
-              key={c}
-              onClick={() => setCycle(c)}
-              aria-pressed={cycle === c}
-              className={cn(
-                "relative flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-all",
-                cycle === c
-                  ? "bg-primary text-primary-foreground shadow"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {c === "year" ? "Yearly" : "Monthly"}
-              {c === "year" && (
-                <span className="ml-2 hidden rounded-full bg-accent/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent-foreground sm:inline">
-                  Save
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-
         {/* Pricing cards */}
         <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2 md:gap-8">
           {PLANS.map((plan, idx) => {
-            const price = cycle === "year" ? plan.priceYear : plan.priceMonth;
-            const suffix = cycle === "year" ? "/ year" : "/ month";
+            const price = plan.priceYear;
+            const suffix = "/ year";
             const { Icon } = plan;
             return (
               <Card
