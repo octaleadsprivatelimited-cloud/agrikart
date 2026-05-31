@@ -23,6 +23,7 @@ const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const Refund = lazy(() => import("@/pages/Refund"));
 const Schemes = lazy(() => import("@/pages/Schemes"));
 const Services = lazy(() => import("@/pages/Services"));
+const Membership = lazy(() => import("@/pages/Membership"));
 const Tools = lazy(() => import("@/pages/Tools"));
 const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
 const Support = lazy(() => import("@/pages/Support"));
@@ -142,6 +143,8 @@ export default function App() {
         <Route path="refund" element={<Refund />} />
         <Route path="schemes" element={<Schemes />} />
         <Route path="services" element={<Services />} />
+        <Route path="membership" element={<Membership />} />
+        <Route path="membership-plans" element={<Navigate to="/membership" replace />} />
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="drone-services" element={<DroneServices />} />
         <Route path="drones" element={<Navigate to="/drone-services" replace />} />
