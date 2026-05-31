@@ -38,7 +38,7 @@ export default function Signup() {
   return (
     <section className="container mx-auto grid max-w-5xl gap-6 px-4 py-12 lg:grid-cols-[1fr_320px]">
       <Card>
-        <CardContent className="p-8">
+        <CardContent className="p-5 sm:p-8">
           <div className="mb-6">
             <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground"><Sprout className="h-6 w-6" /></div>
             <h1 className="mt-4 text-2xl font-bold">{t("register.title")}</h1>

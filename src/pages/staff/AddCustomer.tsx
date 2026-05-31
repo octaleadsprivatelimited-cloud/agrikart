@@ -263,7 +263,7 @@ export default function AddCustomer() {
 
   return (
     <Card>
-      <CardContent className="p-8">
+      <CardContent className="p-5 sm:p-8">
         <h1 className="text-2xl font-bold">Add Customer</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Capture farmer details. GPS location is detected automatically from this device.

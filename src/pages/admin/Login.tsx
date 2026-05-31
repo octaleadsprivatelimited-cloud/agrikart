@@ -32,7 +32,7 @@ export default function AdminLogin() {
   return (
     <section className="container mx-auto flex min-h-[80vh] items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
-        <CardContent className="p-8">
+        <CardContent className="p-5 sm:p-8">
           <div className="mb-6 text-center">
             <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground">
               <ShieldCheck className="h-6 w-6" />
