@@ -29,7 +29,7 @@ export default function AdminCustomerDetail() {
 
   if (!customer) {
     return (
-      <Card><CardContent className="p-8 text-center text-muted-foreground">
+      <Card><CardContent className="p-5 sm:p-8 text-center text-muted-foreground">
         Customer not found. <Link to="/admin/customers" className="text-primary underline">Back</Link>
       </CardContent></Card>
     );

@@ -20,7 +20,7 @@ export default function MyBookings() {
       </div>
 
       {bookings.length === 0 ? (
-        <Card className="mt-6"><CardContent className="p-8 text-center text-muted-foreground">{t("portal.empty")}</CardContent></Card>
+        <Card className="mt-6"><CardContent className="p-5 sm:p-8 text-center text-muted-foreground">{t("portal.empty")}</CardContent></Card>
       ) : (
         <div className="mt-6 grid gap-4">
           {bookings.map(b => (

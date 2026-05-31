@@ -56,7 +56,7 @@ export default function CustomersList() {
       </div>
 
       {filtered.length === 0 ? (
-        <Card className="mt-6"><CardContent className="p-8 text-center text-muted-foreground">No customers match the current filter.</CardContent></Card>
+        <Card className="mt-6"><CardContent className="p-5 sm:p-8 text-center text-muted-foreground">No customers match the current filter.</CardContent></Card>
       ) : (
         <div className="mt-6 grid gap-3">
           {filtered.map(c => (

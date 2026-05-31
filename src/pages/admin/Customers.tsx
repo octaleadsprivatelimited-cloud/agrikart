@@ -57,7 +57,7 @@ export default function AdminCustomers() {
       </div>
 
       {filtered.length === 0 ? (
-        <Card className="mt-6"><CardContent className="p-8 text-center text-muted-foreground">No customers match the current filter.</CardContent></Card>
+        <Card className="mt-6"><CardContent className="p-5 sm:p-8 text-center text-muted-foreground">No customers match the current filter.</CardContent></Card>
       ) : (
         <Card className="mt-6">
           <div className="overflow-x-auto">
