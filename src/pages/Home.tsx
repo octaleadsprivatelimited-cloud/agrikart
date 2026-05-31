@@ -15,6 +15,7 @@ import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
 import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
+import imgDrone from "@/assets/service-drone.jpg";
 import heroFarmer from "@/assets/farmer-cutout.png";
 import heroFieldBg from "@/assets/hero-field-bg.jpg";
 
@@ -31,7 +32,7 @@ const serviceCards = [
   { title: "Loan Assistance Services", desc: "Easy & quick loans for crops, agriculture equipment and all other needs.", Icon: Banknote, img: imgLoans, to: "/services/loans" },
   { title: "Insurance Services", desc: "Crop insurance, health insurance, equipment insurance and more.", Icon: ShieldCheck, img: imgInsurance, to: "/services/insurance" },
   { title: "Seeds, Pesticides & Fertilisers", desc: "High quality seeds, pesticides and fertilisers at best prices.", Icon: Sprout, img: imgSeeds, to: "/services/seeds" },
-  { title: "Drone Services", desc: "Spraying, surveying, crop monitoring and other drone based services.", Icon: SprayCan, img: imgTrade, to: "/drone-services" },
+  { title: "Drone Services", desc: "Spraying, surveying, crop monitoring and other drone based services.", Icon: SprayCan, img: imgDrone, to: "/drone-services" },
   { title: "Cold Storage Services", desc: "Modern cold storage services for better storage and quality preservation.", Icon: Snowflake, img: imgCold, to: "/services/cold" },
   { title: "Import & Export Services", desc: "Import and export of agriculture products and allied goods.", Icon: Ship, img: imgTrade, to: "/services/trade" },
 ] as const;
