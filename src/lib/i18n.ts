@@ -68,6 +68,11 @@ const en = {
         short: "PMFBY, PM-KISAN, KCC and more.",
         desc: "We help farmers understand and apply for major central and state government schemes.",
       },
+      market: {
+        title: "Market Linkage & Buy-Back Support",
+        short: "Connect farmers with trusted buyers, processors and agri companies.",
+        desc: "We connect farmers with trusted buyers, processors and agri companies, support buy-back arrangements through partner organizations, help farmers get better market access and competitive prices, and facilitate crop procurement opportunities through our network.",
+      },
     },
   },
   about: {
@@ -471,6 +476,11 @@ const te: typeof en = {
         title: "ప్రభుత్వ పథకాలు",
         short: "PMFBY, PM-KISAN, KCC మరియు ఇతరములు.",
         desc: "ముఖ్యమైన కేంద్ర, రాష్ట్ర ప్రభుత్వం పథకాలు రైతులు ఉపయోగించుకునేలా మేము గైడ్ చేస్తాం.",
+      },
+      market: {
+        title: "మార్కెట్ లింకేజ్ & బై-బ్యాక్ సపోర్ట్",
+        short: "విశ్వసనీయ కొనుగోలుదారులు, ప్రాసెసర్లు, అగ్రి సంస్థలతో రైతుల అనుసంధానం.",
+        desc: "రైతులను విశ్వసనీయ కొనుగోలుదారులు మరియు వ్యవసాయ సంస్థలతో అనుసంధానం చేయడం, భాగస్వామ్య సంస్థల ద్వారా బై-బ్యాక్ అవకాశాలను కల్పించడం, పంటలకు మెరుగైన మార్కెట్ మరియు ధరలు పొందడంలో సహాయం చేయడం, పంట కొనుగోలు అవకాశాలకు మార్గదర్శకత్వం అందించడం.",
       },
     },
   },

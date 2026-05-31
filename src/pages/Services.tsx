@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
-import { Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark, TestTube2, ArrowRight } from "lucide-react";
+import { Banknote, ShieldCheck, Sprout, Snowflake, Ship, Landmark, TestTube2, Handshake, ArrowRight } from "lucide-react";
 import imgLoans from "@/assets/service-loans.jpg";
 import imgInsurance from "@/assets/service-insurance.jpg";
 import imgSeeds from "@/assets/service-seeds.jpg";
@@ -10,6 +10,7 @@ import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
 import imgSchemes from "@/assets/service-schemes.jpg";
 import imgSoil from "@/assets/service-soil.jpg";
+import imgMarket from "@/assets/service-market.jpg";
 
 const items = [
   { key: "loans", Icon: Banknote, img: imgLoans },
@@ -19,6 +20,7 @@ const items = [
   { key: "cold", Icon: Snowflake, img: imgCold },
   { key: "trade", Icon: Ship, img: imgTrade },
   { key: "schemes", Icon: Landmark, img: imgSchemes },
+  { key: "market", Icon: Handshake, img: imgMarket },
 ] as const;
 
 export default function Services() {
