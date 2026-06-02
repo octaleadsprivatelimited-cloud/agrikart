@@ -366,7 +366,7 @@ export function useCustomerEdits(customerId: string | undefined) {
 }
 
 // ---------- Service requests (per customer) ----------
-export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage";
+export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage" | "Market Linkage & Buy-back";
 export type ServiceRequest = {
   id: string;
   customerId: string;
