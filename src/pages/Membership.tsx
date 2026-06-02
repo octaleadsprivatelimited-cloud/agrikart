@@ -141,6 +141,9 @@ export default function Membership() {
                     </span>
                     <span className="mb-2 text-sm text-muted-foreground">{suffix}</span>
                   </div>
+                  {plan.priceNote && (
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">{plan.priceNote}</p>
+                  )}
 
                   <Button
                     asChild
