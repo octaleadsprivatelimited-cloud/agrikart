@@ -44,8 +44,8 @@ const en = {
         desc: "Advisory for crop, cattle, health and accident insurance, help in choosing the right policy and filing claims.",
       },
       seeds: {
-        title: "Seeds & Fertilizers",
-        short: "Certified high-yield seeds and quality fertilizers.",
+        title: "Seeds, pesticides & Fertilizers",
+        short: "Certified high-yield seeds, quality pesticides and fertilizers.",
         desc: "Company-certified high-yield seeds, quality fertilizers and crop protection products with crop and season-wise recommendations.",
       },
       soil: {
@@ -449,8 +449,8 @@ const te: typeof en = {
         desc: "పంట, పశు, ఆరోగ్య, ప్రమాద బీమా కోసం సలహా, సరైన పాలసీ ఎంపిక, క్లెయిమ్ ఫైల్ చేయడంలో సహాయం.",
       },
       seeds: {
-        title: "విత్తనాలు & ఎరువులు",
-        short: "సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు.",
+        title: "విత్తనాలు, పురుగుమందులు & ఎరువులు",
+        short: "సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన పురుగుమందులు, ఎరువులు.",
         desc:
           "కంపెనీ సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు, పంట రక్షణ ఉత్పత్తులు, పంట & సీజన్–వైజ్ సూచనలు.",
       },
