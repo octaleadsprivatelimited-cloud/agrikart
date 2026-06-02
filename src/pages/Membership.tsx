@@ -13,6 +13,8 @@ type Plan = {
   name: string;
   tagline: string;
   priceYear: number;
+  joiningFee?: number;
+  priceNote?: string;
   badge?: string;
   highlight?: boolean;
   cta: string;
