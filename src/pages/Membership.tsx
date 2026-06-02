@@ -34,7 +34,7 @@ const PLANS: Plan[] = [
       "Crop Loan Assistance",
       "Crop Insurance Support",
       "Government Scheme Updates",
-      "Seeds & Fertilizers Discounts",
+      "Seeds, pesticides & Fertilizers Discounts",
       "Market Price Updates",
       "Agriculture Advisory Support",
       "Priority Customer Support",
