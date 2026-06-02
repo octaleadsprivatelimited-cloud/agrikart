@@ -252,7 +252,7 @@ const en = {
       points: [
         "You must be 18 years or older and a resident of India to use our services.",
         "AgriKart Fin is a facilitator only — loans, insurance and inputs are provided by partner NBFCs, insurers and dealers.",
-        "Joining fee ₹2,000 and annual renewal ₹1,499 must be paid via approved online channels (Rojaripay UPI / Cards / Net Banking).",
+        "Membership fees — Basic Plan ₹2,000/year and Premium Plan ₹4,999/year — must be paid via approved online channels (Rojaripay UPI / Cards / Net Banking).",
         "Services are subject to availability in your district; we may refuse or delay any request without prior notice.",
         "AgriKart Fin is not liable for crop loss, weather damage, NBFC decisions or third-party actions beyond our reasonable control.",
         "Disputes are governed by Indian law and fall under the jurisdiction of courts in Hyderabad, Telangana.",
@@ -657,7 +657,7 @@ const te: typeof en = {
       points: [
         "మా సేవలు ఉపయోగించటానికి మీరు 18 సంవత్సరాలు లేదా అంతకంటే ఎక్కువ వయస్సు ఉన్న భారతీయ నివాసి అయి ఉండాలి.",
         "AgriKart Fin కేవలం ఒక సమన్వయకర్త మాత్రమే — రుణాలు, ఇన్సూరెన్స్, ఇన్‌పుట్‌లు భాగస్వామ్య NBFCలు, ఇన్సూరర్లు, డీలర్లు అందిస్తారు.",
-        "జాయినింగ్ ఫీజు ₹2,000 మరియు వార్షిక రీన్యువల్ ₹1,499 ను Rojaripay (UPI / కార్డులు / నెట్‌బ్యాంకింగ్) ద్వారా చెల్లించాలి.",
+        "మెంబర్‌షిప్ ఫీజులు — బేసిక్ ప్లాన్ సంవత్సరానికి ₹2,000 మరియు ప్రీమియం ప్లాన్ సంవత్సరానికి ₹4,999 — Rojaripay (UPI / కార్డులు / నెట్‌బ్యాంకింగ్) ద్వారా చెల్లించాలి.",
         "సేవలు మీ జిల్లాలో అందుబాటును బట్టి ఉంటాయి; ముందస్తు నోటీసు లేకుండా అభ్యర్థనను నిరాకరించే లేదా ఆలస్యం చేసే హక్కు మాకు ఉంది.",
         "పంట నష్టం, వాతావరణ నష్టం, NBFC నిర్ణయాలు లేదా థర్డ్ పార్టీ చర్యలకు AgriKart Fin బాధ్యత వహించదు.",
         "వివాదాలు భారత చట్టాల పరిధిలో, హైదరాబాద్, తెలంగాణ న్యాయస్థానాల పరిధిలో వస్తాయి.",
