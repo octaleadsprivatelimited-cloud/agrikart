@@ -80,7 +80,7 @@ export default function Home() {
 
           <div className="relative grid items-end gap-4 px-5 pt-8 sm:px-8 sm:pt-12 md:grid-cols-2 md:gap-6 md:px-12 md:pt-14">
             {/* Text */}
-            <div className="animate-fade-up max-w-xl pb-8 sm:pb-12 md:pb-14">
+            <div className="animate-fade-up max-w-xl pb-0 md:pb-14">
               <h1 className="text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
                 One Stop Digital Platform{" "}
                 <span className="text-primary">for Farmers</span>
@@ -99,13 +99,13 @@ export default function Home() {
             </div>
 
             {/* Farmer cutout */}
-            <div className="relative hidden md:flex md:justify-end md:items-end">
+            <div className="relative flex justify-center items-end md:justify-end">
               <img
                 src={heroFarmer}
                 alt="Andhra Pradesh farmer family in traditional attire"
                 width={832}
                 height={1216}
-                className="h-[460px] w-auto object-contain object-bottom drop-shadow-2xl lg:h-[540px] xl:h-[600px]"
+                className="h-[260px] w-auto object-contain object-bottom drop-shadow-2xl sm:h-[320px] md:h-[460px] lg:h-[540px] xl:h-[600px]"
               />
             </div>
           </div>
