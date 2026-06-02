@@ -16,7 +16,7 @@ import imgSeeds from "@/assets/service-seeds.jpg";
 import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
 import imgDrone from "@/assets/service-drone.jpg";
-import heroFarmer from "@/assets/farmer-cutout.png";
+import heroFarmer from "@/assets/farmer-family-cutout.png";
 import heroFieldBg from "@/assets/hero-field-bg.jpg";
 
 const heroIcons = [
@@ -102,7 +102,7 @@ export default function Home() {
             <div className="relative hidden md:flex md:justify-end md:items-end">
               <img
                 src={heroFarmer}
-                alt="Indian farmer holding paddy"
+                alt="Andhra Pradesh farmer family in traditional attire"
                 width={832}
                 height={1216}
                 className="h-[460px] w-auto object-contain object-bottom drop-shadow-2xl lg:h-[540px] xl:h-[600px]"
