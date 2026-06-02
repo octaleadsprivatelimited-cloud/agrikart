@@ -13,6 +13,8 @@ type Plan = {
   name: string;
   tagline: string;
   priceYear: number;
+  joiningFee?: number;
+  priceNote?: string;
   badge?: string;
   highlight?: boolean;
   cta: string;
@@ -26,6 +28,8 @@ const PLANS: Plan[] = [
     name: "Basic Plan",
     tagline: "Everything a farmer needs to get started.",
     priceYear: 1499,
+    joiningFee: 2000,
+    priceNote: "+ one-time joining fee ₹2,000",
     cta: "Join Basic Plan",
     Icon: Sprout,
     features: [
@@ -47,6 +51,7 @@ const PLANS: Plan[] = [
     name: "Premium Plus Plan",
     tagline: "Full-service membership with a dedicated executive.",
     priceYear: 4999,
+    priceNote: "All-inclusive · no extra joining fee",
     badge: "Most Popular",
     highlight: true,
     cta: "Join Premium Plus",
@@ -136,6 +141,9 @@ export default function Membership() {
                     </span>
                     <span className="mb-2 text-sm text-muted-foreground">{suffix}</span>
                   </div>
+                  {plan.priceNote && (
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">{plan.priceNote}</p>
+                  )}
 
                   <Button
                     asChild
