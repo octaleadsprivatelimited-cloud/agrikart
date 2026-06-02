@@ -43,9 +43,9 @@ export function Navbar() {
           <img
             src={agrikartLogo}
             alt="Agrikart Fintech Pvt. Ltd."
-            width={160}
-            height={48}
-            className="h-10 w-auto sm:h-12 transition-transform group-hover:scale-105"
+            width={176}
+            height={53}
+            className="h-11 w-auto sm:h-[3.3rem] transition-transform group-hover:scale-105"
           />
         </Link>
 

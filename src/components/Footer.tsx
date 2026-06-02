@@ -14,9 +14,9 @@ export function Footer() {
             src={agrikartLogo}
             alt="Agrikart Fintech Pvt. Ltd."
             loading="lazy"
-            width={200}
-            height={60}
-            className="mx-auto h-14 w-auto md:mx-0"
+            width={260}
+            height={78}
+            className="mx-auto h-[4.55rem] w-auto md:mx-0"
           />
           <p className="mt-3 text-sm text-muted-foreground">{t("footer.tagline")}</p>
           <p className="mt-4 text-xs text-muted-foreground">{t("brandFull")}</p>
