@@ -366,7 +366,7 @@ export function useCustomerEdits(customerId: string | undefined) {
 }
 
 // ---------- Service requests (per customer) ----------
-export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage";
+export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage" | "Market Linkage & Buy-back";
 export type ServiceRequest = {
   id: string;
   customerId: string;
@@ -376,7 +376,7 @@ export type ServiceRequest = {
   createdAt: number;
 };
 
-export const serviceCategories: ServiceCategory[] = ["Drone","Seeds","Fertilizers","Pesticides","Loan","Insurance","Cold Storage"];
+export const serviceCategories: ServiceCategory[] = ["Drone","Seeds","Fertilizers","Pesticides","Loan","Insurance","Cold Storage","Market Linkage & Buy-back"];
 
 export function addServiceRequest(customerId: string, category: ServiceCategory, description: string): ServiceRequest {
   const all = read<ServiceRequest[]>(REQUESTS_KEY, []);
