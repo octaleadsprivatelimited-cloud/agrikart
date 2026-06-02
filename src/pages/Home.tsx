@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -59,6 +60,21 @@ export default function Home() {
   const videos = useVideos();
   const partners = usePartners();
   const faqItems = (t("faq.items", { returnObjects: true }) as Array<{ q: string; a: string }>).slice(0, 4);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sliderRef.current;
+    if (!el) return;
+    let index = 0;
+    const interval = setInterval(() => {
+      const children = el.children;
+      if (children.length === 0) return;
+      index = (index + 1) % children.length;
+      const card = children[index] as HTMLElement;
+      el.scrollTo({ left: card.offsetLeft - el.offsetLeft, behavior: "smooth" });
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
   return (
     <>
       {/* HERO — One Stop Digital Platform */}
@@ -256,7 +272,7 @@ export default function Home() {
 
             {/* Mobile slider */}
             <div className="md:hidden -mx-4 px-4">
-              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div ref={sliderRef} className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {testimonials.map((tt) => (
                   <article
                     key={tt.id}
