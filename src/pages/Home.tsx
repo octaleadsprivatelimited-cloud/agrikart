@@ -16,7 +16,7 @@ import imgSeeds from "@/assets/service-seeds.jpg";
 import imgCold from "@/assets/service-cold.jpg";
 import imgTrade from "@/assets/service-trade.jpg";
 import imgDrone from "@/assets/service-drone.jpg";
-import heroFarmer from "@/assets/farmer-cutout.png";
+import heroFarmer from "@/assets/farmer-family-cutout.png";
 import heroFieldBg from "@/assets/hero-field-bg.jpg";
 
 const heroIcons = [
