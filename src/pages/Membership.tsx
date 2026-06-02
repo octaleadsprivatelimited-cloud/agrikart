@@ -48,13 +48,13 @@ const PLANS: Plan[] = [
   },
   {
     id: "premium",
-    name: "Premium Plus Plan",
+    name: "Premium Plan",
     tagline: "Full-service membership with a dedicated executive.",
     priceYear: 4999,
     priceNote: "All-inclusive · no extra joining fee",
     badge: "Most Popular",
     highlight: true,
-    cta: "Join Premium Plus",
+    cta: "Join Premium Plan",
     Icon: Crown,
     features: [
       "Priority Crop Loan Assistance",
@@ -193,7 +193,7 @@ export default function Membership() {
             <div className="grid grid-cols-[1.5fr_1fr_1fr] gap-2 bg-muted/60 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:px-6 sm:text-sm">
               <div>Benefit</div>
               <div className="text-center">Basic</div>
-              <div className="text-center text-primary">Premium Plus</div>
+              <div className="text-center text-primary">Premium Plan</div>
             </div>
             {comparisonRows.map((row, i) => (
               <div
