@@ -207,13 +207,13 @@ export default function Home() {
               Trusted by thousands of farmers across India for quality, speed and transparency.
             </p>
           </div>
-          <ul className="mx-auto mt-6 grid max-w-5xl gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
+          <ul className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
             {whyItems.map(({ Icon, label }) => (
-              <li key={label} className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-4 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5">
-                <span className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="h-6 w-6" />
+              <li key={label} className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5">
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary sm:h-12 sm:w-12">
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
-                <span className="text-xs font-semibold leading-tight sm:text-sm">{label}</span>
+                <span className="text-[11px] font-semibold leading-tight sm:text-sm">{label}</span>
               </li>
             ))}
           </ul>
