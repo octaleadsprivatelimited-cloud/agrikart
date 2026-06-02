@@ -182,7 +182,7 @@ const en = {
       },
       {
         q: "Is there any joining fee?",
-        a: "Yes, there is a one-time joining fee of ₹2,000 and annual renewal of ₹1,499.",
+        a: "Yes. Basic Plan – ₹1,499/year (plus one-time joining fee ₹2,000). Premium Plan – ₹4,999/year (all-inclusive, no extra joining fee).",
       },
       {
         q: "How is the joining fee paid?",
@@ -588,7 +588,7 @@ const te: typeof en = {
       },
       {
         q: "ఏమైనా జాయినింగ్ ఫీజుందా?",
-        a: "అవును, ఒకసారి జాయినింగ్ ఫీజు ₹2,000, ప్రతి సంవత్సరం రీన్యువల్ ₹1,499.",
+        a: "అవును. బేసిక్ ప్లాన్ – సంవత్సరానికి ₹1,499 (ఒకసారి జాయినింగ్ ఫీజు ₹2,000 చేర్చబడుతుంది). ప్రీమియం ప్లాన్ – సంవత్సరానికి ₹4,999 (అన్ని చార్జీలు చేర్చబడ్డాయి, జాయినింగ్ ఫీజు లేదు).",
       },
       {
         q: "జాయినింగ్ ఫీజు ఎలా చెల్లించాలి?",
