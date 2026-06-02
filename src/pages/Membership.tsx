@@ -28,6 +28,8 @@ const PLANS: Plan[] = [
     name: "Basic Plan",
     tagline: "Everything a farmer needs to get started.",
     priceYear: 1499,
+    joiningFee: 2000,
+    priceNote: "+ one-time joining fee ₹2,000",
     cta: "Join Basic Plan",
     Icon: Sprout,
     features: [
