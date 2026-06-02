@@ -257,7 +257,7 @@ export default function Home() {
 
             {/* Mobile slider */}
             <div className="md:hidden -mx-4 px-4">
-              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div ref={sliderRef} className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {testimonials.map((tt) => (
                   <article
                     key={tt.id}
