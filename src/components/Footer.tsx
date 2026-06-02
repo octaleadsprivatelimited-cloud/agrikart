@@ -9,14 +9,14 @@ export function Footer() {
   return (
     <footer className="mt-16 border-t border-border/60 bg-muted/40 md:mt-24">
       <div className="container mx-auto grid gap-6 px-4 py-8 md:grid-cols-4 md:gap-10 md:py-12">
-        <div>
+        <div className="text-center md:text-left">
           <img
             src={agrikartLogo}
             alt="Agrikart Fintech Pvt. Ltd."
             loading="lazy"
             width={200}
             height={60}
-            className="h-14 w-auto"
+            className="mx-auto h-14 w-auto md:mx-0"
           />
           <p className="mt-3 text-sm text-muted-foreground">{t("footer.tagline")}</p>
           <p className="mt-4 text-xs text-muted-foreground">{t("brandFull")}</p>
