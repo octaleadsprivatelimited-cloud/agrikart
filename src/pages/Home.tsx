@@ -102,7 +102,7 @@ export default function Home() {
             <div className="relative hidden md:flex md:justify-end md:items-end">
               <img
                 src={heroFarmer}
-                alt="Indian farmer holding paddy"
+                alt="Andhra Pradesh farmer family in traditional attire"
                 width={832}
                 height={1216}
                 className="h-[460px] w-auto object-contain object-bottom drop-shadow-2xl lg:h-[540px] xl:h-[600px]"
