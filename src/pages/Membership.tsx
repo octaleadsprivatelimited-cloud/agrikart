@@ -27,9 +27,7 @@ const PLANS: Plan[] = [
     id: "basic",
     name: "Basic Plan",
     tagline: "Everything a farmer needs to get started.",
-    priceYear: 1499,
-    joiningFee: 2000,
-    priceNote: "+ one-time joining fee ₹2,000",
+    priceYear: 2000,
     cta: "Join Basic Plan",
     Icon: Sprout,
     features: [
@@ -51,7 +49,6 @@ const PLANS: Plan[] = [
     name: "Premium Plan",
     tagline: "Full-service membership with a dedicated executive.",
     priceYear: 4999,
-    priceNote: "All-inclusive · no extra joining fee",
     badge: "Most Popular",
     highlight: true,
     cta: "Join Premium Plan",

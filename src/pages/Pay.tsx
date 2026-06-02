@@ -21,7 +21,7 @@ export default function Pay() {
     if (!farmerId.trim()) return toast.error(t("pay.errFarmerId"));
     if (mobile && !/^\d{10}$/.test(mobile.trim())) return toast.error(t("pay.errMobile"));
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return toast.error(t("pay.errEmail"));
-    const amount = kind === "joining" ? 2000 : 1499;
+    const amount = kind === "joining" ? 2000 : 4999;
     const p = recordPayment({
       farmerId: farmerId.trim().toUpperCase(),
       farmerName: farmerName.trim() || undefined,
@@ -54,7 +54,8 @@ export default function Pay() {
         )}
         <div className="grid gap-5 md:grid-cols-2">
           <PayCard label={t("pay.joining")} amount="₹2,000" onPay={() => pay("joining")} paid={paid?.kind === "joining"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
-          <PayCard label={t("pay.renewal")} amount="₹1,499" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
+          <PayCard label={t("pay.renewal")} amount="₹4,999" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
+
         </div>
       </section>
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">{t("pay.poweredBy")}</p>

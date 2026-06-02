@@ -116,12 +116,12 @@ const en = {
   register: {
     title: "Farmer Registration",
     subtitle: "Join AgriKart Fin and get continuous farmer support.",
-    feeTitle: "Fee Details",
-    joiningFee: "Joining Fee: ₹2,000 (one-time)",
-    renewalFee: "Annual Renewal: ₹1,499 per year",
+    feeTitle: "Plan Details",
+    joiningFee: "Basic Plan: ₹2,000 per year",
+    renewalFee: "Premium Plan: ₹4,999 per year",
     paymentMode: "Payment Mode: Rojaripay online payment",
     note:
-      "Your registration will be activated only after successful payment through Rojaripay.",
+      "No one-time joining fee. Your registration will be activated only after successful payment through Rojaripay.",
     fields: {
       name: "Farmer Name",
       mobile: "Mobile Number",
@@ -135,7 +135,7 @@ const en = {
       mainCrop: "Main Crop",
       season: "Season",
     },
-    submit: "Register & Pay ₹2,000",
+    submit: "Register & Pay",
     success: "Thank you! You are successfully registered with AgriKart Fin. Your Farmer ID:",
     captured: "Registration captured. Redirecting to Rojaripay…",
     placeholders: {
@@ -147,9 +147,9 @@ const en = {
   pay: {
     title: "Pay Now",
     subtitle:
-      "Pay your joining fee of ₹2,000 and annual renewal of ₹1,499 securely using Rojaripay (UPI, cards, net banking).",
-    joining: "Joining Fee — ₹2,000",
-    renewal: "Annual Renewal — ₹1,499",
+      "Pay for your Basic (₹2,000/year) or Premium (₹4,999/year) plan securely using Rojaripay (UPI, cards, net banking).",
+    joining: "Basic Plan — ₹2,000 / year",
+    renewal: "Premium Plan — ₹4,999 / year",
     payBtn: "Proceed to Rojaripay",
     success: "Payment successful. Receipt has been sent to your mobile and email.",
     farmerIdLabel: "Farmer ID *",
@@ -182,10 +182,10 @@ const en = {
       },
       {
         q: "Is there any joining fee?",
-        a: "Yes. Basic Plan – ₹1,499/year (plus one-time joining fee ₹2,000). Premium Plan – ₹4,999/year (all-inclusive, no extra joining fee).",
+        a: "No. There is no one-time joining fee. We offer just two plans: Basic Plan – ₹2,000/year and Premium Plan – ₹4,999/year. No extra or hidden charges.",
       },
       {
-        q: "How is the joining fee paid?",
+        q: "How is the membership fee paid?",
         a: "Securely via Rojaripay — UPI, cards or net banking. Registration activates after successful payment.",
       },
       {
@@ -523,11 +523,11 @@ const te: typeof en = {
   register: {
     title: "రైతు నమోదు",
     subtitle: "AgriKart Finలో జాయిన్ అయి నిరంతర రైతు సేవలు పొందండి.",
-    feeTitle: "ఫీజు వివరాలు",
-    joiningFee: "జాయినింగ్ ఫీజు: ₹2,000 (ఒకసారి మాత్రమే)",
-    renewalFee: "వార్షిక రీన్యువల్: ప్రతి సంవత్సరం ₹1,499",
+    feeTitle: "ప్లాన్ వివరాలు",
+    joiningFee: "బేసిక్ ప్లాన్: సంవత్సరానికి ₹2,000",
+    renewalFee: "ప్రీమియం ప్లాన్: సంవత్సరానికి ₹4,999",
     paymentMode: "చెల్లింపు విధానం: Rojaripay ద్వారా ఆన్‌లైన్ చెల్లింపు",
-    note: "Rojaripay ద్వారా చెల్లింపు విజయవంతంగా పూర్తయిన తర్వాత మాత్రమే మీ రిజిస్ట్రేషన్ సక్రియమవుతుంది.",
+    note: "ఒకసారి జాయినింగ్ ఫీజు లేదు. Rojaripay ద్వారా చెల్లింపు విజయవంతంగా పూర్తయిన తర్వాత మాత్రమే మీ రిజిస్ట్రేషన్ సక్రియమవుతుంది.",
     fields: {
       name: "రైతు పేరు",
       mobile: "మొబైల్ నెంబరు",
@@ -541,7 +541,7 @@ const te: typeof en = {
       mainCrop: "ప్రధాన పంట",
       season: "సీజన్",
     },
-    submit: "నమోదు & ₹2,000 చెల్లించండి",
+    submit: "నమోదు & చెల్లించండి",
     success: "ధన్యవాదాలు! మీరు AgriKart Finలో విజయవంతంగా నమోదు అయ్యారు. మీ రైతు ID:",
     captured: "నమోదు స్వీకరించబడింది. Rojaripayకి తీసుకెళ్తున్నాము…",
     placeholders: {
@@ -553,9 +553,9 @@ const te: typeof en = {
   pay: {
     title: "చెల్లించండి",
     subtitle:
-      "మీ ₹2,000 జాయినింగ్ ఫీజు మరియు ప్రతి సంవత్సరం ₹1,499 రీన్యువల్ ఫీజును Rojaripay (UPI, కార్డులు, నెట్‌బ్యాంకింగ్) ద్వారా సురక్షితంగా చెల్లించండి.",
-    joining: "జాయినింగ్ ఫీజు — ₹2,000",
-    renewal: "వార్షిక రీన్యువల్ — ₹1,499",
+      "మీ బేసిక్ ప్లాన్ (సంవత్సరానికి ₹2,000) లేదా ప్రీమియం ప్లాన్ (సంవత్సరానికి ₹4,999) చెల్లింపును Rojaripay (UPI, కార్డులు, నెట్‌బ్యాంకింగ్) ద్వారా సురక్షితంగా చెల్లించండి.",
+    joining: "బేసిక్ ప్లాన్ — సంవత్సరానికి ₹2,000",
+    renewal: "ప్రీమియం ప్లాన్ — సంవత్సరానికి ₹4,999",
     payBtn: "Rojaripayకి వెళ్లండి",
     success: "పేమెంట్ విజయవంతం. మీ మొబైల్ మరియు ఇమెయిల్‌కు రసీదు పంపబడింది.",
     farmerIdLabel: "రైతు ID *",
@@ -588,10 +588,10 @@ const te: typeof en = {
       },
       {
         q: "ఏమైనా జాయినింగ్ ఫీజుందా?",
-        a: "అవును. బేసిక్ ప్లాన్ – సంవత్సరానికి ₹1,499 (ఒకసారి జాయినింగ్ ఫీజు ₹2,000 చేర్చబడుతుంది). ప్రీమియం ప్లాన్ – సంవత్సరానికి ₹4,999 (అన్ని చార్జీలు చేర్చబడ్డాయి, జాయినింగ్ ఫీజు లేదు).",
+        a: "లేదు. ఒకసారి జాయినింగ్ ఫీజు లేదు. మాకు రెండు ప్లాన్‌లు మాత్రమే ఉన్నాయి: బేసిక్ ప్లాన్ – సంవత్సరానికి ₹2,000, ప్రీమియం ప్లాన్ – సంవత్సరానికి ₹4,999. ఇతర చార్జీలు లేవు.",
       },
       {
-        q: "జాయినింగ్ ఫీజు ఎలా చెల్లించాలి?",
+        q: "మెంబర్‌షిప్ ఫీజు ఎలా చెల్లించాలి?",
         a: "Rojaripay ద్వారా UPI, కార్డులు లేదా నెట్‌బ్యాంకింగ్‌తో సురక్షితంగా చెల్లించవచ్చు.",
       },
       {
