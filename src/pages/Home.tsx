@@ -254,7 +254,42 @@ export default function Home() {
               <div className="h-1 w-16 rounded-full bg-[#a0c49d]" />
             </div>
 
-            <div className="grid auto-rows-min grid-cols-1 gap-4 sm:gap-6 md:grid-cols-4 lg:grid-cols-6">
+            {/* Mobile slider */}
+            <div className="md:hidden -mx-4 px-4">
+              <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {testimonials.map((tt) => (
+                  <article
+                    key={tt.id}
+                    className="snap-center shrink-0 w-[85%] rounded-2xl border border-[#a0c49d]/20 bg-white p-4 shadow-sm"
+                  >
+                    <div className="mb-2 flex gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} className={`h-3 w-3 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`} />
+                      ))}
+                    </div>
+                    <p className="font-display text-sm leading-relaxed text-[#1a3c2a] line-clamp-5">
+                      "{tt.quote}"
+                    </p>
+                    <div className="mt-3 flex items-center gap-2 border-t border-[#a0c49d]/20 pt-3">
+                      {tt.avatar ? (
+                        <img src={tt.avatar} alt={tt.name} className="h-8 w-8 rounded-full object-cover" />
+                      ) : (
+                        <span className="grid h-8 w-8 place-items-center rounded-full bg-[#a0c49d]/20 text-xs font-bold text-[#1a3c2a]">
+                          {tt.name.charAt(0)}
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-semibold text-[#1a3c2a]">{tt.name}</p>
+                        <p className="truncate text-[11px] text-[#5a8a5c]">{tt.role}</p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p className="text-center text-[11px] text-[#5a8a5c]">Swipe to see more →</p>
+            </div>
+
+            <div className="hidden auto-rows-min grid-cols-1 gap-4 sm:gap-6 md:grid md:grid-cols-4 lg:grid-cols-6">
               {/* Featured testimonial — hero block */}
               {testimonials[0] && (
                 <article className="group relative overflow-hidden rounded-3xl border border-[#a0c49d]/20 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl sm:rounded-[2.5rem] md:col-span-4 md:min-h-[380px] lg:col-span-4 lg:row-span-2 lg:min-h-[480px]">
@@ -322,6 +357,7 @@ export default function Home() {
                 </article>
               ))}
             </div>
+
           </div>
         </section>
       )}
