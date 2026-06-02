@@ -27,7 +27,7 @@ const PLANS: Plan[] = [
     id: "basic",
     name: "Basic Plan",
     tagline: "Everything a farmer needs to get started.",
-    priceYear: 2000,
+    priceYear: 1499,
     cta: "Join Basic Plan",
     Icon: Sprout,
     features: [
