@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <>
       {/* HERO — One Stop Digital Platform */}
-      <section className="container mx-auto px-3 pt-3 sm:px-4 sm:pt-6">
+      <section className="container mx-auto px-3 pt-4 sm:px-4 sm:pt-6">
         <div className="relative overflow-hidden rounded-2xl shadow-elegant ring-1 ring-border/60">
           {/* Background field + sky */}
           <div className="absolute inset-0">
@@ -74,25 +74,25 @@ export default function Home() {
               height={896}
               className="h-full w-full object-cover"
             />
-            {/* Soft fade for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/50 to-transparent md:bg-gradient-to-r md:from-background/80 md:via-background/30" />
+            {/* Soft left fade for text legibility */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/55 to-transparent md:from-background/80 md:via-background/30" />
           </div>
 
-          <div className="relative grid items-end gap-3 px-4 pt-5 sm:gap-4 sm:px-8 sm:pt-12 md:grid-cols-2 md:gap-6 md:px-12 md:pt-14">
+          <div className="relative grid items-end gap-4 px-5 pt-8 sm:px-8 sm:pt-12 md:grid-cols-2 md:gap-6 md:px-12 md:pt-14">
             {/* Text */}
             <div className="animate-fade-up max-w-xl pb-0 md:pb-14">
-              <h1 className="text-balance text-2xl font-extrabold leading-[1.15] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              <h1 className="text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
                 One Stop Digital Platform{" "}
                 <span className="text-primary">for Farmers</span>
               </h1>
-              <p className="mt-2 max-w-md text-xs font-medium text-foreground/80 sm:mt-4 sm:text-base">
+              <p className="mt-4 max-w-md text-sm font-medium text-foreground/80 sm:text-base">
                 Loans, Insurance, Agri Inputs, Technology &amp; More — All in One Place.
               </p>
-              <div className="mt-3 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
-                <Button asChild size="sm" className="gap-2 bg-primary text-primary-foreground shadow-elegant hover:bg-primary/90 sm:h-11 sm:px-6 sm:text-base">
+              <div className="mt-5 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
+                <Button asChild size="lg" className="gap-2 bg-primary text-primary-foreground shadow-elegant hover:bg-primary/90">
                   <Link to="/apply">Apply for Loan <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
-                <Button asChild size="sm" className="gap-2 bg-[hsl(45_95%_55%)] text-foreground shadow-elegant hover:bg-[hsl(45_95%_50%)] sm:h-11 sm:px-6 sm:text-base">
+                <Button asChild size="lg" className="gap-2 bg-[hsl(45_95%_55%)] text-foreground shadow-elegant hover:bg-[hsl(45_95%_50%)]">
                   <Link to="/careers">Join as Field Executive</Link>
                 </Button>
               </div>
@@ -105,7 +105,7 @@ export default function Home() {
                 alt="Andhra Pradesh farmer family in traditional attire"
                 width={832}
                 height={1216}
-                className="h-[180px] w-auto object-contain object-bottom drop-shadow-2xl sm:h-[320px] md:h-[460px] lg:h-[540px] xl:h-[600px]"
+                className="h-[260px] w-auto object-contain object-bottom drop-shadow-2xl sm:h-[320px] md:h-[460px] lg:h-[540px] xl:h-[600px]"
               />
             </div>
           </div>
