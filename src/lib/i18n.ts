@@ -117,7 +117,7 @@ const en = {
     title: "Farmer Registration",
     subtitle: "Join AgriKart Fin and get continuous farmer support.",
     feeTitle: "Plan Details",
-    joiningFee: "Basic Plan: ₹2,000 per year",
+    joiningFee: "Basic Plan: ₹1,499 per year",
     renewalFee: "Premium Plan: ₹4,999 per year",
     paymentMode: "Payment Mode: Rojaripay online payment",
     note:
@@ -147,8 +147,8 @@ const en = {
   pay: {
     title: "Pay Now",
     subtitle:
-      "Pay for your Basic (₹2,000/year) or Premium (₹4,999/year) plan securely using Rojaripay (UPI, cards, net banking).",
-    joining: "Basic Plan — ₹2,000 / year",
+      "Pay for your Basic (₹1,499/year) or Premium (₹4,999/year) plan securely using Rojaripay (UPI, cards, net banking).",
+    joining: "Basic Plan — ₹1,499 / year",
     renewal: "Premium Plan — ₹4,999 / year",
     payBtn: "Proceed to Rojaripay",
     success: "Payment successful. Receipt has been sent to your mobile and email.",
@@ -182,7 +182,7 @@ const en = {
       },
       {
         q: "Is there any joining fee?",
-        a: "No. There is no one-time joining fee. We offer just two plans: Basic Plan – ₹2,000/year and Premium Plan – ₹4,999/year. No extra or hidden charges.",
+        a: "No. There is no one-time joining fee. We offer just two plans: Basic Plan – ₹1,499/year and Premium Plan – ₹4,999/year. No extra or hidden charges.",
       },
       {
         q: "How is the membership fee paid?",
@@ -252,7 +252,7 @@ const en = {
       points: [
         "You must be 18 years or older and a resident of India to use our services.",
         "AgriKart Fin is a facilitator only — loans, insurance and inputs are provided by partner NBFCs, insurers and dealers.",
-        "Membership fees — Basic Plan ₹2,000/year and Premium Plan ₹4,999/year — must be paid via approved online channels (Rojaripay UPI / Cards / Net Banking).",
+        "Membership fees — Basic Plan ₹1,499/year and Premium Plan ₹4,999/year — must be paid via approved online channels (Rojaripay UPI / Cards / Net Banking).",
         "Services are subject to availability in your district; we may refuse or delay any request without prior notice.",
         "AgriKart Fin is not liable for crop loss, weather damage, NBFC decisions or third-party actions beyond our reasonable control.",
         "Disputes are governed by Indian law and fall under the jurisdiction of courts in Hyderabad, Telangana.",
@@ -524,7 +524,7 @@ const te: typeof en = {
     title: "రైతు నమోదు",
     subtitle: "AgriKart Finలో జాయిన్ అయి నిరంతర రైతు సేవలు పొందండి.",
     feeTitle: "ప్లాన్ వివరాలు",
-    joiningFee: "బేసిక్ ప్లాన్: సంవత్సరానికి ₹2,000",
+    joiningFee: "బేసిక్ ప్లాన్: సంవత్సరానికి ₹1,499",
     renewalFee: "ప్రీమియం ప్లాన్: సంవత్సరానికి ₹4,999",
     paymentMode: "చెల్లింపు విధానం: Rojaripay ద్వారా ఆన్‌లైన్ చెల్లింపు",
     note: "ఒకసారి జాయినింగ్ ఫీజు లేదు. Rojaripay ద్వారా చెల్లింపు విజయవంతంగా పూర్తయిన తర్వాత మాత్రమే మీ రిజిస్ట్రేషన్ సక్రియమవుతుంది.",
@@ -553,8 +553,8 @@ const te: typeof en = {
   pay: {
     title: "చెల్లించండి",
     subtitle:
-      "మీ బేసిక్ ప్లాన్ (సంవత్సరానికి ₹2,000) లేదా ప్రీమియం ప్లాన్ (సంవత్సరానికి ₹4,999) చెల్లింపును Rojaripay (UPI, కార్డులు, నెట్‌బ్యాంకింగ్) ద్వారా సురక్షితంగా చెల్లించండి.",
-    joining: "బేసిక్ ప్లాన్ — సంవత్సరానికి ₹2,000",
+      "మీ బేసిక్ ప్లాన్ (సంవత్సరానికి ₹1,499) లేదా ప్రీమియం ప్లాన్ (సంవత్సరానికి ₹4,999) చెల్లింపును Rojaripay (UPI, కార్డులు, నెట్‌బ్యాంకింగ్) ద్వారా సురక్షితంగా చెల్లించండి.",
+    joining: "బేసిక్ ప్లాన్ — సంవత్సరానికి ₹1,499",
     renewal: "ప్రీమియం ప్లాన్ — సంవత్సరానికి ₹4,999",
     payBtn: "Rojaripayకి వెళ్లండి",
     success: "పేమెంట్ విజయవంతం. మీ మొబైల్ మరియు ఇమెయిల్‌కు రసీదు పంపబడింది.",
@@ -588,7 +588,7 @@ const te: typeof en = {
       },
       {
         q: "ఏమైనా జాయినింగ్ ఫీజుందా?",
-        a: "లేదు. ఒకసారి జాయినింగ్ ఫీజు లేదు. మాకు రెండు ప్లాన్‌లు మాత్రమే ఉన్నాయి: బేసిక్ ప్లాన్ – సంవత్సరానికి ₹2,000, ప్రీమియం ప్లాన్ – సంవత్సరానికి ₹4,999. ఇతర చార్జీలు లేవు.",
+        a: "లేదు. ఒకసారి జాయినింగ్ ఫీజు లేదు. మాకు రెండు ప్లాన్‌లు మాత్రమే ఉన్నాయి: బేసిక్ ప్లాన్ – సంవత్సరానికి ₹1,499, ప్రీమియం ప్లాన్ – సంవత్సరానికి ₹4,999. ఇతర చార్జీలు లేవు.",
       },
       {
         q: "మెంబర్‌షిప్ ఫీజు ఎలా చెల్లించాలి?",
@@ -657,7 +657,7 @@ const te: typeof en = {
       points: [
         "మా సేవలు ఉపయోగించటానికి మీరు 18 సంవత్సరాలు లేదా అంతకంటే ఎక్కువ వయస్సు ఉన్న భారతీయ నివాసి అయి ఉండాలి.",
         "AgriKart Fin కేవలం ఒక సమన్వయకర్త మాత్రమే — రుణాలు, ఇన్సూరెన్స్, ఇన్‌పుట్‌లు భాగస్వామ్య NBFCలు, ఇన్సూరర్లు, డీలర్లు అందిస్తారు.",
-        "మెంబర్‌షిప్ ఫీజులు — బేసిక్ ప్లాన్ సంవత్సరానికి ₹2,000 మరియు ప్రీమియం ప్లాన్ సంవత్సరానికి ₹4,999 — Rojaripay (UPI / కార్డులు / నెట్‌బ్యాంకింగ్) ద్వారా చెల్లించాలి.",
+        "మెంబర్‌షిప్ ఫీజులు — బేసిక్ ప్లాన్ సంవత్సరానికి ₹1,499 మరియు ప్రీమియం ప్లాన్ సంవత్సరానికి ₹4,999 — Rojaripay (UPI / కార్డులు / నెట్‌బ్యాంకింగ్) ద్వారా చెల్లించాలి.",
         "సేవలు మీ జిల్లాలో అందుబాటును బట్టి ఉంటాయి; ముందస్తు నోటీసు లేకుండా అభ్యర్థనను నిరాకరించే లేదా ఆలస్యం చేసే హక్కు మాకు ఉంది.",
         "పంట నష్టం, వాతావరణ నష్టం, NBFC నిర్ణయాలు లేదా థర్డ్ పార్టీ చర్యలకు AgriKart Fin బాధ్యత వహించదు.",
         "వివాదాలు భారత చట్టాల పరిధిలో, హైదరాబాద్, తెలంగాణ న్యాయస్థానాల పరిధిలో వస్తాయి.",

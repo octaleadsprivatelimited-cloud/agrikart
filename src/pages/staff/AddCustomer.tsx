@@ -24,7 +24,7 @@ const PAY_METHODS: { value: PayMethod; label: string }[] = [
   { value: "Card", label: "Card" },
   { value: "NetBanking", label: "Net Banking" },
 ];
-const KIND_AMOUNTS: Record<PaymentKind, number> = { joining: 2000, renewal: 4999 };
+const KIND_AMOUNTS: Record<PaymentKind, number> = { joining: 1499, renewal: 4999 };
 
 
 type Gps = { lat: number; lng: number; accuracy: number; timestamp: number };
@@ -418,7 +418,7 @@ export default function AddCustomer() {
                     <Select value={payKind} onValueChange={(v) => onKindChange(v as PaymentKind)}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="joining">Basic Plan · ₹2,000 / year</SelectItem>
+                        <SelectItem value="joining">Basic Plan · ₹1,499 / year</SelectItem>
                         <SelectItem value="renewal">Premium Plan · ₹4,999 / year</SelectItem>
                       </SelectContent>
                     </Select>
