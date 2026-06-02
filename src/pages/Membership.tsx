@@ -51,6 +51,7 @@ const PLANS: Plan[] = [
     name: "Premium Plus Plan",
     tagline: "Full-service membership with a dedicated executive.",
     priceYear: 4999,
+    priceNote: "All-inclusive · no extra joining fee",
     badge: "Most Popular",
     highlight: true,
     cta: "Join Premium Plus",
