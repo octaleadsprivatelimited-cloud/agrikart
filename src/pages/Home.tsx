@@ -119,7 +119,7 @@ export default function Home() {
             <div className="relative flex justify-center items-end md:justify-end">
               <img
                 src={heroFarmer}
-                alt="Andhra Pradesh farmer family in traditional attire"
+                alt="Telugu farmer from Andhra Pradesh smiling in traditional attire"
                 width={832}
                 height={1216}
                 className="h-[260px] w-auto object-contain object-bottom drop-shadow-2xl sm:h-[320px] md:h-[460px] lg:h-[540px] xl:h-[600px]"
