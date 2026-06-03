@@ -179,7 +179,7 @@ function seed() {
     gstin: "36AAFCA1234L1ZP",
     license: "Pesticide License No. AP/PEST/2024/1187 · Fertilizer License No. FCO/AP/F-2241",
     phone: "+91 98765 43210",
-    email: "support@agrikartfin.com",
+    email: "support@agrifincart.com",
     address: "AgriKart Fin Tech Pvt Ltd, Plot 12, Madhapur, Hyderabad, Telangana 500081",
     codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
   };

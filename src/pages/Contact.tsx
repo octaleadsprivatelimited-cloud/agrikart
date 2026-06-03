@@ -20,7 +20,7 @@ export default function Contact() {
           {[
             { Icon: MapPin, label: t("contact.address") },
             { Icon: Phone, label: "+91 99999 99999" },
-            { Icon: Mail, label: "support@agrikartfin.com" },
+            { Icon: Mail, label: "support@agrifincart.com" },
           ].map(({ Icon, label }) => (
             <div key={label} className="flex items-start gap-3">
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
