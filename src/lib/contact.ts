@@ -4,7 +4,7 @@ export const CONTACT = {
   phoneIntl: "919999999999", // WhatsApp uses digits only (country code + number)
   phoneDisplay: "+91 99999 99999",
   whatsappMessage: "Hello AgriKart Fin, I would like to know more about your services.",
-  email: "support@agrikartfin.com",
+  email: "support@agrifincart.com",
 };
 
 export const waLink = (msg = CONTACT.whatsappMessage) =>

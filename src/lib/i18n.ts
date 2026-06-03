@@ -211,7 +211,7 @@ const en = {
       { role: "Customer Support — Telugu", loc: "Hyderabad", type: "Full-time" },
       { role: "Frontend Engineer (React)", loc: "Hyderabad / Remote", type: "Full-time" },
     ],
-    apply: "Apply via careers@agrikartfin.com",
+    apply: "Apply via careers@agrifincart.com",
   },
   blog: {
     title: "Insights & News",
@@ -244,7 +244,7 @@ const en = {
         "We use your data only to deliver services, process payments, verify identity, and share scheme/insurance updates.",
         "We do not sell or rent your personal data to any third party for marketing purposes.",
         "Your data is stored securely with industry-standard encryption and restricted employee access.",
-        "You may request deletion of your account and data anytime by emailing privacy@agrikartfin.com.",
+        "You may request deletion of your account and data anytime by emailing privacy@agrifincart.com.",
       ],
     },
     terms: {
@@ -265,7 +265,7 @@ const en = {
         "Service bookings (cold storage, drone, etc.) can be cancelled free of charge before they are marked Approved by our team.",
         "Approved refunds are processed back to the original payment method within 7–10 working days.",
         "Government fees, third-party insurance premiums and already-consumed services are non-refundable.",
-        "For refund queries contact support@agrikartfin.com or call +91 99999 99999.",
+        "For refund queries contact support@agrifincart.com or call +91 99999 99999.",
       ],
     },
   },
@@ -616,7 +616,7 @@ const te: typeof en = {
       { role: "కస్టమర్ సపోర్ట్ — తెలుగు", loc: "హైదరాబాద్", type: "ఫుల్-టైమ్" },
       { role: "ఫ్రంటెండ్ ఇంజినీర్ (React)", loc: "హైదరాబాద్ / రిమోట్", type: "ఫుల్-టైమ్" },
     ],
-    apply: "careers@agrikartfin.com ద్వారా దరఖాస్తు చేయండి",
+    apply: "careers@agrifincart.com ద్వారా దరఖాస్తు చేయండి",
   },
   blog: {
     title: "సమాచారం & వార్తలు",
@@ -649,7 +649,7 @@ const te: typeof en = {
         "మీ డేటాను సేవలు అందించడం, చెల్లింపులు ప్రాసెస్ చేయడం, గుర్తింపు ధృవీకరణ, పథకాలు/ఇన్సూరెన్స్ అప్‌డేట్‌లకు మాత్రమే ఉపయోగిస్తాము.",
         "మార్కెటింగ్ కోసం మీ వ్యక్తిగత డేటాను ఏ థర్డ్ పార్టీకి అమ్మము లేదా అద్దెకు ఇవ్వము.",
         "మీ డేటా పరిశ్రమ ప్రామాణిక ఎన్‌క్రిప్షన్‌తో సురక్షితంగా నిల్వ చేయబడుతుంది, అధికారిక ఉద్యోగులకే యాక్సెస్ ఉంటుంది.",
-        "మీరు ఎప్పుడైనా privacy@agrikartfin.com కు ఇమెయిల్ చేసి మీ ఖాతా & డేటా తొలగింపును అభ్యర్థించవచ్చు.",
+        "మీరు ఎప్పుడైనా privacy@agrifincart.com కు ఇమెయిల్ చేసి మీ ఖాతా & డేటా తొలగింపును అభ్యర్థించవచ్చు.",
       ],
     },
     terms: {
@@ -670,7 +670,7 @@ const te: typeof en = {
         "సేవా బుకింగ్‌లు (కోల్డ్ స్టోరేజ్, డ్రోన్ మొదలైనవి) మా టీమ్ ఆమోదానికి ముందు ఉచితంగా రద్దు చేయవచ్చు.",
         "ఆమోదించబడిన రీఫండ్‌లు 7–10 పని దినాల్లో అసలు చెల్లింపు విధానానికి తిరిగి జమ చేయబడతాయి.",
         "ప్రభుత్వ ఫీజులు, థర్డ్ పార్టీ ఇన్సూరెన్స్ ప్రీమియంలు, ఇప్పటికే వినియోగించిన సేవలు రీఫండ్ చేయబడవు.",
-        "రీఫండ్ ప్రశ్నల కోసం support@agrikartfin.com ను సంప్రదించండి లేదా +91 99999 99999 కు కాల్ చేయండి.",
+        "రీఫండ్ ప్రశ్నల కోసం support@agrifincart.com ను సంప్రదించండి లేదా +91 99999 99999 కు కాల్ చేయండి.",
       ],
     },
   },

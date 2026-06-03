@@ -53,8 +53,8 @@ function seed() {
   if (typeof window === "undefined") return;
   if (localStorage.getItem(SEED_KEY)) return;
   const staff: StoredStaff[] = [
-    { id: "emp-demo", email: "employee@agrikartfin.com", password: "password123", name: "Ravi Kumar", role: "employee" },
-    { id: "adm-demo", email: "admin@agrikartfin.com", password: "password123", name: "Site Admin", role: "admin" },
+    { id: "emp-demo", email: "employee@agrifincart.com", password: "password123", name: "Ravi Kumar", role: "employee" },
+    { id: "adm-demo", email: "admin@agrifincart.com", password: "password123", name: "Site Admin", role: "admin" },
   ];
   write(STAFF_KEY, staff);
   localStorage.setItem(SEED_KEY, "1");

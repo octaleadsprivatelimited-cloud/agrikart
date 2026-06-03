@@ -21,7 +21,7 @@ export default function Careers() {
                   <span className="inline-flex items-center gap-1"><Briefcase className="h-3.5 w-3.5" />{o.type}</span>
                 </div>
               </div>
-              <Button asChild variant="outline"><a href="mailto:careers@agrikartfin.com">{t("careers.apply")}</a></Button>
+              <Button asChild variant="outline"><a href="mailto:careers@agrifincart.com">{t("careers.apply")}</a></Button>
             </CardContent>
           </Card>
         ))}
