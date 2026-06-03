@@ -379,42 +379,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* BUY BACK SUPPORT — 7th block */}
-      <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary">
-            Assured Buy Back
-          </span>
-          <h2 className="mt-3 text-balance text-2xl font-bold sm:text-3xl md:text-4xl">
-            Buy Back Support for Your Harvest
-          </h2>
-          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
-            Grow with confidence. We guarantee a fair market price and pick up your produce
-            right from the farm — no middlemen, no delays.
-          </p>
-        </div>
-        <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-4 sm:gap-4">
-          {[
-            { Icon: RefreshCw, title: "Guaranteed Buy Back", desc: "Pre-agreed purchase of your produce post harvest." },
-            { Icon: TrendingUp, title: "Fair Market Price", desc: "Transparent pricing benchmarked to mandi rates." },
-            { Icon: Truck, title: "Farm Gate Pickup", desc: "Logistics handled by us — no transport hassle." },
-            { Icon: Wallet, title: "Quick Payments", desc: "Direct bank transfer within 24–48 hours." },
-          ].map(({ Icon, title, desc }) => (
-            <div key={title} className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-4 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/10 text-primary sm:h-12 sm:w-12">
-                <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-              </span>
-              <h3 className="text-xs font-semibold sm:text-sm">{title}</h3>
-              <p className="text-[11px] leading-snug text-muted-foreground sm:text-xs">{desc}</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 text-center sm:mt-8">
-          <Button asChild size="sm" className="sm:size-default gap-2">
-            <Link to="/contact">Register for Buy Back <ArrowRight className="h-4 w-4" /></Link>
-          </Button>
-        </div>
-      </section>
+
 
       {/* FAQ PREVIEW — editorial split */}
       <section className="bg-[#fcfdfc] py-12 sm:py-20">
