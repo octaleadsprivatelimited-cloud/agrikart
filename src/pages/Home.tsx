@@ -7,6 +7,7 @@ import {
   Banknote, ShieldCheck, Sprout, Snowflake, Ship, ArrowRight,
   Timer, BadgeCheck, Leaf, Users, Headphones, SprayCan, Package,
   Handshake, MapPin, IndianRupee, Star, PlayCircle, Quote, HelpCircle, Plus,
+  RefreshCw, TrendingUp, Truck, Wallet,
 } from "lucide-react";
 import { useTestimonials, useGallery, useVideos, usePartners } from "@/lib/content-store";
 import imgValues from "@/assets/about-values.jpg";
