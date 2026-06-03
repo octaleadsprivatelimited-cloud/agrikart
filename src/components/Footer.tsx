@@ -48,7 +48,18 @@ export function Footer() {
       </div>
       <div className="border-t border-border/60">
         <div className="container mx-auto px-4 py-4 text-center text-xs text-muted-foreground md:py-5">
-          © {new Date().getFullYear()} {t("brandFull")}. {t("footer.rights")}
+          <p>© {new Date().getFullYear()} {t("brandFull")}. {t("footer.rights")}</p>
+          <p className="mt-1">
+            Developed By{" "}
+            <a
+              href="https://www.octaleads.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary underline"
+            >
+              OctaLeads Pvt Ltd.
+            </a>
+          </p>
         </div>
       </div>
     </footer>
