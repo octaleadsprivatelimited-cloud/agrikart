@@ -496,7 +496,7 @@ export function usePayments() {
 }
 
 // ---------- Public submissions (farmers submit forms without login) ----------
-export type SubmissionStatus = "New" | "Assigned" | "In Progress" | "Completed" | "Rejected";
+export type SubmissionStatus = "New" | "Approved" | "Assigned" | "In Progress" | "Completed" | "Rejected";
 export type Submission = {
   id: string;
   farmerName: string;
