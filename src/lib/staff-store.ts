@@ -366,7 +366,7 @@ export function useCustomerEdits(customerId: string | undefined) {
 }
 
 // ---------- Service requests (per customer) ----------
-export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage" | "Market Linkage & Buy-back";
+export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage" | "Market Linkage & Buy-back" | "General Inquiry";
 export type ServiceRequest = {
   id: string;
   customerId: string;
@@ -376,7 +376,7 @@ export type ServiceRequest = {
   createdAt: number;
 };
 
-export const serviceCategories: ServiceCategory[] = ["Drone","Seeds","Fertilizers","Pesticides","Loan","Insurance","Cold Storage","Market Linkage & Buy-back"];
+export const serviceCategories: ServiceCategory[] = ["Drone","Seeds","Fertilizers","Pesticides","Loan","Insurance","Cold Storage","Market Linkage & Buy-back","General Inquiry"];
 
 export function addServiceRequest(customerId: string, category: ServiceCategory, description: string): ServiceRequest {
   const all = read<ServiceRequest[]>(REQUESTS_KEY, []);
@@ -496,7 +496,7 @@ export function usePayments() {
 }
 
 // ---------- Public submissions (farmers submit forms without login) ----------
-export type SubmissionStatus = "New" | "Assigned" | "In Progress" | "Completed" | "Rejected";
+export type SubmissionStatus = "New" | "Approved" | "Assigned" | "In Progress" | "Completed" | "Rejected";
 export type Submission = {
   id: string;
   farmerName: string;
@@ -543,12 +543,27 @@ export function updateSubmissionStatus(id: string, status: SubmissionStatus) {
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
 
-export function useSubmissions(opts?: { assignedStaffId?: string }) {
+export function approveSubmission(id: string) {
+  const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+  write(SUBMISSIONS_KEY, all.map(s => s.id === id ? { ...s, status: "Approved" as SubmissionStatus } : s));
+  window.dispatchEvent(new Event("agrikart-submissions"));
+}
+
+
+export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: string }) {
   const [items, setItems] = useState<Submission[]>([]);
   useEffect(() => {
     const sync = () => {
       const all = read<Submission[]>(SUBMISSIONS_KEY, []);
-      setItems(opts?.assignedStaffId ? all.filter(s => s.assignedStaffId === opts.assignedStaffId) : all);
+      let r = all;
+      if (opts?.assignedStaffId) r = r.filter(s => s.assignedStaffId === opts.assignedStaffId);
+      if (opts?.forStaffId) {
+        r = r.filter(s =>
+          s.assignedStaffId === opts.forStaffId ||
+          (["Approved", "In Progress", "Completed"] as SubmissionStatus[]).includes(s.status) && !s.assignedStaffId
+        );
+      }
+      setItems(r);
     };
     sync();
     window.addEventListener("agrikart-submissions", sync);
@@ -557,7 +572,8 @@ export function useSubmissions(opts?: { assignedStaffId?: string }) {
       window.removeEventListener("agrikart-submissions", sync);
       window.removeEventListener("storage", sync);
     };
-  }, [opts?.assignedStaffId]);
+  }, [opts?.assignedStaffId, opts?.forStaffId]);
   return items;
 }
+
 

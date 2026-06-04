@@ -3,22 +3,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import {
-  useSubmissions, useStaffList, assignSubmission, updateSubmissionStatus,
+  useSubmissions, useStaffList, assignSubmission, updateSubmissionStatus, approveSubmission,
   type SubmissionStatus,
 } from "@/lib/staff-store";
-import { Search, MapPin, Phone, Inbox } from "lucide-react";
+import { Search, MapPin, Phone, Inbox, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
-const statuses: SubmissionStatus[] = ["New", "Assigned", "In Progress", "Completed", "Rejected"];
+const statuses: SubmissionStatus[] = ["New", "Approved", "Assigned", "In Progress", "Completed", "Rejected"];
 
 function statusTone(s: SubmissionStatus): string {
   switch (s) {
     case "New": return "bg-accent/20 text-[oklch(0.45_0.15_75)]";
+    case "Approved": return "bg-[oklch(0.93_0.08_145)] text-[oklch(0.35_0.13_150)]";
     case "Assigned": return "bg-primary/10 text-primary";
     case "In Progress": return "bg-[oklch(0.93_0.10_240)] text-[oklch(0.35_0.15_240)]";
     case "Completed": return "bg-[oklch(0.93_0.08_145)] text-[oklch(0.35_0.13_150)]";
     case "Rejected": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
   }
 }
 
@@ -125,6 +128,19 @@ export default function AdminSubmissions() {
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-3">
+                  {s.status !== "Approved" && s.status !== "Completed" && s.status !== "Rejected" && (
+                    <Button size="sm" onClick={() => { approveSubmission(s.id); toast.success("Lead approved — now visible to staff"); }}>
+                      <CheckCircle2 className="h-4 w-4" /> Approve & send to staff
+                    </Button>
+                  )}
+                  {s.status !== "Rejected" && (
+                    <Button size="sm" variant="outline" onClick={() => { updateSubmissionStatus(s.id, "Rejected"); toast.success("Lead rejected"); }}>
+                      Reject
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

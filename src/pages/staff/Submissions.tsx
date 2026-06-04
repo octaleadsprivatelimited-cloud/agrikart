@@ -5,21 +5,23 @@ import { Badge } from "@/components/ui/badge";
 import { useCurrentStaff, useSubmissions, updateSubmissionStatus, type SubmissionStatus } from "@/lib/staff-store";
 import { MapPin, Phone, Inbox } from "lucide-react";
 
-const statuses: SubmissionStatus[] = ["Assigned", "In Progress", "Completed", "Rejected"];
+const statuses: SubmissionStatus[] = ["Approved", "Assigned", "In Progress", "Completed", "Rejected"];
 
 function tone(s: SubmissionStatus): string {
   switch (s) {
     case "New": return "bg-accent/20 text-[oklch(0.45_0.15_75)]";
+    case "Approved": return "bg-[oklch(0.93_0.08_145)] text-[oklch(0.35_0.13_150)]";
     case "Assigned": return "bg-primary/10 text-primary";
     case "In Progress": return "bg-[oklch(0.93_0.10_240)] text-[oklch(0.35_0.15_240)]";
     case "Completed": return "bg-[oklch(0.93_0.08_145)] text-[oklch(0.35_0.13_150)]";
     case "Rejected": return "bg-destructive/10 text-destructive";
+    default: return "bg-muted text-muted-foreground";
   }
 }
 
 export default function StaffSubmissions() {
   const staff = useCurrentStaff();
-  const submissions = useSubmissions({ assignedStaffId: staff?.id });
+  const submissions = useSubmissions({ forStaffId: staff?.id });
   const [tab, setTab] = useState<"All" | SubmissionStatus>("All");
   const filtered = useMemo(() => tab === "All" ? submissions : submissions.filter(s => s.status === tab), [submissions, tab]);
 
