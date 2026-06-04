@@ -129,6 +129,19 @@ export default function AdminSubmissions() {
                     </Select>
                   </div>
                 </div>
+
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-3">
+                  {s.status !== "Approved" && s.status !== "Completed" && s.status !== "Rejected" && (
+                    <Button size="sm" onClick={() => { approveSubmission(s.id); toast.success("Lead approved — now visible to staff"); }}>
+                      <CheckCircle2 className="h-4 w-4" /> Approve & send to staff
+                    </Button>
+                  )}
+                  {s.status !== "Rejected" && (
+                    <Button size="sm" variant="outline" onClick={() => { updateSubmissionStatus(s.id, "Rejected"); toast.success("Lead rejected"); }}>
+                      Reject
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
