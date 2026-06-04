@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCurrentStaff, useSubmissions, updateSubmissionStatus, type SubmissionStatus } from "@/lib/staff-store";
 import { MapPin, Phone, Inbox } from "lucide-react";
 
-const statuses: SubmissionStatus[] = ["Assigned", "In Progress", "Completed", "Rejected"];
+const statuses: SubmissionStatus[] = ["Approved", "Assigned", "In Progress", "Completed", "Rejected"];
 
 function tone(s: SubmissionStatus): string {
   switch (s) {
