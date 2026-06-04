@@ -21,7 +21,7 @@ function tone(s: SubmissionStatus): string {
 
 export default function StaffSubmissions() {
   const staff = useCurrentStaff();
-  const submissions = useSubmissions({ assignedStaffId: staff?.id });
+  const submissions = useSubmissions({ forStaffId: staff?.id });
   const [tab, setTab] = useState<"All" | SubmissionStatus>("All");
   const filtered = useMemo(() => tab === "All" ? submissions : submissions.filter(s => s.status === tab), [submissions, tab]);
 
