@@ -130,12 +130,34 @@ export default function AdminSubmissions() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-3">
+                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
                   {s.status !== "Approved" && s.status !== "Completed" && s.status !== "Rejected" && (
                     <Button size="sm" onClick={() => { approveSubmission(s.id); toast.success("Lead approved — now visible to staff"); }}>
                       <CheckCircle2 className="h-4 w-4" /> Approve & send to staff
                     </Button>
                   )}
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-muted-foreground">or approve & assign to:</span>
+                    <Select
+                      value=""
+                      onValueChange={(v) => {
+                        try {
+                          approveAndAssignSubmission(s.id, v);
+                          const name = employees.find(e => e.id === v)?.name ?? "staff";
+                          toast.success(`Approved and assigned to ${name}`);
+                        } catch (e) {
+                          toast.error(e instanceof Error ? e.message : "Failed");
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="h-9 w-[200px]">
+                        <SelectValue placeholder={employees.length ? "Pick employee…" : "No employees"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {employees.map(e => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
                   {s.status !== "Rejected" && (
                     <Button size="sm" variant="outline" onClick={() => { updateSubmissionStatus(s.id, "Rejected"); toast.success("Lead rejected"); }}>
                       Reject
