@@ -543,6 +543,13 @@ export function updateSubmissionStatus(id: string, status: SubmissionStatus) {
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
 
+export function approveSubmission(id: string) {
+  const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+  write(SUBMISSIONS_KEY, all.map(s => s.id === id ? { ...s, status: "Approved" as SubmissionStatus } : s));
+  window.dispatchEvent(new Event("agrikart-submissions"));
+}
+
+
 export function useSubmissions(opts?: { assignedStaffId?: string }) {
   const [items, setItems] = useState<Submission[]>([]);
   useEffect(() => {
