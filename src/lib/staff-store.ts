@@ -549,6 +549,17 @@ export function approveSubmission(id: string) {
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
 
+export function approveAndAssignSubmission(id: string, staffId: string) {
+  const staffList = read<StoredStaff[]>(STAFF_KEY, []);
+  const target = staffList.find(s => s.id === staffId);
+  if (!target) throw new Error("Staff not found");
+  const all = read<Submission[]>(SUBMISSIONS_KEY, []);
+  write(SUBMISSIONS_KEY, all.map(s => s.id === id
+    ? { ...s, status: "Assigned" as SubmissionStatus, assignedStaffId: target.id, assignedStaffName: target.name, assignedAt: Date.now() }
+    : s));
+  window.dispatchEvent(new Event("agrikart-submissions"));
+}
+
 
 export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: string }) {
   const [items, setItems] = useState<Submission[]>([]);
