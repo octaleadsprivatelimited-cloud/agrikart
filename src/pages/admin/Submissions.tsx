@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
-  useSubmissions, useStaffList, assignSubmission, updateSubmissionStatus, approveSubmission,
+  useSubmissions, useStaffList, assignSubmission, updateSubmissionStatus, approveSubmission, approveAndAssignSubmission,
   type SubmissionStatus,
 } from "@/lib/staff-store";
 import { Search, MapPin, Phone, Inbox, CheckCircle2 } from "lucide-react";
