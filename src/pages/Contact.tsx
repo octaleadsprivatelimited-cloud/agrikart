@@ -36,6 +36,15 @@ export default function Contact() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                if (!/^[0-9]{10}$/.test(form.phone)) { toast.error("Enter a valid 10-digit phone."); return; }
+                createSubmission({
+                  farmerName: form.name.trim(),
+                  mobile: form.phone.trim(),
+                  village: "",
+                  district: "",
+                  serviceCategory: "General Inquiry",
+                  message: form.message.trim(),
+                });
                 toast.success(t("contact.sent"));
                 setForm({ name: "", phone: "", message: "" });
               }}
