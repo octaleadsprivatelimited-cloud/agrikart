@@ -550,12 +550,20 @@ export function approveSubmission(id: string) {
 }
 
 
-export function useSubmissions(opts?: { assignedStaffId?: string }) {
+export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: string }) {
   const [items, setItems] = useState<Submission[]>([]);
   useEffect(() => {
     const sync = () => {
       const all = read<Submission[]>(SUBMISSIONS_KEY, []);
-      setItems(opts?.assignedStaffId ? all.filter(s => s.assignedStaffId === opts.assignedStaffId) : all);
+      let r = all;
+      if (opts?.assignedStaffId) r = r.filter(s => s.assignedStaffId === opts.assignedStaffId);
+      if (opts?.forStaffId) {
+        r = r.filter(s =>
+          s.assignedStaffId === opts.forStaffId ||
+          (["Approved", "In Progress", "Completed"] as SubmissionStatus[]).includes(s.status) && !s.assignedStaffId
+        );
+      }
+      setItems(r);
     };
     sync();
     window.addEventListener("agrikart-submissions", sync);
@@ -564,7 +572,8 @@ export function useSubmissions(opts?: { assignedStaffId?: string }) {
       window.removeEventListener("agrikart-submissions", sync);
       window.removeEventListener("storage", sync);
     };
-  }, [opts?.assignedStaffId]);
+  }, [opts?.assignedStaffId, opts?.forStaffId]);
   return items;
 }
+
 
