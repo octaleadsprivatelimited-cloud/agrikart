@@ -3,14 +3,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import {
-  useSubmissions, useStaffList, assignSubmission, updateSubmissionStatus,
+  useSubmissions, useStaffList, assignSubmission, updateSubmissionStatus, approveSubmission,
   type SubmissionStatus,
 } from "@/lib/staff-store";
-import { Search, MapPin, Phone, Inbox } from "lucide-react";
+import { Search, MapPin, Phone, Inbox, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
-const statuses: SubmissionStatus[] = ["New", "Assigned", "In Progress", "Completed", "Rejected"];
+const statuses: SubmissionStatus[] = ["New", "Approved", "Assigned", "In Progress", "Completed", "Rejected"];
 
 function statusTone(s: SubmissionStatus): string {
   switch (s) {
