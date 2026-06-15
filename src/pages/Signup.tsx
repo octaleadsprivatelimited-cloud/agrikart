@@ -27,8 +27,8 @@ export default function Signup() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^[0-9]{10}$/.test(form.mobile)) { toast.error("Enter a valid 10-digit mobile."); return; }
-    if (!/^[0-9]{12}$/.test(form.aadhaar)) { toast.error("Enter a valid 12-digit Aadhaar."); return; }
+    if (!/^[0-9]{10}$/.test(form.mobile)) { toast.error(t("validation.mobile10")); return; }
+    if (!/^[0-9]{12}$/.test(form.aadhaar)) { toast.error(t("validation.aadhaar12")); return; }
     const sub = createSubmission({
       farmerName: form.name.trim(),
       mobile: form.mobile.trim(),
