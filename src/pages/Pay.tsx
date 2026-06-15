@@ -5,17 +5,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { IndianRupee, CheckCircle2 } from "lucide-react";
+import { IndianRupee, CheckCircle2, Copy, Landmark } from "lucide-react";
 import { toast } from "sonner";
 import { recordPayment } from "@/lib/staff-store";
+import { useSettings } from "@/lib/shop-store";
 
 export default function Pay() {
   const { t } = useTranslation();
+  const settings = useSettings();
   const [paid, setPaid] = useState<{ kind: "joining" | "renewal"; txnId: string; orderId: string } | null>(null);
   const [farmerId, setFarmerId] = useState("");
   const [farmerName, setFarmerName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
+  const [showBank, setShowBank] = useState(false);
 
   const pay = (kind: "joining" | "renewal") => {
     if (!farmerId.trim()) return toast.error(t("pay.errFarmerId"));
@@ -55,8 +58,24 @@ export default function Pay() {
         <div className="grid gap-5 md:grid-cols-2">
           <PayCard label={t("pay.joining")} amount="₹1,499" onPay={() => pay("joining")} paid={paid?.kind === "joining"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
           <PayCard label={t("pay.renewal")} amount="₹4,999" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
-
         </div>
+
+        <Card className="mt-8">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <Landmark className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold">Bank Transfer (NEFT / IMPS / UPI)</h3>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">You can also pay via direct bank transfer. Use the details below and share the transaction screenshot on WhatsApp.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <BankField label="Bank Name" value={settings.bankName} />
+              <BankField label="Account Holder" value={settings.bankAccountName} />
+              <BankField label="Account Number" value={settings.bankAccountNumber} />
+              <BankField label="Account Type" value={settings.bankAccountType} />
+              <BankField label="IFSC Code" value={settings.bankIfsc} />
+            </div>
+          </CardContent>
+        </Card>
       </section>
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">{t("pay.poweredBy")}</p>
     </>
@@ -75,5 +94,18 @@ function PayCard({ label, amount, onPay, paid, btn, paidLabel }: { label: string
         <Button onClick={onPay} className="mt-4 w-full">{btn}</Button>
       )}
     </CardContent></Card>
+  );
+}
+
+function BankField({ label, value }: { label: string; value: string }) {
+  const copy = () => { navigator.clipboard.writeText(value); toast.success(`${label} copied`); };
+  return (
+    <div className="rounded-md border border-border bg-muted/30 p-3">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <div className="mt-1 flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold break-all">{value}</p>
+        <Button type="button" size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={copy}><Copy className="h-3.5 w-3.5" /></Button>
+      </div>
+    </div>
   );
 }

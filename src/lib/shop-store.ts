@@ -57,6 +57,7 @@ export type CompanySettings = {
   name: string; tagline: string; gstin: string; license: string;
   phone: string; email: string; address: string;
   codEnabled: boolean; onlineEnabled: boolean; freeShippingAbove: number; shippingFee: number;
+  bankAccountNumber: string; bankAccountName: string; bankAccountType: string; bankIfsc: string; bankName: string;
 };
 
 const PROD_KEY = "agrikart.products";
@@ -182,6 +183,11 @@ function seed() {
     email: "support@agrifincart.com",
     address: "AgriKart Fin Tech Pvt Ltd, Plot 12, Madhapur, Hyderabad, Telangana 500081",
     codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
+    bankAccountNumber: "50200121562101",
+    bankAccountName: "AGRIKART FIN TECH PRIVATE LIMITED",
+    bankAccountType: "Current",
+    bankIfsc: "HDFC0000518",
+    bankName: "HDFC Bank",
   };
   write(SETTINGS_KEY, settings);
 
@@ -396,6 +402,8 @@ export function replyTicket(id: string, author: string, message: string, status?
 export function getSettings(): CompanySettings { return read<CompanySettings>(SETTINGS_KEY, {
   name: "AgriKart Fin Tech Pvt Ltd", tagline: "", gstin: "", license: "",
   phone: "", email: "", address: "", codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
+  bankAccountNumber: "50200121562101", bankAccountName: "AGRIKART FIN TECH PRIVATE LIMITED", bankAccountType: "Current",
+  bankIfsc: "HDFC0000518", bankName: "HDFC Bank",
 }); }
 export const useSettings = () => useStore<CompanySettings>(SETTINGS_KEY, "agrikart-settings", getSettings());
 export function updateSettings(patch: Partial<CompanySettings>) {
