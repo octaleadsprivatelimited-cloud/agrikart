@@ -183,6 +183,11 @@ function seed() {
     email: "support@agrifincart.com",
     address: "AgriKart Fin Tech Pvt Ltd, Plot 12, Madhapur, Hyderabad, Telangana 500081",
     codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
+    bankAccountNumber: "50200121562101",
+    bankAccountName: "AGRIKART FIN TECH PRIVATE LIMITED",
+    bankAccountType: "Current",
+    bankIfsc: "HDFC0000518",
+    bankName: "HDFC Bank",
   };
   write(SETTINGS_KEY, settings);
 
