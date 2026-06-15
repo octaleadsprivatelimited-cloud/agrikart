@@ -12,11 +12,13 @@ import { useSettings } from "@/lib/shop-store";
 
 export default function Pay() {
   const { t } = useTranslation();
+  const settings = useSettings();
   const [paid, setPaid] = useState<{ kind: "joining" | "renewal"; txnId: string; orderId: string } | null>(null);
   const [farmerId, setFarmerId] = useState("");
   const [farmerName, setFarmerName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
+  const [showBank, setShowBank] = useState(false);
 
   const pay = (kind: "joining" | "renewal") => {
     if (!farmerId.trim()) return toast.error(t("pay.errFarmerId"));
