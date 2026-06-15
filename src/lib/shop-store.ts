@@ -402,6 +402,8 @@ export function replyTicket(id: string, author: string, message: string, status?
 export function getSettings(): CompanySettings { return read<CompanySettings>(SETTINGS_KEY, {
   name: "AgriKart Fin Tech Pvt Ltd", tagline: "", gstin: "", license: "",
   phone: "", email: "", address: "", codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
+  bankAccountNumber: "50200121562101", bankAccountName: "AGRIKART FIN TECH PRIVATE LIMITED", bankAccountType: "Current",
+  bankIfsc: "HDFC0000518", bankName: "HDFC Bank",
 }); }
 export const useSettings = () => useStore<CompanySettings>(SETTINGS_KEY, "agrikart-settings", getSettings());
 export function updateSettings(patch: Partial<CompanySettings>) {
