@@ -11,25 +11,25 @@ import {
 import agrikartLogo from "@/assets/agrikart-logo.png";
 
 const topLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
-  { to: "/services", label: "Services" },
-  { to: "/drone-services", label: "Drone Services" },
-  { to: "/tools", label: "Tools" },
-  { to: "/products", label: "Store" },
-  { to: "/schemes", label: "Government" },
+  { to: "/", labelKey: "nav.home" },
+  { to: "/about", labelKey: "nav.about" },
+  { to: "/services", labelKey: "nav.services" },
+  { to: "/drone-services", labelKey: "nav.droneServices" },
+  { to: "/tools", labelKey: "nav.tools" },
+  { to: "/products", labelKey: "nav.store" },
+  { to: "/schemes", labelKey: "nav.schemes" },
 ] as const;
 
 const categories = [
-  { to: "/products", label: "Shop All", Icon: Store },
-  { to: "/products", label: "Pesticides", Icon: Bug },
-  { to: "/products", label: "Fertilisers", Icon: Beaker },
-  { to: "/products", label: "Implements", Icon: Wrench },
-  { to: "/products", label: "Organic", Icon: Leaf },
-  { to: "/products", label: "Specialty", Icon: FlaskConical },
-  { to: "/products", label: "Veterinary", Icon: Stethoscope },
-  { to: "/products", label: "Seeds", Icon: Sparkles },
-  { to: "/products", label: "Nano", Icon: Atom },
+  { to: "/products", labelKey: "nav.categories.shopAll", Icon: Store },
+  { to: "/products", labelKey: "nav.categories.pesticides", Icon: Bug },
+  { to: "/products", labelKey: "nav.categories.fertilisers", Icon: Beaker },
+  { to: "/products", labelKey: "nav.categories.implements", Icon: Wrench },
+  { to: "/products", labelKey: "nav.categories.organic", Icon: Leaf },
+  { to: "/products", labelKey: "nav.categories.specialty", Icon: FlaskConical },
+  { to: "/products", labelKey: "nav.categories.veterinary", Icon: Stethoscope },
+  { to: "/products", labelKey: "nav.categories.seeds", Icon: Sparkles },
+  { to: "/products", labelKey: "nav.categories.nano", Icon: Atom },
 ] as const;
 
 export function Navbar() {
