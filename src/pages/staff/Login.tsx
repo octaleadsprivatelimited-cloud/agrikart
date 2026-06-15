@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield } from "lucide-react";
-import { staffLogin, staffLogout } from "@/lib/staff-store";
+import { staffLogin, staffLogout, getCurrentStaff } from "@/lib/staff-store";
 import { toast } from "sonner";
 
 
@@ -13,6 +13,13 @@ export default function StaffLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // If an admin (or any non-employee) is currently signed in, clear that session
+  // so opening the staff portal always shows the staff login form — not the admin dashboard.
+  useEffect(() => {
+    const s = getCurrentStaff();
+    if (s && s.role !== "employee") staffLogout();
+  }, []);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();

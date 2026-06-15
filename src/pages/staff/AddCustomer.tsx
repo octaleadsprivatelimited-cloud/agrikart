@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   createCustomer, recordPayment, useCurrentStaff,
   type PaymentKind, type Payment, type DocFile, type CustomerDocuments,
+  type FarmerType, FARMER_TYPE_LABELS,
   DOC_MAX_BYTES, DOC_ACCEPT_MIME,
 } from "@/lib/staff-store";
 import {
@@ -39,6 +40,7 @@ export default function AddCustomer() {
     farmerName: "", mobile: "", village: "", district: "",
     landSize: "", crops: "",
   });
+  const [farmerType, setFarmerType] = useState<FarmerType>("Owner");
 
   // Documents (KYC + land proof) — all mandatory
   const [aadhaarNo, setAadhaarNo] = useState("");
@@ -227,6 +229,7 @@ export default function AddCustomer() {
     const c = createCustomer({
       ...formRef.current,
       farmerName: formRef.current.farmerName.trim(),
+      farmerType,
       aadhaar: aadhaarNo.trim(),
       gps,
       documents,
@@ -272,6 +275,22 @@ export default function AddCustomer() {
         <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
           <Field label="Farmer Name"><Input required maxLength={100} value={form.farmerName} onChange={update("farmerName")} /></Field>
           <Field label="Mobile Number"><Input required pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={update("mobile")} /></Field>
+
+          <div className="sm:col-span-2">
+            <Label>Farmer Type <span className="text-destructive">*</span></Label>
+            <Select value={farmerType} onValueChange={(v) => setFarmerType(v as FarmerType)}>
+              <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {(Object.keys(FARMER_TYPE_LABELS) as FarmerType[]).map((k) => (
+                  <SelectItem key={k} value={k}>{FARMER_TYPE_LABELS[k]}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="mt-1 text-xs text-muted-foreground">
+              "Koulu Rythu" = tenant farmer who cultivates land leased / rented from another owner.
+            </p>
+          </div>
+
           
           <Field label="Village"><Input required maxLength={100} value={form.village} onChange={update("village")} /></Field>
           <Field label="District"><Input required maxLength={100} value={form.district} onChange={update("district")} /></Field>
