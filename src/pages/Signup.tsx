@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sprout, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
+import { createSubmission } from "@/lib/staff-store";
 
 type Form = {
   name: string; mobile: string; aadhaar: string; village: string; mandal: string;
