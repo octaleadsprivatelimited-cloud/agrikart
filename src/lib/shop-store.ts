@@ -57,6 +57,7 @@ export type CompanySettings = {
   name: string; tagline: string; gstin: string; license: string;
   phone: string; email: string; address: string;
   codEnabled: boolean; onlineEnabled: boolean; freeShippingAbove: number; shippingFee: number;
+  bankAccountNumber: string; bankAccountName: string; bankAccountType: string; bankIfsc: string; bankName: string;
 };
 
 const PROD_KEY = "agrikart.products";
