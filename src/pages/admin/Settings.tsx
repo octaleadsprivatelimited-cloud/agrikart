@@ -36,6 +36,17 @@ export default function AdminSettings() {
       </CardContent></Card>
 
       <Card><CardContent className="space-y-3 p-6">
+        <h2 className="text-base font-semibold">Bank account</h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="Bank Name"><Input value={s.bankName} onChange={e => setS({ ...s, bankName: e.target.value })} /></Field>
+          <Field label="Account Holder Name"><Input value={s.bankAccountName} onChange={e => setS({ ...s, bankAccountName: e.target.value })} /></Field>
+          <Field label="Account Number"><Input value={s.bankAccountNumber} onChange={e => setS({ ...s, bankAccountNumber: e.target.value })} /></Field>
+          <Field label="Account Type"><Input value={s.bankAccountType} onChange={e => setS({ ...s, bankAccountType: e.target.value })} /></Field>
+          <Field label="IFSC Code"><Input value={s.bankIfsc} onChange={e => setS({ ...s, bankIfsc: e.target.value })} /></Field>
+        </div>
+      </CardContent></Card>
+
+      <Card><CardContent className="space-y-3 p-6">
         <h2 className="text-base font-semibold">Compliance</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="GSTIN"><Input value={s.gstin} onChange={e => setS({ ...s, gstin: e.target.value })} /></Field>
