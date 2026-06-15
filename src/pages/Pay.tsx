@@ -5,9 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { IndianRupee, CheckCircle2 } from "lucide-react";
+import { IndianRupee, CheckCircle2, Copy, Landmark } from "lucide-react";
 import { toast } from "sonner";
 import { recordPayment } from "@/lib/staff-store";
+import { useSettings } from "@/lib/shop-store";
 
 export default function Pay() {
   const { t } = useTranslation();
