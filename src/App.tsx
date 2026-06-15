@@ -82,7 +82,7 @@ function RequireAdmin() {
 function RequireStaff() {
   const s = getCurrentStaff();
   if (!s) return <Navigate to="/staff/login" replace />;
-  if (s.role !== "employee") return <Navigate to="/admin/dashboard" replace />;
+  if (s.role !== "employee") return <Navigate to="/staff/login" replace />;
   return <Outlet />;
 }
 
