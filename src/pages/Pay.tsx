@@ -58,8 +58,24 @@ export default function Pay() {
         <div className="grid gap-5 md:grid-cols-2">
           <PayCard label={t("pay.joining")} amount="₹1,499" onPay={() => pay("joining")} paid={paid?.kind === "joining"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
           <PayCard label={t("pay.renewal")} amount="₹4,999" onPay={() => pay("renewal")} paid={paid?.kind === "renewal"} btn={t("pay.payBtn")} paidLabel={t("pay.paid")} />
-
         </div>
+
+        <Card className="mt-8">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <Landmark className="h-5 w-5 text-primary" />
+              <h3 className="text-lg font-semibold">Bank Transfer (NEFT / IMPS / UPI)</h3>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">You can also pay via direct bank transfer. Use the details below and share the transaction screenshot on WhatsApp.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <BankField label="Bank Name" value={settings.bankName} />
+              <BankField label="Account Holder" value={settings.bankAccountName} />
+              <BankField label="Account Number" value={settings.bankAccountNumber} />
+              <BankField label="Account Type" value={settings.bankAccountType} />
+              <BankField label="IFSC Code" value={settings.bankIfsc} />
+            </div>
+          </CardContent>
+        </Card>
       </section>
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">{t("pay.poweredBy")}</p>
     </>
