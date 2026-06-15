@@ -36,7 +36,7 @@ export default function Contact() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (!/^[0-9]{10}$/.test(form.phone)) { toast.error("Enter a valid 10-digit phone."); return; }
+                if (!/^[0-9]{10}$/.test(form.phone)) { toast.error(t("validation.phone10")); return; }
                 createSubmission({
                   farmerName: form.name.trim(),
                   mobile: form.phone.trim(),
