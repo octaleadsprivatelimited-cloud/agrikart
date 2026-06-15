@@ -51,10 +51,6 @@ export default function AdminLogin() {
             </div>
             <Button type="submit" size="lg">Login</Button>
           </form>
-          <div className="mt-6 rounded-lg border border-dashed border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-            <p className="font-semibold text-foreground">Demo credentials</p>
-            <p className="mt-1">Admin: admin@agrifincart.com / password123</p>
-          </div>
           <p className="mt-4 text-center text-xs text-muted-foreground">
             Field employee? <Link to="/staff/login" className="font-semibold text-primary hover:underline">Staff login</Link>
           </p>
