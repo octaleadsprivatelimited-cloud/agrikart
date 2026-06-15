@@ -27,8 +27,17 @@ export default function Signup() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const id = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
-    setFarmerId(id);
+    if (!/^[0-9]{10}$/.test(form.mobile)) { toast.error("Enter a valid 10-digit mobile."); return; }
+    if (!/^[0-9]{12}$/.test(form.aadhaar)) { toast.error("Enter a valid 12-digit Aadhaar."); return; }
+    const sub = createSubmission({
+      farmerName: form.name.trim(),
+      mobile: form.mobile.trim(),
+      village: form.village.trim(),
+      district: form.district.trim(),
+      serviceCategory: "General Inquiry",
+      message: `Farmer registration request.\nAadhaar: ${form.aadhaar}\nMandal: ${form.mandal}, State: ${form.state}\nLand: ${form.landArea} acres, Survey #: ${form.surveyNumbers}\nMain crop: ${form.mainCrop}, Season: ${form.season}`,
+    });
+    setFarmerId(sub.id);
     toast.success(t("register.captured"));
     setTimeout(() => navigate("/pay"), 1200);
   };
