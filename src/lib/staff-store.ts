@@ -162,10 +162,18 @@ export type CustomerDocuments = {
 export const DOC_MAX_BYTES = 1_500_000; // ~1.5 MB per file (localStorage safety)
 export const DOC_ACCEPT_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 
+export type FarmerType = "Owner" | "Tenant" | "Both";
+export const FARMER_TYPE_LABELS: Record<FarmerType, string> = {
+  Owner: "Land Owner (Sontha Rythu)",
+  Tenant: "Tenant Farmer (Koulu Rythu)",
+  Both: "Owner + Tenant",
+};
+
 export type Customer = {
   id: string;
   farmerCode: string;
   farmerName: string;
+  farmerType?: FarmerType;
   mobile: string;
   aadhaar?: string;        // legacy plain number (deprecated, kept for old records)
   village: string;
@@ -296,7 +304,7 @@ export type CustomerEdit = {
 };
 
 const EDITABLE_FIELDS = [
-  "farmerName", "mobile", "aadhaar", "village", "district", "landSize", "crops", "remarks",
+  "farmerName", "farmerType", "mobile", "aadhaar", "village", "district", "landSize", "crops", "remarks",
 ] as const;
 type EditableField = (typeof EDITABLE_FIELDS)[number];
 
