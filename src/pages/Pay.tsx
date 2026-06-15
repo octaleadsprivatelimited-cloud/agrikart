@@ -96,3 +96,16 @@ function PayCard({ label, amount, onPay, paid, btn, paidLabel }: { label: string
     </CardContent></Card>
   );
 }
+
+function BankField({ label, value }: { label: string; value: string }) {
+  const copy = () => { navigator.clipboard.writeText(value); toast.success(`${label} copied`); };
+  return (
+    <div className="rounded-md border border-border bg-muted/30 p-3">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <div className="mt-1 flex items-center justify-between gap-2">
+        <p className="text-sm font-semibold break-all">{value}</p>
+        <Button type="button" size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={copy}><Copy className="h-3.5 w-3.5" /></Button>
+      </div>
+    </div>
+  );
+}
