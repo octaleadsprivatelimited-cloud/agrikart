@@ -51,8 +51,8 @@ export function Navbar() {
 
         <nav className="hidden items-center gap-5 lg:flex">
           {topLinks.map(i => (
-            <Link key={i.label} to={i.to} className="text-sm font-semibold text-foreground/85 hover:text-primary">
-              {i.label}
+            <Link key={i.labelKey} to={i.to} className="text-sm font-semibold text-foreground/85 hover:text-primary">
+              {t(i.labelKey)}
             </Link>
           ))}
         </nav>
@@ -61,7 +61,7 @@ export function Navbar() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search for products, crops…"
+            placeholder={t("nav.searchPlaceholder")}
             className="h-10 rounded-full border-primary/30 bg-muted/40 pl-9 pr-12 text-sm"
           />
           <button
@@ -78,7 +78,7 @@ export function Navbar() {
             <ShoppingCart className="h-5 w-5" />
           </Link>
           <Button asChild size="sm" className="hidden gap-1.5 sm:inline-flex">
-            <Link to="/apply">Apply Now</Link>
+            <Link to="/apply">{t("nav.applyNow")}</Link>
           </Button>
 
           <Sheet>
@@ -90,13 +90,13 @@ export function Navbar() {
             <SheetContent side="right" className="w-72">
               <div className="mt-8 flex flex-col gap-1">
                 {topLinks.map(i => (
-                  <Link key={i.label} to={i.to} className="rounded-md px-3 py-2 text-base font-medium hover:bg-muted">
-                    {i.label}
+                  <Link key={i.labelKey} to={i.to} className="rounded-md px-3 py-2 text-base font-medium hover:bg-muted">
+                    {t(i.labelKey)}
                   </Link>
                 ))}
                 <div className="mt-4 border-t pt-4 flex flex-col gap-2">
                   <LanguageToggle />
-                  <Button asChild><Link to="/apply">Apply Now</Link></Button>
+                  <Button asChild><Link to="/apply">{t("nav.applyNow")}</Link></Button>
                 </div>
               </div>
             </SheetContent>
@@ -108,8 +108,8 @@ export function Navbar() {
       <div className="bg-primary text-primary-foreground">
         <div className="container mx-auto px-2 sm:px-4">
           <ul className="flex items-center gap-1 overflow-x-auto py-2 [scrollbar-width:none] [-ms-overflow-style:none] sm:gap-2 [&::-webkit-scrollbar]:hidden">
-            {categories.map(({ label, Icon, to }) => (
-              <li key={label} className="shrink-0">
+            {categories.map(({ labelKey, Icon, to }) => (
+              <li key={labelKey} className="shrink-0">
                 <Link
                   to={to}
                   className="flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold hover:bg-primary-foreground/15 sm:text-sm"
@@ -117,7 +117,7 @@ export function Navbar() {
                   <span className="grid h-6 w-6 place-items-center rounded-full bg-primary-foreground/15">
                     <Icon className="h-3.5 w-3.5" />
                   </span>
-                  {label}
+                  {t(labelKey)}
                 </Link>
               </li>
             ))}
