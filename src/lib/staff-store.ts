@@ -12,32 +12,19 @@ const REQUESTS_KEY = "agrikart.service_requests";
 const PAYMENTS_KEY = "agrikart.payments";
 const CUSTOMER_EDITS_KEY = "agrikart.customer_edits";
 const SUBMISSIONS_KEY = "agrikart.submissions";
-const SEED_KEY = "agrikart.seeded_v1";
+const SEED_KEY = "agrikart.seeded_v2";
 
 // ---------- Permissions (role-based access control) ----------
-// Hard rules:
-//  • NO ONE can delete a customer entry (audit/compliance).
-//  • Employees can edit ONLY customers they themselves added.
-//  • Admins can edit any customer and change status.
-//  • Only admins can manage staff users.
 export const permissions = {
   canEditCustomer(staff: Staff | null, c: Pick<Customer, "employeeId">): boolean {
     if (!staff) return false;
     if (staff.role === "admin") return true;
     return staff.id === c.employeeId;
   },
-  canDeleteCustomer(_staff: Staff | null): boolean {
-    return false; // never allowed
-  },
-  canChangeCustomerStatus(staff: Staff | null): boolean {
-    return staff?.role === "admin";
-  },
-  canManageStaff(staff: Staff | null): boolean {
-    return staff?.role === "admin";
-  },
-  canViewAllCustomers(staff: Staff | null): boolean {
-    return staff?.role === "admin";
-  },
+  canDeleteCustomer(_staff: Staff | null): boolean { return false; },
+  canChangeCustomerStatus(staff: Staff | null): boolean { return staff?.role === "admin"; },
+  canManageStaff(staff: Staff | null): boolean { return staff?.role === "admin"; },
+  canViewAllCustomers(staff: Staff | null): boolean { return staff?.role === "admin"; },
 };
 
 function read<T>(key: string, fallback: T): T {
@@ -51,13 +38,24 @@ function write(key: string, val: unknown) {
 
 function seed() {
   if (typeof window === "undefined") return;
-  if (localStorage.getItem(SEED_KEY)) return;
-  const staff: StoredStaff[] = [
+  const required: StoredStaff[] = [
     { id: "emp-demo", email: "employee@agrifincart.com", password: "password123", name: "Ravi Kumar", role: "employee" },
     { id: "adm-demo", email: "admin@agrifincart.com", password: "password123", name: "Site Admin", role: "admin" },
   ];
-  write(STAFF_KEY, staff);
-  localStorage.setItem(SEED_KEY, "1");
+  const existing = read<StoredStaff[]>(STAFF_KEY, []);
+  let changed = false;
+  for (const r of required) {
+    const idx = existing.findIndex(s => s.email.toLowerCase() === r.email.toLowerCase());
+    if (idx === -1) { existing.push(r); changed = true; }
+    else if (existing[idx].password !== r.password || existing[idx].role !== r.role) {
+      existing[idx] = { ...existing[idx], password: r.password, role: r.role };
+      changed = true;
+    }
+  }
+  if (changed || !localStorage.getItem(SEED_KEY)) {
+    write(STAFF_KEY, existing);
+    localStorage.setItem(SEED_KEY, "1");
+  }
 }
 seed();
 
