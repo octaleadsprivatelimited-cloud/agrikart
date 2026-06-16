@@ -72,7 +72,7 @@ export default function StaffLogin() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <Button type="submit" size="lg">Login</Button>
+            <Button type="submit" size="lg" disabled={loading}>{loading ? "Signing in…" : "Login"}</Button>
           </form>
           <p className="mt-4 text-center text-xs text-muted-foreground">
             Administrator? <Link to="/admin/login" className="font-semibold text-primary hover:underline">Admin login</Link>
