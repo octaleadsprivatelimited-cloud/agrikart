@@ -41,24 +41,51 @@ function seed() {
   if (typeof window === "undefined") return;
   const required: StoredStaff[] = [
     { id: "emp-demo", email: "employee@agrifincart.com", password: "password123", name: "Ravi Kumar", role: "employee" },
-    { id: "adm-demo", email: "admin@agrifincart.com", password: "password123", name: "Site Admin", role: "admin" },
+    { id: "adm-demo", email: "admin@agrifincart.com", password: ADMIN_DEFAULT_PASSWORD, name: "Site Admin", role: "admin" },
   ];
   const existing = read<StoredStaff[]>(STAFF_KEY, []);
+  const seeded = localStorage.getItem(SEED_KEY);
   let changed = false;
   for (const r of required) {
     const idx = existing.findIndex(s => s.email.toLowerCase() === r.email.toLowerCase());
     if (idx === -1) { existing.push(r); changed = true; }
-    else if (existing[idx].password !== r.password || existing[idx].role !== r.role) {
-      existing[idx] = { ...existing[idx], password: r.password, role: r.role };
-      changed = true;
+    else if (!seeded) {
+      // One-time forced reset when bumping SEED_KEY version (admin password rotation)
+      if (r.role === "admin" && existing[idx].password !== r.password) {
+        existing[idx] = { ...existing[idx], password: r.password, role: r.role };
+        changed = true;
+      }
     }
   }
-  if (changed || !localStorage.getItem(SEED_KEY)) {
+  if (changed || !seeded) {
     write(STAFF_KEY, existing);
     localStorage.setItem(SEED_KEY, "1");
   }
 }
 seed();
+
+// ---------- Password management ----------
+export function changeStaffPassword(id: string, currentPassword: string, newPassword: string) {
+  if (!newPassword || newPassword.length < 6) throw new Error("New password must be at least 6 characters.");
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  const idx = all.findIndex(s => s.id === id);
+  if (idx === -1) throw new Error("Account not found");
+  if (all[idx].password !== currentPassword) throw new Error("Current password is incorrect");
+  all[idx] = { ...all[idx], password: newPassword };
+  write(STAFF_KEY, all);
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
+export function resetStaffPassword(actor: Staff | null, targetId: string, newPassword: string) {
+  if (!actor || actor.role !== "admin") throw new Error("Only admins can reset passwords");
+  if (!newPassword || newPassword.length < 6) throw new Error("Password must be at least 6 characters.");
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  const idx = all.findIndex(s => s.id === targetId);
+  if (idx === -1) throw new Error("Account not found");
+  all[idx] = { ...all[idx], password: newPassword };
+  write(STAFF_KEY, all);
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
 
 export function staffLogin(email: string, password: string): Staff {
   seed();
