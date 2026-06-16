@@ -4,8 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useStaffList, createStaff, deleteStaff, updateStaffRole, useCurrentStaff, type StaffRole } from "@/lib/staff-store";
-import { UserPlus, Trash2, ShieldCheck, User } from "lucide-react";
+import { useStaffList, createStaff, deleteStaff, updateStaffRole, useCurrentStaff, resetStaffPassword, type StaffRole } from "@/lib/staff-store";
+import { UserPlus, Trash2, ShieldCheck, User, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
 
@@ -34,6 +34,17 @@ export default function AdminStaff() {
     if (!confirm(`Remove ${name}?`)) return;
     deleteStaff(id);
     toast.success("Removed");
+  };
+
+  const resetPw = (id: string, name: string) => {
+    const next = prompt(`Set a new password for ${name} (min 6 chars):`);
+    if (next == null) return;
+    try {
+      resetStaffPassword(me, id, next);
+      toast.success(`Password reset for ${name}`);
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   };
 
   return (
@@ -87,6 +98,9 @@ export default function AdminStaff() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-1">
+                      <Button size="sm" variant="ghost" onClick={() => resetPw(s.id, s.name)} title="Reset password">
+                        <KeyRound className="h-4 w-4" />
+                      </Button>
                       <Button size="sm" variant="ghost" onClick={() => updateStaffRole(s.id, s.role === "admin" ? "employee" : "admin")} disabled={s.id === me?.id}>
                         Make {s.role === "admin" ? "Employee" : "Admin"}
                       </Button>

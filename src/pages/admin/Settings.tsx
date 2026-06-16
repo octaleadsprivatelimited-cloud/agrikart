@@ -7,15 +7,32 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useSettings, updateSettings, type CompanySettings } from "@/lib/shop-store";
+import { changeStaffPassword, useCurrentStaff } from "@/lib/staff-store";
 import { toast } from "sonner";
+import { KeyRound } from "lucide-react";
 
 
 export default function AdminSettings() {
   const live = useSettings();
+  const me = useCurrentStaff();
   const [s, setS] = useState<CompanySettings>(live);
   useEffect(() => { setS(live); }, [live]);
+  const [pw, setPw] = useState({ current: "", next: "", confirm: "" });
 
   const save = () => { updateSettings(s); toast.success("Settings saved"); };
+
+  const submitPw = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!me) return;
+    if (pw.next !== pw.confirm) { toast.error("New passwords do not match"); return; }
+    try {
+      changeStaffPassword(me.id, pw.current, pw.next);
+      toast.success("Password changed");
+      setPw({ current: "", next: "", confirm: "" });
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -82,6 +99,17 @@ export default function AdminSettings() {
           <li><strong>Employee</strong> — customers, requests, payments collection.</li>
           <li><strong>Farmer</strong> — customer portal only.</li>
         </ul>
+      </CardContent></Card>
+
+      <Card><CardContent className="space-y-3 p-6">
+        <h2 className="inline-flex items-center gap-2 text-base font-semibold"><KeyRound className="h-4 w-4" /> Change your password</h2>
+        <p className="text-xs text-muted-foreground">Signed in as <strong>{me?.email ?? "—"}</strong>. Use a strong password (6+ characters).</p>
+        <form onSubmit={submitPw} className="grid gap-3 sm:grid-cols-3">
+          <Field label="Current password"><Input type="password" autoComplete="current-password" value={pw.current} onChange={e => setPw({ ...pw, current: e.target.value })} /></Field>
+          <Field label="New password"><Input type="password" autoComplete="new-password" value={pw.next} onChange={e => setPw({ ...pw, next: e.target.value })} /></Field>
+          <Field label="Confirm new password"><Input type="password" autoComplete="new-password" value={pw.confirm} onChange={e => setPw({ ...pw, confirm: e.target.value })} /></Field>
+          <div className="sm:col-span-3"><Button type="submit" variant="outline">Update password</Button></div>
+        </form>
       </CardContent></Card>
 
       <div className="flex justify-end"><Button onClick={save}>Save all changes</Button></div>
