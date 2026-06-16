@@ -98,6 +98,9 @@ export default function AdminStaff() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-1">
+                      <Button size="sm" variant="ghost" onClick={() => resetPw(s.id, s.name)} title="Reset password">
+                        <KeyRound className="h-4 w-4" />
+                      </Button>
                       <Button size="sm" variant="ghost" onClick={() => updateStaffRole(s.id, s.role === "admin" ? "employee" : "admin")} disabled={s.id === me?.id}>
                         Make {s.role === "admin" ? "Employee" : "Admin"}
                       </Button>
