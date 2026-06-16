@@ -36,6 +36,17 @@ export default function AdminStaff() {
     toast.success("Removed");
   };
 
+  const resetPw = (id: string, name: string) => {
+    const next = prompt(`Set a new password for ${name} (min 6 chars):`);
+    if (next == null) return;
+    try {
+      resetStaffPassword(me, id, next);
+      toast.success(`Password reset for ${name}`);
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div>
