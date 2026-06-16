@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { ShieldCheck } from "lucide-react";
 import { staffLogin, staffLogout, ADMIN_DEFAULT_EMAIL } from "@/lib/staff-store";
 import { toast } from "sonner";
-import { firebaseAuth } from "@/lib/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseStaffLogin } from "@/lib/firebase-staff";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -21,19 +20,21 @@ export default function AdminLogin() {
     setLoading(true);
     const cleanEmail = email.trim();
     try {
-      // Primary: Firebase Auth for the admin account.
-      if (cleanEmail.toLowerCase() === ADMIN_DEFAULT_EMAIL.toLowerCase()) {
-        try {
-          await signInWithEmailAndPassword(firebaseAuth, cleanEmail, password);
-        } catch (err: unknown) {
-          const code = (err as { code?: string })?.code ?? "";
-          // Fallback to local credentials only if the Firebase user doesn't exist yet.
-          if (code !== "auth/user-not-found" && code !== "auth/invalid-credential") {
-            throw err;
-          }
+      let s: { role: string; name: string } | null = null;
+      try {
+        s = await firebaseStaffLogin(cleanEmail, password);
+      } catch (err: unknown) {
+        const code = (err as { code?: string })?.code ?? "";
+        if (
+          code !== "auth/user-not-found" &&
+          code !== "auth/invalid-credential" &&
+          // Allow fallback for the seeded local admin if its Firebase profile isn't set up yet.
+          cleanEmail.toLowerCase() !== ADMIN_DEFAULT_EMAIL.toLowerCase()
+        ) {
+          throw err;
         }
+        s = staffLogin(cleanEmail, password);
       }
-      const s = staffLogin(cleanEmail, password);
       if (s.role !== "admin") {
         staffLogout();
         toast.error("This portal is for administrators only.");
