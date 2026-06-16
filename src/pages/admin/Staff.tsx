@@ -85,7 +85,7 @@ export default function AdminStaff() {
                 <option value="admin">Admin</option>
               </select>
             </div>
-            <Button type="submit" className="md:col-span-4 md:w-fit">Add Staff</Button>
+            <Button type="submit" disabled={saving} className="md:col-span-4 md:w-fit">{saving ? "Adding…" : "Add Staff"}</Button>
           </form>
         </CardContent>
       </Card>
