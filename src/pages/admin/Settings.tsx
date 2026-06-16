@@ -14,10 +14,25 @@ import { KeyRound } from "lucide-react";
 
 export default function AdminSettings() {
   const live = useSettings();
+  const me = useCurrentStaff();
   const [s, setS] = useState<CompanySettings>(live);
   useEffect(() => { setS(live); }, [live]);
+  const [pw, setPw] = useState({ current: "", next: "", confirm: "" });
 
   const save = () => { updateSettings(s); toast.success("Settings saved"); };
+
+  const submitPw = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!me) return;
+    if (pw.next !== pw.confirm) { toast.error("New passwords do not match"); return; }
+    try {
+      changeStaffPassword(me.id, pw.current, pw.next);
+      toast.success("Password changed");
+      setPw({ current: "", next: "", confirm: "" });
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
+  };
 
   return (
     <div className="space-y-6">
