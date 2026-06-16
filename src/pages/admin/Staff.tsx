@@ -4,8 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useStaffList, createStaff, deleteStaff, updateStaffRole, useCurrentStaff, type StaffRole } from "@/lib/staff-store";
-import { UserPlus, Trash2, ShieldCheck, User } from "lucide-react";
+import { useStaffList, createStaff, deleteStaff, updateStaffRole, useCurrentStaff, resetStaffPassword, type StaffRole } from "@/lib/staff-store";
+import { UserPlus, Trash2, ShieldCheck, User, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
 
