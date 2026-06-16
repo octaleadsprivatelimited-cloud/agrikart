@@ -1,5 +1,8 @@
 // Staff (employee/admin) + customer + service-request store. localStorage-backed.
 import { useEffect, useState } from "react";
+import { firebaseAuth, firebaseConfig } from "./firebase";
+import { initializeApp, getApp } from "firebase/app";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword } from "firebase/auth";
 
 export type StaffRole = "employee" | "admin";
 export type Staff = { id: string; email: string; name: string; role: StaffRole };
@@ -97,11 +100,48 @@ export function resetStaffPassword(actor: Staff | null, targetId: string, newPas
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
-export function staffLogin(email: string, password: string): Staff {
+export async function staffLogin(email: string, password: string): Promise<Staff> {
   seed();
+  const cleanEmail = email.trim();
+  let firebaseUser = null;
+  let loginError: any = null;
+
+  try {
+    const res = await signInWithEmailAndPassword(firebaseAuth, cleanEmail, password);
+    firebaseUser = res.user;
+  } catch (err: any) {
+    loginError = err;
+  }
+
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const s = all.find(x => x.email.toLowerCase() === email.toLowerCase() && x.password === password);
-  if (!s) throw new Error("INVALID_LOGIN");
+
+  if (firebaseUser) {
+    const uid = firebaseUser.uid;
+    const name = firebaseUser.displayName || "Staff Member";
+    const role = (firebaseUser.photoURL === "admin" ? "admin" : "employee") as StaffRole;
+
+    const existingIdx = all.findIndex(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
+    const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password };
+    
+    if (existingIdx !== -1) {
+      all[existingIdx] = staffData;
+    } else {
+      all.push(staffData);
+    }
+    write(STAFF_KEY, all);
+    write(STAFF_SESSION_KEY, uid);
+    window.dispatchEvent(new Event("agrikart-staff"));
+    return { id: uid, email: cleanEmail, name, role };
+  }
+
+  // Fallback to local storage (e.g. initial demo login credentials or offline)
+  const s = all.find(x => x.email.toLowerCase() === cleanEmail.toLowerCase() && x.password === password);
+  if (!s) {
+    if (loginError) {
+      throw new Error(loginError.message || "INVALID_LOGIN");
+    }
+    throw new Error("INVALID_LOGIN");
+  }
   write(STAFF_SESSION_KEY, s.id);
   window.dispatchEvent(new Event("agrikart-staff"));
   const { password: _p, ...rest } = s;
@@ -111,32 +151,6 @@ export function staffLogin(email: string, password: string): Staff {
 export function staffLogout() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STAFF_SESSION_KEY);
-  window.dispatchEvent(new Event("agrikart-staff"));
-}
-
-// ---------- Bridge helpers (used by firebase-staff.ts) ----------
-// Insert/update a Staff record in the local store and persist the password locally
-// so the existing localStorage-based code paths (permissions, edit history, etc.) keep working.
-export function upsertLocalStaff(staff: Staff, password: string) {
-  const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const idx = all.findIndex(s => s.id === staff.id || s.email.toLowerCase() === staff.email.toLowerCase());
-  const record: StoredStaff = { ...staff, password };
-  if (idx === -1) all.push(record);
-  else all[idx] = record;
-  write(STAFF_KEY, all);
-  window.dispatchEvent(new Event("agrikart-staff"));
-}
-
-export function removeLocalStaff(id: string) {
-  const all = read<StoredStaff[]>(STAFF_KEY, []);
-  write(STAFF_KEY, all.filter(s => s.id !== id));
-  window.dispatchEvent(new Event("agrikart-staff"));
-}
-
-// Mirror a Firebase-authenticated staff into local store and activate the session.
-export function hydrateStaffSession(staff: Staff, password: string) {
-  upsertLocalStaff(staff, password);
-  write(STAFF_SESSION_KEY, staff.id);
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
@@ -184,12 +198,42 @@ export function useStaffList() {
   return items;
 }
 
-export function createStaff(input: { email: string; name: string; password: string; role: StaffRole }): Staff {
+async function createFirebaseStaff(input: { email: string; name: string; password: string; role: StaffRole }): Promise<string> {
+  let tempApp;
+  try {
+    tempApp = getApp("TempRegistrationApp");
+  } catch {
+    tempApp = initializeApp(firebaseConfig, "TempRegistrationApp");
+  }
+  const tempAuth = getAuth(tempApp);
+  try {
+    const userCredential = await createUserWithEmailAndPassword(tempAuth, input.email, input.password);
+    await updateProfile(userCredential.user, {
+      displayName: input.name,
+      photoURL: input.role,
+    });
+    await signOut(tempAuth);
+    return userCredential.user.uid;
+  } finally {
+    await tempApp.delete();
+  }
+}
+
+export async function createStaff(input: { email: string; name: string; password: string; role: StaffRole }): Promise<Staff> {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   if (all.some(s => s.email.toLowerCase() === input.email.toLowerCase())) {
     throw new Error("Email already in use");
   }
-  const item: StoredStaff = { ...input, id: (input.role === "admin" ? "adm-" : "emp-") + crypto.randomUUID().slice(0, 8) };
+  
+  let uid = (input.role === "admin" ? "adm-" : "emp-") + crypto.randomUUID().slice(0, 8);
+  try {
+    const firebaseUid = await createFirebaseStaff(input);
+    uid = firebaseUid;
+  } catch (err: any) {
+    throw new Error(err.message || "Failed to create user in Firebase Auth");
+  }
+
+  const item: StoredStaff = { ...input, id: uid };
   all.push(item);
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));

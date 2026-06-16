@@ -4,8 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useStaffList, deleteStaff, updateStaffRole, useCurrentStaff, resetStaffPassword, type StaffRole } from "@/lib/staff-store";
-import { firebaseCreateStaff, firebaseDeleteStaffDoc } from "@/lib/firebase-staff";
+import { useStaffList, createStaff, deleteStaff, updateStaffRole, useCurrentStaff, resetStaffPassword, type StaffRole } from "@/lib/staff-store";
 import { UserPlus, Trash2, ShieldCheck, User, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
@@ -14,7 +13,7 @@ export default function AdminStaff() {
   const me = useCurrentStaff();
   const staff = useStaffList();
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "employee" as StaffRole });
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,34 +21,23 @@ export default function AdminStaff() {
       toast.error("Fill all fields. Password must be 6+ characters.");
       return;
     }
-    setSaving(true);
+    setLoading(true);
     try {
-      await firebaseCreateStaff(form);
-      toast.success(`${form.role === "admin" ? "Admin" : "Employee"} added — they can now sign in from any device.`);
+      await createStaff(form);
+      toast.success(`${form.role === "admin" ? "Admin" : "Employee"} added successfully in Firebase Auth & Local Storage`);
       setForm({ name: "", email: "", password: "", role: "employee" });
-    } catch (err: unknown) {
-      const code = (err as { code?: string })?.code ?? "";
-      const msg =
-        code === "auth/email-already-in-use" ? "Email already in use" :
-        code === "auth/weak-password" ? "Password is too weak" :
-        code === "auth/invalid-email" ? "Invalid email address" :
-        (err as Error).message || "Failed to add staff";
-      toast.error(msg);
+    } catch (err) {
+      toast.error((err as Error).message);
     } finally {
-      setSaving(false);
+      setLoading(false);
     }
   };
 
-  const remove = async (id: string, name: string) => {
+  const remove = (id: string, name: string) => {
     if (id === me?.id) return toast.error("You cannot delete your own account.");
-    if (!confirm(`Remove ${name}? (Sign-in access is revoked; the auth record may need manual cleanup.)`)) return;
-    try {
-      if (id.startsWith("fb-")) await firebaseDeleteStaffDoc(id);
-      else deleteStaff(id);
-      toast.success("Removed");
-    } catch (err) {
-      toast.error((err as Error).message);
-    }
+    if (!confirm(`Remove ${name}?`)) return;
+    deleteStaff(id);
+    toast.success("Removed");
   };
 
   const resetPw = (id: string, name: string) => {
@@ -74,18 +62,20 @@ export default function AdminStaff() {
         <CardContent className="p-6">
           <h2 className="mb-4 inline-flex items-center gap-2 text-lg font-semibold"><UserPlus className="h-4 w-4" /> Add Staff</h2>
           <form onSubmit={submit} className="grid gap-3 md:grid-cols-4">
-            <div><Label>Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-            <div><Label>Email</Label><Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
-            <div><Label>Password</Label><Input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
+            <div><Label>Name</Label><Input disabled={loading} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
+            <div><Label>Email</Label><Input disabled={loading} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
+            <div><Label>Password</Label><Input disabled={loading} type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
             <div>
               <Label>Role</Label>
-              <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+              <select disabled={loading} className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
                 value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as StaffRole })}>
                 <option value="employee">Employee</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
-            <Button type="submit" disabled={saving} className="md:col-span-4 md:w-fit">{saving ? "Adding…" : "Add Staff"}</Button>
+            <Button type="submit" disabled={loading} className="md:col-span-4 md:w-fit">
+              {loading ? "Adding Staff..." : "Add Staff"}
+            </Button>
           </form>
         </CardContent>
       </Card>

@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield } from "lucide-react";
 import { staffLogin, staffLogout, getCurrentStaff } from "@/lib/staff-store";
-import { firebaseStaffLogin } from "@/lib/firebase-staff";
 import { toast } from "sonner";
 
 
@@ -16,6 +15,8 @@ export default function StaffLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // If an admin (or any non-employee) is currently signed in, clear that session
+  // so opening the staff portal always shows the staff login form — not the admin dashboard.
   useEffect(() => {
     const s = getCurrentStaff();
     if (s && s.role !== "employee") staffLogout();
@@ -24,19 +25,8 @@ export default function StaffLogin() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const cleanEmail = email.trim();
     try {
-      let s: { role: string; name: string } | null = null;
-      try {
-        s = await firebaseStaffLogin(cleanEmail, password);
-      } catch (err: unknown) {
-        const code = (err as { code?: string })?.code ?? "";
-        // Only fall back to local seeds for users that don't exist in Firebase yet.
-        if (code !== "auth/user-not-found" && code !== "auth/invalid-credential") {
-          throw err;
-        }
-        s = staffLogin(cleanEmail, password);
-      }
+      const s = await staffLogin(email.trim(), password);
       if (s.role !== "employee") {
         staffLogout();
         toast.error("Admins must sign in at the admin portal.");
@@ -45,8 +35,8 @@ export default function StaffLogin() {
       }
       toast.success(`Welcome, ${s.name}`);
       void navigate("/staff/dashboard");
-    } catch {
-      toast.error("Invalid email or password.");
+    } catch (err: any) {
+      toast.error(err.message || "Invalid email or password.");
     } finally {
       setLoading(false);
     }
@@ -66,13 +56,15 @@ export default function StaffLogin() {
           <form onSubmit={onSubmit} className="grid gap-4">
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input id="email" type="email" required disabled={loading} value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input id="password" type="password" required disabled={loading} value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <Button type="submit" size="lg" disabled={loading}>{loading ? "Signing in…" : "Login"}</Button>
+            <Button type="submit" size="lg" disabled={loading}>
+              {loading ? "Signing in..." : "Login"}
+            </Button>
           </form>
           <p className="mt-4 text-center text-xs text-muted-foreground">
             Administrator? <Link to="/admin/login" className="font-semibold text-primary hover:underline">Admin login</Link>
