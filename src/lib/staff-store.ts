@@ -12,7 +12,8 @@ const REQUESTS_KEY = "agrikart.service_requests";
 const PAYMENTS_KEY = "agrikart.payments";
 const CUSTOMER_EDITS_KEY = "agrikart.customer_edits";
 const SUBMISSIONS_KEY = "agrikart.submissions";
-const SEED_KEY = "agrikart.seeded_v2";
+const SEED_KEY = "agrikart.seeded_v3";
+export const ADMIN_DEFAULT_PASSWORD = "Agri@2026";
 
 // ---------- Permissions (role-based access control) ----------
 export const permissions = {
