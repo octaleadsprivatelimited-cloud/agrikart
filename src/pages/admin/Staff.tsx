@@ -4,7 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useStaffList, createStaff, deleteStaff, updateStaffRole, useCurrentStaff, resetStaffPassword, type StaffRole } from "@/lib/staff-store";
+import { useStaffList, deleteStaff, updateStaffRole, useCurrentStaff, resetStaffPassword, type StaffRole } from "@/lib/staff-store";
+import { firebaseCreateStaff, firebaseDeleteStaffDoc } from "@/lib/firebase-staff";
 import { UserPlus, Trash2, ShieldCheck, User, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 
@@ -13,27 +14,42 @@ export default function AdminStaff() {
   const me = useCurrentStaff();
   const staff = useStaffList();
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "employee" as StaffRole });
+  const [saving, setSaving] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || form.password.length < 6) {
       toast.error("Fill all fields. Password must be 6+ characters.");
       return;
     }
+    setSaving(true);
     try {
-      createStaff(form);
-      toast.success(`${form.role === "admin" ? "Admin" : "Employee"} added`);
+      await firebaseCreateStaff(form);
+      toast.success(`${form.role === "admin" ? "Admin" : "Employee"} added — they can now sign in from any device.`);
       setForm({ name: "", email: "", password: "", role: "employee" });
-    } catch (err) {
-      toast.error((err as Error).message);
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code ?? "";
+      const msg =
+        code === "auth/email-already-in-use" ? "Email already in use" :
+        code === "auth/weak-password" ? "Password is too weak" :
+        code === "auth/invalid-email" ? "Invalid email address" :
+        (err as Error).message || "Failed to add staff";
+      toast.error(msg);
+    } finally {
+      setSaving(false);
     }
   };
 
-  const remove = (id: string, name: string) => {
+  const remove = async (id: string, name: string) => {
     if (id === me?.id) return toast.error("You cannot delete your own account.");
-    if (!confirm(`Remove ${name}?`)) return;
-    deleteStaff(id);
-    toast.success("Removed");
+    if (!confirm(`Remove ${name}? (Sign-in access is revoked; the auth record may need manual cleanup.)`)) return;
+    try {
+      if (id.startsWith("fb-")) await firebaseDeleteStaffDoc(id);
+      else deleteStaff(id);
+      toast.success("Removed");
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   };
 
   const resetPw = (id: string, name: string) => {
