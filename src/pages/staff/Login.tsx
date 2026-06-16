@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield } from "lucide-react";
 import { staffLogin, staffLogout, getCurrentStaff } from "@/lib/staff-store";
+import { firebaseStaffLogin } from "@/lib/firebase-staff";
 import { toast } from "sonner";
 
 
@@ -13,18 +14,29 @@ export default function StaffLogin() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // If an admin (or any non-employee) is currently signed in, clear that session
-  // so opening the staff portal always shows the staff login form — not the admin dashboard.
   useEffect(() => {
     const s = getCurrentStaff();
     if (s && s.role !== "employee") staffLogout();
   }, []);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    const cleanEmail = email.trim();
     try {
-      const s = staffLogin(email.trim(), password);
+      let s: { role: string; name: string } | null = null;
+      try {
+        s = await firebaseStaffLogin(cleanEmail, password);
+      } catch (err: unknown) {
+        const code = (err as { code?: string })?.code ?? "";
+        // Only fall back to local seeds for users that don't exist in Firebase yet.
+        if (code !== "auth/user-not-found" && code !== "auth/invalid-credential") {
+          throw err;
+        }
+        s = staffLogin(cleanEmail, password);
+      }
       if (s.role !== "employee") {
         staffLogout();
         toast.error("Admins must sign in at the admin portal.");
@@ -35,6 +47,8 @@ export default function StaffLogin() {
       void navigate("/staff/dashboard");
     } catch {
       toast.error("Invalid email or password.");
+    } finally {
+      setLoading(false);
     }
   };
 
