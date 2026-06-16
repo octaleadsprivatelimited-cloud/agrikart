@@ -101,6 +101,17 @@ export default function AdminSettings() {
         </ul>
       </CardContent></Card>
 
+      <Card><CardContent className="space-y-3 p-6">
+        <h2 className="inline-flex items-center gap-2 text-base font-semibold"><KeyRound className="h-4 w-4" /> Change your password</h2>
+        <p className="text-xs text-muted-foreground">Signed in as <strong>{me?.email ?? "—"}</strong>. Use a strong password (6+ characters).</p>
+        <form onSubmit={submitPw} className="grid gap-3 sm:grid-cols-3">
+          <Field label="Current password"><Input type="password" autoComplete="current-password" value={pw.current} onChange={e => setPw({ ...pw, current: e.target.value })} /></Field>
+          <Field label="New password"><Input type="password" autoComplete="new-password" value={pw.next} onChange={e => setPw({ ...pw, next: e.target.value })} /></Field>
+          <Field label="Confirm new password"><Input type="password" autoComplete="new-password" value={pw.confirm} onChange={e => setPw({ ...pw, confirm: e.target.value })} /></Field>
+          <div className="sm:col-span-3"><Button type="submit" variant="outline">Update password</Button></div>
+        </form>
+      </CardContent></Card>
+
       <div className="flex justify-end"><Button onClick={save}>Save all changes</Button></div>
     </div>
   );
