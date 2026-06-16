@@ -42,22 +42,31 @@ function seed() {
   if (typeof window === "undefined") return;
   const required: StoredStaff[] = [
     { id: "emp-demo", email: "employee@agrifincart.com", password: "password123", name: "Ravi Kumar", role: "employee" },
-    { id: "adm-demo", email: "admin@agrifincart.com", password: ADMIN_DEFAULT_PASSWORD, name: "Site Admin", role: "admin" },
+    { id: "adm-demo", email: ADMIN_DEFAULT_EMAIL, password: ADMIN_DEFAULT_PASSWORD, name: "Site Admin", role: "admin" },
   ];
   const existing = read<StoredStaff[]>(STAFF_KEY, []);
   const seeded = localStorage.getItem(SEED_KEY);
   let changed = false;
+
+  if (!seeded) {
+    // One-time forced rotation: ensure the canonical admin account exists with the
+    // configured email/password, and drop any legacy admin@agrifincart.com seed.
+    const legacyIdx = existing.findIndex(s => s.email.toLowerCase() === "admin@agrifincart.com");
+    if (legacyIdx !== -1) { existing.splice(legacyIdx, 1); changed = true; }
+    const admIdx = existing.findIndex(s => s.id === "adm-demo");
+    const adm = required[1];
+    if (admIdx === -1) { existing.push(adm); changed = true; }
+    else {
+      existing[admIdx] = { ...existing[admIdx], email: adm.email, password: adm.password, role: "admin" };
+      changed = true;
+    }
+  }
+
   for (const r of required) {
     const idx = existing.findIndex(s => s.email.toLowerCase() === r.email.toLowerCase());
     if (idx === -1) { existing.push(r); changed = true; }
-    else if (!seeded) {
-      // One-time forced reset when bumping SEED_KEY version (admin password rotation)
-      if (r.role === "admin" && existing[idx].password !== r.password) {
-        existing[idx] = { ...existing[idx], password: r.password, role: r.role };
-        changed = true;
-      }
-    }
   }
+
   if (changed || !seeded) {
     write(STAFF_KEY, existing);
     localStorage.setItem(SEED_KEY, "1");
