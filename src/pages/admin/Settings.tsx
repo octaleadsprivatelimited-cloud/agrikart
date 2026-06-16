@@ -7,7 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useSettings, updateSettings, type CompanySettings } from "@/lib/shop-store";
+import { changeStaffPassword, useCurrentStaff } from "@/lib/staff-store";
 import { toast } from "sonner";
+import { KeyRound } from "lucide-react";
 
 
 export default function AdminSettings() {
