@@ -114,6 +114,32 @@ export function staffLogout() {
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
+// ---------- Bridge helpers (used by firebase-staff.ts) ----------
+// Insert/update a Staff record in the local store and persist the password locally
+// so the existing localStorage-based code paths (permissions, edit history, etc.) keep working.
+export function upsertLocalStaff(staff: Staff, password: string) {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  const idx = all.findIndex(s => s.id === staff.id || s.email.toLowerCase() === staff.email.toLowerCase());
+  const record: StoredStaff = { ...staff, password };
+  if (idx === -1) all.push(record);
+  else all[idx] = record;
+  write(STAFF_KEY, all);
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
+export function removeLocalStaff(id: string) {
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  write(STAFF_KEY, all.filter(s => s.id !== id));
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
+// Mirror a Firebase-authenticated staff into local store and activate the session.
+export function hydrateStaffSession(staff: Staff, password: string) {
+  upsertLocalStaff(staff, password);
+  write(STAFF_SESSION_KEY, staff.id);
+  window.dispatchEvent(new Event("agrikart-staff"));
+}
+
 export function getCurrentStaff(): Staff | null {
   if (typeof window === "undefined") return null;
   const id = read<string | null>(STAFF_SESSION_KEY, null);
