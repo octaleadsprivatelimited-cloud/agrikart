@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfig } from "./firebase";
 import { initializeApp, getApp, deleteApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { toast } from "sonner";
 
 export type StaffRole = "employee" | "admin";
@@ -81,20 +81,50 @@ seed();
 // ---------- Password management ----------
 export async function changeStaffPassword(id: string, currentPassword: string, newPassword: string) {
   if (!newPassword || newPassword.length < 6) throw new Error("New password must be at least 6 characters.");
+  
+  // Wait for Firebase Auth state to resolve if it hasn't yet (handles race conditions during initial load)
+  if (typeof window !== "undefined" && !firebaseAuth.currentUser && read<string | null>(STAFF_SESSION_KEY, null)) {
+    await new Promise<void>((resolve) => {
+      const unsubscribe = firebaseAuth.onAuthStateChanged(() => {
+        unsubscribe();
+        resolve();
+      });
+      setTimeout(() => {
+        unsubscribe();
+        resolve();
+      }, 2000);
+    });
+  }
+
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   const idx = all.findIndex(s => s.id === id);
   if (idx === -1) throw new Error("Account not found");
-  if (all[idx].password !== currentPassword) throw new Error("Current password is incorrect");
 
-  // Sync with Firebase Auth for currently logged in user
+  let passwordValid = all[idx].password === currentPassword;
+
+  // Re-authenticate with Firebase to bypass requires-recent-login and validate out-of-sync credentials
+  if (firebaseAuth.currentUser && firebaseAuth.currentUser.uid === id && firebaseAuth.currentUser.email) {
+    try {
+      const credential = EmailAuthProvider.credential(firebaseAuth.currentUser.email, currentPassword);
+      await reauthenticateWithCredential(firebaseAuth.currentUser, credential);
+      passwordValid = true;
+    } catch (err: any) {
+      if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password") {
+        passwordValid = false;
+      }
+    }
+  }
+
+  if (!passwordValid) {
+    throw new Error("Current password is incorrect");
+  }
+
+  // Update password in Firebase Auth
   if (firebaseAuth.currentUser && firebaseAuth.currentUser.uid === id) {
     try {
       await updatePassword(firebaseAuth.currentUser, newPassword);
     } catch (err: any) {
       console.error("Firebase password change failed:", err);
-      if (err.code === "auth/requires-recent-login") {
-        throw new Error("Changing password requires logging in again recently. Please log out, log back in, and try again.");
-      }
       throw new Error(err.message || "Failed to update password in Firebase Auth");
     }
   }
