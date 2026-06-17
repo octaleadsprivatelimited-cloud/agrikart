@@ -16,7 +16,7 @@ const REQUESTS_KEY = "agrikart.service_requests";
 const PAYMENTS_KEY = "agrikart.payments";
 const CUSTOMER_EDITS_KEY = "agrikart.customer_edits";
 const SUBMISSIONS_KEY = "agrikart.submissions";
-const SEED_KEY = "agrikart.seeded_v4";
+const SEED_KEY = "agrikart.seeded_v5";
 export const ADMIN_DEFAULT_EMAIL = "agrikartfintechpvtltd@gmail.com";
 export const ADMIN_DEFAULT_PASSWORD = "Agri@2026";
 
@@ -53,6 +53,13 @@ function seed() {
   let changed = false;
 
   if (!seeded) {
+    // One-time clear of all demo customer and payment data to start with original data
+    write(CUSTOMERS_KEY, []);
+    write(REQUESTS_KEY, []);
+    write(PAYMENTS_KEY, []);
+    write(CUSTOMER_EDITS_KEY, []);
+    write(SUBMISSIONS_KEY, []);
+
     // One-time forced rotation: ensure the canonical admin account exists with the
     // configured email/password, and drop any legacy admin@agrifincart.com seed.
     const legacyIdx = existing.findIndex(s => s.email.toLowerCase() === "admin@agrifincart.com");

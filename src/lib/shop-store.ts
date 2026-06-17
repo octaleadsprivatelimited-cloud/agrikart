@@ -67,7 +67,7 @@ const ADDR_KEY = "agrikart.addresses";
 const TICKETS_KEY = "agrikart.tickets";
 const SETTINGS_KEY = "agrikart.settings";
 const MOVES_KEY = "agrikart.stock_moves";
-const SEED_KEY = "agrikart.shop_seed_v2";
+const SEED_KEY = "agrikart.shop_seed_v3";
 
 export type StockMove = {
   id: string; productId: string; productName: string;
@@ -167,69 +167,40 @@ function seed() {
     },
   ];
 
-  const products: Product[] = seedProducts.map((p, i) => ({
-    ...p,
-    id: "prd-" + (i + 1).toString().padStart(3, "0"),
-    slug: slugify(p.name),
-  }));
-  write(PROD_KEY, products);
+  if (!localStorage.getItem(PROD_KEY)) {
+    const products: Product[] = seedProducts.map((p, i) => ({
+      ...p,
+      id: "prd-" + (i + 1).toString().padStart(3, "0"),
+      slug: slugify(p.name),
+    }));
+    write(PROD_KEY, products);
+  }
 
-  const settings: CompanySettings = {
-    name: "AgriKart Fin Tech Pvt Ltd",
-    tagline: "Smart agri-inputs and finance for Indian farmers",
-    gstin: "36AAFCA1234L1ZP",
-    license: "Pesticide License No. AP/PEST/2024/1187 · Fertilizer License No. FCO/AP/F-2241",
-    phone: "+91 98765 43210",
-    email: "support@agrifincart.com",
-    address: "AgriKart Fin Tech Pvt Ltd, Plot 12, Madhapur, Hyderabad, Telangana 500081",
-    codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
-    bankAccountNumber: "50200121562101",
-    bankAccountName: "AGRIKART FIN TECH PRIVATE LIMITED",
-    bankAccountType: "Current",
-    bankIfsc: "HDFC0000518",
-    bankName: "HDFC Bank",
-  };
-  write(SETTINGS_KEY, settings);
-
-  // Demo orders for admin views
-  const demoUser = "user-demo";
-  const demoAddr: Address = {
-    id: "addr-demo", userId: demoUser, label: "Home", name: "Demo Farmer",
-    mobile: "9876543210", line1: "H.No 2-15, Main Road", village: "Mulkanoor",
-    mandal: "Bheemadevarapalli", district: "Hanamkonda", pincode: "506367", isDefault: true,
-  };
-  write(ADDR_KEY, [demoAddr]);
-
-  const sample = (lines: OrderLine[], status: OrderStatus, daysAgo: number, mode: PaymentMode): Order => {
-    const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);
-    const shipping = subtotal >= settings.freeShippingAbove ? 0 : settings.shippingFee;
-    return {
-      id: "ORD-" + Math.floor(100000 + Math.random() * 900000),
-      userId: demoUser, userName: demoAddr.name, mobile: demoAddr.mobile,
-      lines, subtotal, shipping, total: subtotal + shipping,
-      paymentMode: mode, paymentState: mode === "COD" ? "Pending" : "Paid",
-      status, address: demoAddr, createdAt: today() - daysAgo * 86400000,
-      history: [{ ts: today() - daysAgo * 86400000, note: "Order placed" }],
+  if (!localStorage.getItem(SETTINGS_KEY)) {
+    const settings: CompanySettings = {
+      name: "AgriKart Fin Tech Pvt Ltd",
+      tagline: "Smart agri-inputs and finance for Indian farmers",
+      gstin: "36AAFCA1234L1ZP",
+      license: "Pesticide License No. AP/PEST/2024/1187 · Fertilizer License No. FCO/AP/F-2241",
+      phone: "+91 98765 43210",
+      email: "support@agrifincart.com",
+      address: "AgriKart Fin Tech Pvt Ltd, Plot 12, Madhapur, Hyderabad, Telangana 500081",
+      codEnabled: true, onlineEnabled: true, freeShippingAbove: 999, shippingFee: 49,
+      bankAccountNumber: "50200121562101",
+      bankAccountName: "AGRIKART FIN TECH PRIVATE LIMITED",
+      bankAccountType: "Current",
+      bankIfsc: "HDFC0000518",
+      bankName: "HDFC Bank",
     };
-  };
-  const p = (id: string) => products.find(x => x.id === id)!;
-  const orders: Order[] = [
-    sample([{ productId: p("prd-001").id, name: p("prd-001").name, price: p("prd-001").discountPrice!, qty: 2 }], "Delivered", 14, "Online"),
-    sample([{ productId: p("prd-002").id, name: p("prd-002").name, price: p("prd-002").price, qty: 1 }], "Shipped", 3, "COD"),
-    sample([{ productId: p("prd-004").id, name: p("prd-004").name, price: p("prd-004").discountPrice!, qty: 1 }], "Packed", 1, "Online"),
-    sample([{ productId: p("prd-006").id, name: p("prd-006").name, price: p("prd-006").price, qty: 4 }], "New", 0, "COD"),
-  ];
-  write(ORDERS_KEY, orders);
+    write(SETTINGS_KEY, settings);
+  }
 
-  const tickets: Ticket[] = [
-    {
-      id: "TKT-1001", userId: demoUser, userName: "Demo Farmer",
-      topic: "Delivery", subject: "Delivery delayed for ORD-001",
-      message: "Order was promised in 3 days but still not received.",
-      status: "Open", replies: [], createdAt: today() - 2 * 86400000,
-    },
-  ];
-  write(TICKETS_KEY, tickets);
+  // Force delete all demo transaction data (orders, addresses, tickets, moves, cart)
+  write(ADDR_KEY, []);
+  write(ORDERS_KEY, []);
+  write(TICKETS_KEY, []);
+  write(MOVES_KEY, []);
+  write(CART_KEY, {});
 
   localStorage.setItem(SEED_KEY, "1");
 }
