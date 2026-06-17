@@ -1,17 +1,17 @@
 {
   "rules": {
-    ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'employee')",
-    ".write": "auth != null && auth.token.picture === 'admin'",
+    ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'admin:active' || auth.token.picture === 'employee' || auth.token.picture === 'employee:active')",
+    ".write": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'admin:active')",
     
     "submissions": {
       ".write": true,
       "$submissionId": {
-        ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'employee')"
+        ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'admin:active' || auth.token.picture === 'employee' || auth.token.picture === 'employee:active')"
       }
     },
     "customers": {
       "$customerId": {
-        ".write": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'employee')"
+        ".write": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'admin:active' || auth.token.picture === 'employee' || auth.token.picture === 'employee:active')"
       }
     }
   }

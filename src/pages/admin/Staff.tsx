@@ -33,11 +33,15 @@ export default function AdminStaff() {
     }
   };
 
-  const remove = (id: string, name: string) => {
+  const remove = async (id: string, name: string) => {
     if (id === me?.id) return toast.error("You cannot delete your own account.");
     if (!confirm(`Remove ${name}?`)) return;
-    deleteStaff(id);
-    toast.success("Removed");
+    try {
+      await deleteStaff(id);
+      toast.success("Removed");
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   };
 
   const resetPw = async (id: string, name: string) => {

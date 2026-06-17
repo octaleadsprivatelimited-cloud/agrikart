@@ -8,12 +8,14 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return isAuthenticated() && request.auth.token.picture == 'admin';
+      return isAuthenticated() && 
+             (request.auth.token.picture == 'admin' || request.auth.token.picture == 'admin:active');
     }
     
     function isEmployee() {
       return isAuthenticated() && 
-             (request.auth.token.picture == 'employee' || request.auth.token.picture == 'admin') &&
+             (request.auth.token.picture == 'employee' || request.auth.token.picture == 'employee:active' || 
+              request.auth.token.picture == 'admin' || request.auth.token.picture == 'admin:active') &&
              (!exists(/databases/$(database)/documents/staff/$(request.auth.uid)) || 
               get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.status != 'deleted');
     }

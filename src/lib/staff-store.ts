@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfig } from "./firebase";
 import { initializeApp, getApp, deleteApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword, updatePassword, EmailAuthProvider, reauthenticateWithCredential, sendPasswordResetEmail } from "firebase/auth";
 import { toast } from "sonner";
 
 export type StaffRole = "employee" | "admin";
@@ -149,6 +149,9 @@ export async function resetStaffPassword(actor: Staff | null, targetId: string, 
   if (idx === -1) throw new Error("Account not found");
 
   const target = all[idx];
+  let firebaseSyncSucceeded = false;
+  let syncErrorMsg = "";
+
   // Attempt client-side Firebase Auth sync using impersonation if it's not a local demo user
   if (target.password && !targetId.startsWith("emp-") && !targetId.startsWith("adm-")) {
     let tempApp;
@@ -168,10 +171,11 @@ export async function resetStaffPassword(actor: Staff | null, targetId: string, 
         if (credential.user) {
           await updatePassword(credential.user, newPassword);
           await signOut(tempAuth);
+          firebaseSyncSucceeded = true;
         }
       } catch (err: any) {
         console.warn("Firebase password reset sync failed, update will only apply locally:", err);
-        toast.warning(`Firebase password sync failed: ${err.message || "Connection error"}`);
+        syncErrorMsg = err.message || "Connection error";
       } finally {
         try {
           await deleteApp(tempApp);
@@ -179,6 +183,17 @@ export async function resetStaffPassword(actor: Staff | null, targetId: string, 
           console.error("Failed to delete tempApp:", e);
         }
       }
+    }
+  }
+
+  // If sync failed and it is a Firebase user, we can send a password reset email as fallback
+  if (!firebaseSyncSucceeded && !targetId.startsWith("emp-") && !targetId.startsWith("adm-")) {
+    try {
+      await sendPasswordResetEmail(firebaseAuth, target.email);
+      toast.info(`Sent standard Firebase password reset email to ${target.email} because direct password sync failed (${syncErrorMsg || "missing local credentials"}).`);
+    } catch (emailErr: any) {
+      console.error("Failed to send fallback password reset email:", emailErr);
+      toast.warning(`Could not sync password to Firebase: ${syncErrorMsg || "missing local credentials"}. Also failed to send reset email: ${emailErr.message}`);
     }
   }
 
@@ -203,7 +218,7 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   const existing = all.find(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
 
-  // Block deleted/deactivated accounts
+  // Block deleted/deactivated accounts if they exist locally
   if (existing && existing.status === "deleted") {
     if (firebaseUser) {
       try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
@@ -211,19 +226,28 @@ export async function staffLogin(email: string, password: string): Promise<Staff
     throw new Error("This account has been deleted and cannot access the portal.");
   }
 
-  // Block unregistered accounts
-  if (!existing) {
-    if (firebaseUser) {
-      try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
-    }
-    throw new Error("Account not found in local database.");
-  }
-
   if (firebaseUser) {
     const uid = firebaseUser.uid;
     const name = firebaseUser.displayName || "Staff Member";
-    const role = existing.role;
-    const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password, status: existing.status };
+    
+    // Parse role and status from photoURL
+    const photoURL = firebaseUser.photoURL || "employee";
+    let role: StaffRole = "employee";
+    let status: "active" | "deleted" = "active";
+    if (photoURL.includes(":")) {
+      const parts = photoURL.split(":");
+      role = parts[0] as StaffRole;
+      status = parts[1] as "active" | "deleted";
+    } else {
+      role = photoURL as StaffRole;
+    }
+
+    if (status === "deleted") {
+      try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
+      throw new Error("This account has been deleted and cannot access the portal.");
+    }
+
+    const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password, status };
     
     const existingIdx = all.findIndex(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
     if (existingIdx !== -1) {
@@ -234,7 +258,7 @@ export async function staffLogin(email: string, password: string): Promise<Staff
     write(STAFF_KEY, all);
     write(STAFF_SESSION_KEY, uid);
     window.dispatchEvent(new Event("agrikart-staff"));
-    return { id: uid, email: cleanEmail, name, role, status: existing.status };
+    return { id: uid, email: cleanEmail, name, role, status };
   }
 
   // Fallback to local storage (e.g. initial demo login credentials or offline)
@@ -313,12 +337,16 @@ async function createFirebaseStaff(input: { email: string; name: string; passwor
     const userCredential = await createUserWithEmailAndPassword(tempAuth, input.email, input.password);
     await updateProfile(userCredential.user, {
       displayName: input.name,
-      photoURL: input.role,
+      photoURL: `${input.role}:active`,
     });
     await signOut(tempAuth);
     return userCredential.user.uid;
   } finally {
-    await deleteApp(tempApp);
+    try {
+      if (tempApp) await deleteApp(tempApp);
+    } catch (e) {
+      console.error("Failed to delete tempApp in createFirebaseStaff:", e);
+    }
   }
 }
 
@@ -411,8 +439,45 @@ export async function createStaff(input: { email: string; name: string; password
   return rest;
 }
 
-export function deleteStaff(id: string) {
+export async function deleteStaff(id: string) {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
+  const target = all.find(s => s.id === id);
+  if (!target) return;
+
+  // Attempt client-side Firebase Auth sync using impersonation if it's not a local demo user
+  if (target.password && !id.startsWith("emp-") && !id.startsWith("adm-")) {
+    let tempApp;
+    try {
+      tempApp = getApp("TempRegistrationApp");
+    } catch {
+      try {
+        tempApp = initializeApp(firebaseConfig, "TempRegistrationApp");
+      } catch (e) {
+        console.error("Failed to initialize TempRegistrationApp for delete sync:", e);
+      }
+    }
+    if (tempApp) {
+      const tempAuth = getAuth(tempApp);
+      try {
+        const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
+        if (credential.user) {
+          await updateProfile(credential.user, {
+            photoURL: `${target.role}:deleted`,
+          });
+          await signOut(tempAuth);
+        }
+      } catch (err: any) {
+        console.warn("Firebase delete sync failed, update will only apply locally:", err);
+      } finally {
+        try {
+          await deleteApp(tempApp);
+        } catch (e) {
+          console.error("Failed to delete tempApp:", e);
+        }
+      }
+    }
+  }
+
   write(STAFF_KEY, all.map(s => s.id === id ? { ...s, status: "deleted" as const } : s));
   window.dispatchEvent(new Event("agrikart-staff"));
 }
@@ -439,8 +504,9 @@ export async function updateStaffRole(id: string, role: StaffRole) {
       try {
         const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
         if (credential.user) {
+          const currentStatus = target.status || "active";
           await updateProfile(credential.user, {
-            photoURL: role,
+            photoURL: `${role}:${currentStatus}`,
           });
           await signOut(tempAuth);
         }
