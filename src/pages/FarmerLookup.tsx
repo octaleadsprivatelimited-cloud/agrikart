@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import {
   useCustomerEdits,
   useRequests,
   type Customer,
+  getCustomerDocument,
 } from "@/lib/staff-store";
 import {
   Search,
@@ -218,34 +219,13 @@ export default function FarmerLookup() {
                       </h4>
                       <div className="grid gap-2 text-xs">
                         {farmer.documents?.aadhaar?.file && (
-                          <a
-                            href={farmer.documents.aadhaar.file.dataUrl}
-                            download={farmer.documents.aadhaar.file.name}
-                            className="flex items-center justify-between rounded border p-2 hover:bg-muted/40"
-                          >
-                            <span className="font-semibold truncate">Aadhaar Upload</span>
-                            <Download className="h-3.5 w-3.5 text-primary" />
-                          </a>
+                          <DocDownloadLink label="Aadhaar Upload" file={farmer.documents.aadhaar.file} customerId={farmer.id} docType="aadhaar" />
                         )}
                         {farmer.documents?.pan?.file && (
-                          <a
-                            href={farmer.documents.pan.file.dataUrl}
-                            download={farmer.documents.pan.file.name}
-                            className="flex items-center justify-between rounded border p-2 hover:bg-muted/40"
-                          >
-                            <span className="font-semibold truncate">PAN Upload</span>
-                            <Download className="h-3.5 w-3.5 text-primary" />
-                          </a>
+                          <DocDownloadLink label="PAN Upload" file={farmer.documents.pan.file} customerId={farmer.id} docType="pan" />
                         )}
                         {farmer.documents?.land?.file && (
-                          <a
-                            href={farmer.documents.land.file.dataUrl}
-                            download={farmer.documents.land.file.name}
-                            className="flex items-center justify-between rounded border p-2 hover:bg-muted/40"
-                          >
-                            <span className="font-semibold truncate">Land Record</span>
-                            <Download className="h-3.5 w-3.5 text-primary" />
-                          </a>
+                          <DocDownloadLink label="Land Record" file={farmer.documents.land.file} customerId={farmer.id} docType="land" />
                         )}
                       </div>
                     </div>
@@ -392,5 +372,62 @@ export default function FarmerLookup() {
         )}
       </section>
     </>
+  );
+}
+
+function DocDownloadLink({
+  label,
+  file,
+  customerId,
+  docType,
+}: {
+  label: string;
+  file: any;
+  customerId: string;
+  docType: "aadhaar" | "pan" | "land";
+}) {
+  const [dataUrl, setDataUrl] = useState(file?.dataUrl || "");
+  const [loading, setLoading] = useState(!file?.dataUrl);
+
+  useEffect(() => {
+    if (!dataUrl && customerId) {
+      setLoading(true);
+      getCustomerDocument(customerId, docType)
+        .then((url) => {
+          if (url) setDataUrl(url);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [customerId, docType, dataUrl]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-between rounded border p-2 bg-muted/20 text-muted-foreground animate-pulse">
+        <span className="font-semibold truncate">Loading {label}...</span>
+      </div>
+    );
+  }
+
+  if (!dataUrl) {
+    return (
+      <div className="flex items-center justify-between rounded border p-2 bg-muted/10 text-muted-foreground">
+        <span className="font-semibold truncate">{label} (Not available)</span>
+      </div>
+    );
+  }
+
+  return (
+    <a
+      href={dataUrl}
+      download={file.name}
+      className="flex items-center justify-between rounded border p-2 hover:bg-muted/40"
+    >
+      <span className="font-semibold truncate">{label}</span>
+      <Download className="h-3.5 w-3.5 text-primary" />
+    </a>
   );
 }

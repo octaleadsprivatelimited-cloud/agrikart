@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -32,9 +32,23 @@ export default function PlaceOrder() {
   const navigate = useNavigate();
   const products = useProducts();
 
-  const [code, setCode] = useState("");
+  const [searchParams] = useSearchParams();
+  const codeParam = searchParams.get("code") || "";
+
+  const [code, setCode] = useState(codeParam);
   const [farmer, setFarmer] = useState<Customer | null>(null);
   const [lookupErr, setLookupErr] = useState("");
+
+  useEffect(() => {
+    if (codeParam) {
+      const c = findCustomerByCode(codeParam);
+      if (c) {
+        setFarmer(c);
+      } else {
+        setLookupErr("No farmer found with that ID.");
+      }
+    }
+  }, [codeParam]);
 
   const [lines, setLines] = useState<Line[]>([]);
   const [pickId, setPickId] = useState("");

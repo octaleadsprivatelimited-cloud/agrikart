@@ -27,6 +27,17 @@ function read<T>(key: string, fallback: T): T {
     return fallback;
   }
 }
+function uuidv4() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 function write(key: string, val: unknown) {
   if (typeof window === "undefined") return;
   localStorage.setItem(key, JSON.stringify(val));
@@ -39,7 +50,7 @@ export function signup(
   if (users.some((u) => u.email.toLowerCase() === input.email.toLowerCase())) {
     throw new Error("EMAIL_EXISTS");
   }
-  const user: StoredUser = { ...input, id: crypto.randomUUID(), createdAt: Date.now() };
+  const user: StoredUser = { ...input, id: uuidv4(), createdAt: Date.now() };
   users.push(user);
   write(USERS_KEY, users);
   write(SESSION_KEY, user.id);
@@ -111,7 +122,7 @@ export function createBooking(
 ): Booking {
   const items = read<Booking[]>(BOOKINGS_KEY, []);
   const b: Booking = {
-    id: crypto.randomUUID(),
+    id: uuidv4(),
     farmerId,
     serviceCategory,
     description,

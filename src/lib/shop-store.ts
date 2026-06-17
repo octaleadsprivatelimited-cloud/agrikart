@@ -1,6 +1,6 @@
-// E-commerce store: products, cart, orders, addresses, tickets, settings.
-// LocalStorage-backed. Replace with backend later.
 import { useEffect, useState } from "react";
+import { db, safeSetDoc as setDoc } from "./firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 
 export type Category =
   | "Pesticides"
@@ -152,6 +152,17 @@ function write(k: string, v: unknown) {
 }
 function emit(name: string) {
   window.dispatchEvent(new Event(name));
+}
+
+function uuidv4() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
 const slugify = (s: string) =>
@@ -407,17 +418,24 @@ export function getProduct(id: string) {
 }
 export function upsertProduct(input: Omit<Product, "id" | "slug"> & { id?: string }) {
   const all = read<Product[]>(PROD_KEY, []);
+  let item: Product;
   if (input.id) {
+    const existing = all.find((p) => p.id === input.id);
+    item = { ...existing, ...input, slug: slugify(input.name) } as Product;
     const next = all.map((p) =>
-      p.id === input.id ? ({ ...p, ...input, slug: slugify(input.name) } as Product) : p,
+      p.id === input.id ? item : p,
     );
     write(PROD_KEY, next);
   } else {
-    const id = "prd-" + crypto.randomUUID().slice(0, 6);
-    const item: Product = { ...input, id, slug: slugify(input.name) };
+    const id = "prd-" + uuidv4().slice(0, 6);
+    item = { ...input, id, slug: slugify(input.name) };
     write(PROD_KEY, [item, ...all]);
   }
   emit("agrikart-products");
+
+  setDoc(doc(db, "products", item.id), item).catch((err) => {
+    console.error("Failed to sync upserted product to Firestore:", err);
+  });
 }
 export function deleteProduct(id: string) {
   write(
@@ -425,32 +443,47 @@ export function deleteProduct(id: string) {
     read<Product[]>(PROD_KEY, []).filter((p) => p.id !== id),
   );
   emit("agrikart-products");
+
+  deleteDoc(doc(db, "products", id)).catch((err) => {
+    console.error("Failed to delete product from Firestore:", err);
+  });
 }
 export const useStockMoves = () => useStore<StockMove[]>(MOVES_KEY, "agrikart-moves", []);
 export function adjustStock(id: string, delta: number, reason: string) {
   const all = read<Product[]>(PROD_KEY, []);
   const prod = all.find((p) => p.id === id);
+  if (!prod) return;
+  const updatedProd = { ...prod, stock: Math.max(0, prod.stock + delta) };
   write(
     PROD_KEY,
-    all.map((p) => (p.id === id ? { ...p, stock: Math.max(0, p.stock + delta) } : p)),
+    all.map((p) => (p.id === id ? updatedProd : p)),
   );
   const moves = read<StockMove[]>(MOVES_KEY, []);
+  const moveId = "mv-" + uuidv4().slice(0, 6);
+  const move = {
+    id: moveId,
+    productId: id,
+    productName: prod.name,
+    delta,
+    reason,
+    ts: Date.now(),
+  };
   write(
     MOVES_KEY,
     [
-      {
-        id: "mv-" + crypto.randomUUID().slice(0, 6),
-        productId: id,
-        productName: prod?.name ?? id,
-        delta,
-        reason,
-        ts: Date.now(),
-      },
+      move,
       ...moves,
     ].slice(0, 500),
   );
   emit("agrikart-products");
   emit("agrikart-moves");
+
+  setDoc(doc(db, "products", id), updatedProd).catch((err) => {
+    console.error("Failed to sync adjusted product to Firestore:", err);
+  });
+  setDoc(doc(db, "stock_moves", moveId), move).catch((err) => {
+    console.error("Failed to sync stock move to Firestore:", err);
+  });
 }
 
 // ---------- Cart ----------
@@ -494,7 +527,7 @@ export const useAddresses = (userId?: string) =>
   useStore<Address[]>(ADDR_KEY, "agrikart-addr", []).filter((a) => !userId || a.userId === userId);
 export function addAddress(a: Omit<Address, "id">) {
   const all = read<Address[]>(ADDR_KEY, []);
-  const item: Address = { ...a, id: "addr-" + crypto.randomUUID().slice(0, 6) };
+  const item: Address = { ...a, id: "addr-" + uuidv4().slice(0, 6) };
   if (item.isDefault)
     all.forEach((x) => {
       if (x.userId === item.userId) x.isDefault = false;
@@ -546,48 +579,66 @@ export function placeOrder(input: {
   input.lines.forEach((l) => adjustStock(l.productId, -l.qty, "order:" + order.id));
   clearCart(input.userId);
   emit("agrikart-orders");
+
+  setDoc(doc(db, "orders", order.id), order).catch((err) => {
+    console.error("Failed to sync placed order to Firestore:", err);
+  });
+
   return order;
 }
 export function updateOrderStatus(id: string, status: OrderStatus, note?: string) {
   const all = read<Order[]>(ORDERS_KEY, []);
+  const current = all.find((o) => o.id === id);
+  if (!current) return;
+  const updatedOrder = {
+    ...current,
+    status,
+    history: [...current.history, { ts: today(), note: note ?? `Status → ${status}` }],
+  };
   write(
     ORDERS_KEY,
-    all.map((o) =>
-      o.id === id
-        ? {
-            ...o,
-            status,
-            history: [...o.history, { ts: today(), note: note ?? `Status → ${status}` }],
-          }
-        : o,
-    ),
+    all.map((o) => (o.id === id ? updatedOrder : o)),
   );
   emit("agrikart-orders");
+
+  setDoc(doc(db, "orders", id), updatedOrder).catch((err) => {
+    console.error("Failed to sync updated order to Firestore:", err);
+  });
 }
 export function setOrderPayment(id: string, state: PaymentState) {
   const all = read<Order[]>(ORDERS_KEY, []);
+  const current = all.find((o) => o.id === id);
+  if (!current) return;
+  const updatedOrder = { ...current, paymentState: state };
   write(
     ORDERS_KEY,
-    all.map((o) => (o.id === id ? { ...o, paymentState: state } : o)),
+    all.map((o) => (o.id === id ? updatedOrder : o)),
   );
   emit("agrikart-orders");
+
+  setDoc(doc(db, "orders", id), updatedOrder).catch((err) => {
+    console.error("Failed to sync order payment to Firestore:", err);
+  });
 }
 export function assignDelivery(id: string, person: string, expected: number) {
   const all = read<Order[]>(ORDERS_KEY, []);
+  const current = all.find((o) => o.id === id);
+  if (!current) return;
+  const updatedOrder = {
+    ...current,
+    deliveryPerson: person,
+    expectedDelivery: expected,
+    history: [...current.history, { ts: today(), note: `Assigned to ${person}` }],
+  };
   write(
     ORDERS_KEY,
-    all.map((o) =>
-      o.id === id
-        ? {
-            ...o,
-            deliveryPerson: person,
-            expectedDelivery: expected,
-            history: [...o.history, { ts: today(), note: `Assigned to ${person}` }],
-          }
-        : o,
-    ),
+    all.map((o) => (o.id === id ? updatedOrder : o)),
   );
   emit("agrikart-orders");
+
+  setDoc(doc(db, "orders", id), updatedOrder).catch((err) => {
+    console.error("Failed to sync assigned delivery to Firestore:", err);
+  });
 }
 
 // ---------- Tickets ----------
@@ -608,6 +659,11 @@ export function createTicket(
   const all = read<Ticket[]>(TICKETS_KEY, []);
   write(TICKETS_KEY, [item, ...all]);
   emit("agrikart-tickets");
+
+  setDoc(doc(db, "tickets", item.id), item).catch((err) => {
+    console.error("Failed to sync created ticket to Firestore:", err);
+  });
+
   return item;
 }
 export function replyTicket(
@@ -617,19 +673,22 @@ export function replyTicket(
   status?: Ticket["status"],
 ) {
   const all = read<Ticket[]>(TICKETS_KEY, []);
+  const current = all.find((t) => t.id === id);
+  if (!current) return;
+  const updatedTicket = {
+    ...current,
+    status: status ?? current.status,
+    replies: [...current.replies, { ts: today(), author, message }],
+  };
   write(
     TICKETS_KEY,
-    all.map((t) =>
-      t.id === id
-        ? {
-            ...t,
-            status: status ?? t.status,
-            replies: [...t.replies, { ts: today(), author, message }],
-          }
-        : t,
-    ),
+    all.map((t) => (t.id === id ? updatedTicket : t)),
   );
   emit("agrikart-tickets");
+
+  setDoc(doc(db, "tickets", id), updatedTicket).catch((err) => {
+    console.error("Failed to sync ticket reply to Firestore:", err);
+  });
 }
 
 // ---------- Settings ----------
@@ -656,8 +715,13 @@ export function getSettings(): CompanySettings {
 export const useSettings = () =>
   useStore<CompanySettings>(SETTINGS_KEY, "agrikart-settings", getSettings());
 export function updateSettings(patch: Partial<CompanySettings>) {
-  write(SETTINGS_KEY, { ...getSettings(), ...patch });
+  const next = { ...getSettings(), ...patch };
+  write(SETTINGS_KEY, next);
   emit("agrikart-settings");
+
+  setDoc(doc(db, "settings", "company"), next).catch((err) => {
+    console.error("Failed to sync updated settings to Firestore:", err);
+  });
 }
 
 // ---------- Derived helpers ----------

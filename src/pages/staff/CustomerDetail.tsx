@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,12 +31,17 @@ import { toast } from "sonner";
 
 export default function CustomerDetail() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const staff = useCurrentStaff();
   const customer = useCustomer(id);
   const requests = useRequests({ customerId: id });
   const edits = useCustomerEdits(id);
-  const [cat, setCat] = useState<ServiceCategory | "">("");
-  const [desc, setDesc] = useState("");
+
+  const catParam = (searchParams.get("category") as ServiceCategory | "") || "";
+  const descParam = searchParams.get("desc") || "";
+
+  const [cat, setCat] = useState<ServiceCategory | "">(catParam);
+  const [desc, setDesc] = useState(descParam);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<Record<string, string>>({});
 

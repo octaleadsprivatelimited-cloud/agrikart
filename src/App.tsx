@@ -1,10 +1,11 @@
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FloatingContact } from "@/components/FloatingContact";
 import { Toaster } from "@/components/ui/sonner";
-import { getCurrentStaff } from "@/lib/staff-store";
+import { getCurrentStaff, startPublicFirestoreSync, startPrivateFirestoreSync, ensureFirebaseAuth } from "@/lib/staff-store";
+import { firebaseAuth } from "@/lib/firebase";
 
 // -- Lazy-loaded page components -----------------------------------------------
 const Home = lazy(() => import("@/pages/Home"));
@@ -83,7 +84,7 @@ function RequireAdmin() {
 function RequireStaff() {
   const s = getCurrentStaff();
   if (!s) return <Navigate to="/staff/login" replace />;
-  if (s.role !== "employee") return <Navigate to="/staff/login" replace />;
+  if (s.role !== "employee" && s.role !== "admin") return <Navigate to="/staff/login" replace />;
   return <Outlet />;
 }
 
@@ -129,6 +130,32 @@ function RootLayout() {
 
 // -- App -----------------------------------------------------------------------
 export default function App() {
+  useEffect(() => {
+    // 1. Start public Firestore sync immediately for all visitors (products, settings, testimonials, etc.)
+    const unsubPublic = startPublicFirestoreSync();
+
+    // 2. Ensure background Firebase Auth session matches local storage session
+    ensureFirebaseAuth();
+
+    // 3. Start private Firestore sync for authenticated staff/admin users (customers, submissions, requests, etc.)
+    let unsubPrivate: (() => void) | null = null;
+    const unsubAuth = firebaseAuth.onAuthStateChanged((user) => {
+      if (unsubPrivate) {
+        unsubPrivate();
+        unsubPrivate = null;
+      }
+      if (user) {
+        unsubPrivate = startPrivateFirestoreSync();
+      }
+    });
+
+    return () => {
+      unsubPublic();
+      unsubAuth();
+      if (unsubPrivate) unsubPrivate();
+    };
+  }, []);
+
   return (
     <Routes>
       <Route element={<RootLayout />}>

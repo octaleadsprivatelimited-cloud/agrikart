@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useNavigate, Link } from "react-router-dom";
 import { staffLogout, useCurrentStaff } from "@/lib/staff-store";
 import { LayoutDashboard, UserPlus, Users, LogOut, Inbox, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,18 @@ export default function StaffLayout() {
     <section className="container mx-auto grid gap-8 px-4 py-10 lg:grid-cols-[220px_1fr]">
       <aside className="lg:sticky lg:top-20 lg:self-start">
         <div className="mb-4 rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Employee</p>
+          <p className="text-xs text-muted-foreground">
+            {staff?.role === "admin" ? "Admin Mode" : "Employee"}
+          </p>
           <p className="text-sm font-semibold">{staff?.name}</p>
+          {staff?.role === "admin" && (
+            <Link
+              to="/admin/dashboard"
+              className="mt-2 block text-xs font-semibold text-primary hover:underline"
+            >
+              ← Admin Portal
+            </Link>
+          )}
         </div>
         <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
           {items.map(({ to, label, Icon }) => (

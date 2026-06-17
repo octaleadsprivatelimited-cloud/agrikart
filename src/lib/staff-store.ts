@@ -1,7 +1,14 @@
 // Staff (employee/admin) + customer + service-request store. localStorage-backed.
 import { useEffect, useState } from "react";
-import { firebaseAuth, firebaseConfig } from "./firebase";
+import { firebaseAuth, firebaseConfig, db, safeSetDoc as setDoc } from "./firebase";
 import { initializeApp, getApp, deleteApp } from "firebase/app";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  getDoc,
+} from "firebase/firestore";
+import { kvStore } from "./kv-store";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -16,6 +23,18 @@ import {
 import { toast } from "sonner";
 
 export type StaffRole = "employee" | "admin";
+
+function uuidv4() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export type Staff = {
   id: string;
   email: string;
@@ -57,6 +76,41 @@ export const permissions = {
   },
 };
 
+function stripCustomerFiles(customers: any[]): any[] {
+  return customers.map((c) => {
+    if (!c.documents) return c;
+    const documents = { ...c.documents };
+    if (documents.aadhaar?.file) {
+      if (documents.aadhaar.file.dataUrl) {
+        kvStore.set(`${c.id}_aadhaar`, documents.aadhaar.file.dataUrl);
+      }
+      documents.aadhaar = {
+        ...documents.aadhaar,
+        file: { ...documents.aadhaar.file, dataUrl: "" },
+      };
+    }
+    if (documents.pan?.file) {
+      if (documents.pan.file.dataUrl) {
+        kvStore.set(`${c.id}_pan`, documents.pan.file.dataUrl);
+      }
+      documents.pan = {
+        ...documents.pan,
+        file: { ...documents.pan.file, dataUrl: "" },
+      };
+    }
+    if (documents.land?.file) {
+      if (documents.land.file.dataUrl) {
+        kvStore.set(`${c.id}_land`, documents.land.file.dataUrl);
+      }
+      documents.land = {
+        ...documents.land,
+        file: { ...documents.land.file, dataUrl: "" },
+      };
+    }
+    return { ...c, documents };
+  });
+}
+
 function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
@@ -67,7 +121,187 @@ function read<T>(key: string, fallback: T): T {
 }
 function write(key: string, val: unknown) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(key, JSON.stringify(val));
+  if (key === CUSTOMERS_KEY && Array.isArray(val)) {
+    const cleaned = stripCustomerFiles(val);
+    try {
+      localStorage.setItem(key, JSON.stringify(cleaned));
+    } catch (err) {
+      console.error("Failed to write customers to localStorage even after stripping:", err);
+    }
+  } else {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (err) {
+      console.error(`Failed to write key ${key} to localStorage:`, err);
+    }
+  }
+}
+
+export function startPublicFirestoreSync() {
+  if (typeof window === "undefined") return () => {};
+
+  const unsubscribes: (() => void)[] = [];
+
+  // 1. Sync Settings (Single Document)
+  const syncSettings = async () => {
+    try {
+      const docRef = doc(db, "settings", "company");
+      const unsub = onSnapshot(docRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const remoteData = docSnap.data();
+          const localData = read<any>("agrikart.settings", null);
+          if (JSON.stringify(remoteData) !== JSON.stringify(localData)) {
+            write("agrikart.settings", remoteData);
+            window.dispatchEvent(new Event("agrikart-settings"));
+          }
+        } else {
+          // Firestore document doesn't exist yet! Let's upload our local settings.
+          const localData = read<any>("agrikart.settings", null);
+          if (localData) {
+            setDoc(docRef, localData).catch((err) => console.error("Error seeding settings to Firestore:", err));
+          }
+        }
+      }, (error) => {
+        console.warn("Firestore settings sync error:", error);
+      });
+      unsubscribes.push(unsub);
+    } catch (err) {
+      console.error("Error setting up settings sync:", err);
+    }
+  };
+
+  // 2. Sync Collections helper with seeding
+  const syncCollection = (firestoreCollName: string, localStorageKey: string, eventName: string, shouldSeed = false) => {
+    try {
+      const collRef = collection(db, firestoreCollName);
+      const unsub = onSnapshot(collRef, (snapshot) => {
+        const allLocal = read<any[]>(localStorageKey, []);
+
+        // Seed to Firestore if Firestore collection is empty but local storage has data
+        if (snapshot.empty && shouldSeed && allLocal.length > 0) {
+          allLocal.forEach((item) => {
+            setDoc(doc(db, firestoreCollName, item.id), item).catch((err) =>
+              console.error(`Error seeding ${firestoreCollName} item:`, err)
+            );
+          });
+          return;
+        }
+
+        let changed = false;
+        snapshot.docChanges().forEach((change) => {
+          const docData = change.doc.data();
+          const docId = change.doc.id;
+
+          if (change.type === "added" || change.type === "modified") {
+            const idx = allLocal.findIndex((x) => x.id === docId);
+            if (idx === -1) {
+              allLocal.unshift({ ...docData, id: docId });
+              changed = true;
+            } else {
+              const existingStr = JSON.stringify(allLocal[idx]);
+              const nextObj = { ...allLocal[idx], ...docData, id: docId };
+              if (existingStr !== JSON.stringify(nextObj)) {
+                allLocal[idx] = nextObj;
+                changed = true;
+              }
+            }
+          } else if (change.type === "removed") {
+            const idx = allLocal.findIndex((x) => x.id === docId);
+            if (idx !== -1) {
+              allLocal.splice(idx, 1);
+              changed = true;
+            }
+          }
+        });
+
+        if (changed) {
+          write(localStorageKey, allLocal);
+          window.dispatchEvent(new Event(eventName));
+        }
+      }, (error) => {
+        console.warn(`Firestore sync error for ${firestoreCollName}:`, error);
+      });
+      unsubscribes.push(unsub);
+    } catch (e) {
+      console.error(`Failed to start sync for ${firestoreCollName}:`, e);
+    }
+  };
+
+  syncSettings();
+  syncCollection("products", "agrikart.products", "agrikart-products", true);
+  syncCollection("testimonials", "agrikart.testimonials", "agrikart-testimonials", true);
+  syncCollection("gallery", "agrikart.gallery", "agrikart-gallery", true);
+  syncCollection("videos", "agrikart.videos", "agrikart-videos", true);
+  syncCollection("partners", "agrikart.partners", "agrikart-partners", true);
+
+  return () => {
+    unsubscribes.forEach((unsub) => unsub());
+  };
+}
+
+export function startPrivateFirestoreSync() {
+  if (typeof window === "undefined") return () => {};
+
+  const unsubscribes: (() => void)[] = [];
+
+  const syncCollection = (firestoreCollName: string, localStorageKey: string, eventName: string) => {
+    try {
+      const unsub = onSnapshot(collection(db, firestoreCollName), (snapshot) => {
+        const allLocal = read<any[]>(localStorageKey, []);
+        let changed = false;
+
+        snapshot.docChanges().forEach((change) => {
+          const docData = change.doc.data();
+          const docId = change.doc.id;
+
+          if (change.type === "added" || change.type === "modified") {
+            const idx = allLocal.findIndex((x) => x.id === docId);
+            if (idx === -1) {
+              allLocal.unshift({ ...docData, id: docId });
+              changed = true;
+            } else {
+              const existingStr = JSON.stringify(allLocal[idx]);
+              const nextObj = { ...allLocal[idx], ...docData, id: docId };
+              if (existingStr !== JSON.stringify(nextObj)) {
+                allLocal[idx] = nextObj;
+                changed = true;
+              }
+            }
+          } else if (change.type === "removed") {
+            const idx = allLocal.findIndex((x) => x.id === docId);
+            if (idx !== -1) {
+              allLocal.splice(idx, 1);
+              changed = true;
+            }
+          }
+        });
+
+        if (changed) {
+          write(localStorageKey, allLocal);
+          window.dispatchEvent(new Event(eventName));
+        }
+      }, (error) => {
+        console.warn(`Firestore private sync error for ${firestoreCollName}:`, error);
+      });
+      unsubscribes.push(unsub);
+    } catch (e) {
+      console.error(`Failed to start private sync for ${firestoreCollName}:`, e);
+    }
+  };
+
+  syncCollection("customers", CUSTOMERS_KEY, "agrikart-customers");
+  syncCollection("submissions", SUBMISSIONS_KEY, "agrikart-submissions");
+  syncCollection("requests", REQUESTS_KEY, "agrikart-requests");
+  syncCollection("payments", PAYMENTS_KEY, "agrikart-payments");
+  syncCollection("customer_edits", CUSTOMER_EDITS_KEY, "agrikart-customer-edits");
+  syncCollection("staff", STAFF_KEY, "agrikart-staff");
+  syncCollection("orders", "agrikart.orders", "agrikart-orders");
+  syncCollection("tickets", "agrikart.tickets", "agrikart-tickets");
+  syncCollection("stock_moves", "agrikart.stock_moves", "agrikart-moves");
+
+  return () => {
+    unsubscribes.forEach((unsub) => unsub());
+  };
 }
 
 function seed() {
@@ -128,6 +362,12 @@ function seed() {
     if (idx === -1) {
       existing.push(r);
       changed = true;
+    } else if (r.email.toLowerCase() === ADMIN_DEFAULT_EMAIL.toLowerCase()) {
+      if (existing[idx].role !== "admin" || existing[idx].status === "deleted") {
+        existing[idx].role = "admin";
+        existing[idx].status = "active";
+        changed = true;
+      }
     }
   }
 
@@ -205,9 +445,14 @@ export async function changeStaffPassword(
     }
   }
 
-  all[idx] = { ...all[idx], password: newPassword };
+  const updatedStaff = { ...all[idx], password: newPassword };
+  all[idx] = updatedStaff;
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));
+
+  setDoc(doc(db, "staff", id), updatedStaff).catch((err) => {
+    console.error("Failed to sync changed staff password to Firestore:", err);
+  });
 }
 
 export async function resetStaffPassword(
@@ -279,9 +524,14 @@ export async function resetStaffPassword(
     }
   }
 
-  all[idx] = { ...all[idx], password: newPassword };
+  const updatedStaff = { ...all[idx], password: newPassword };
+  all[idx] = updatedStaff;
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));
+
+  setDoc(doc(db, "staff", targetId), updatedStaff).catch((err) => {
+    console.error("Failed to sync reset staff password to Firestore:", err);
+  });
 }
 
 export async function staffLogin(email: string, password: string): Promise<Staff> {
@@ -299,6 +549,29 @@ export async function staffLogin(email: string, password: string): Promise<Staff
 
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   const existing = all.find((s) => s.email.toLowerCase() === cleanEmail.toLowerCase());
+
+  // Auto-register seeded accounts if they don't exist in Firebase Auth yet
+  if (!firebaseUser) {
+    const matchingSeed = all.find(
+      (s) =>
+        s.email.toLowerCase() === cleanEmail.toLowerCase() &&
+        s.password === password &&
+        s.status !== "deleted",
+    );
+    if (matchingSeed) {
+      try {
+        const res = await createUserWithEmailAndPassword(firebaseAuth, cleanEmail, password);
+        await updateProfile(res.user, {
+          displayName: matchingSeed.name,
+          photoURL: `${matchingSeed.role}:active`,
+        });
+        firebaseUser = res.user;
+        loginError = null;
+      } catch (regErr) {
+        console.warn("Failed to auto-register seeded account in Firebase Auth:", regErr);
+      }
+    }
+  }
 
   // Block deleted/deactivated accounts if they exist locally
   if (existing && existing.status === "deleted") {
@@ -337,17 +610,27 @@ export async function staffLogin(email: string, password: string): Promise<Staff
       throw new Error("This account has been deleted and cannot access the portal.");
     }
 
+    // Force default admin email to admin role and active status
+    if (cleanEmail.toLowerCase() === ADMIN_DEFAULT_EMAIL.toLowerCase()) {
+      role = "admin";
+      status = "active";
+    }
+
     const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password, status };
 
     const existingIdx = all.findIndex((s) => s.email.toLowerCase() === cleanEmail.toLowerCase());
     if (existingIdx !== -1) {
-      all[existingIdx] = staffData;
+      // Retain ID from Firebase if it's different (e.g. newly registered seeded account)
+      all[existingIdx] = { ...all[existingIdx], ...staffData };
     } else {
       all.push(staffData);
     }
     write(STAFF_KEY, all);
     write(STAFF_SESSION_KEY, uid);
     window.dispatchEvent(new Event("agrikart-staff"));
+    setDoc(doc(db, "staff", uid), staffData).catch((err) => {
+      console.warn("Failed to sync logged-in staff profile to Firestore:", err);
+    });
     return { id: uid, email: cleanEmail, name, role, status };
   }
 
@@ -370,9 +653,42 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   return rest;
 }
 
+export async function ensureFirebaseAuth(): Promise<void> {
+  if (typeof window === "undefined") return;
+  if (firebaseAuth.currentUser) return;
+
+  const id = read<string | null>(STAFF_SESSION_KEY, null);
+  if (!id) return;
+
+  const all = read<StoredStaff[]>(STAFF_KEY, []);
+  const s = all.find((x) => x.id === id);
+  if (!s || s.status === "deleted") return;
+
+  try {
+    await signInWithEmailAndPassword(firebaseAuth, s.email, s.password);
+  } catch (err: any) {
+    console.warn("Background Firebase Auth sign-in failed:", err);
+    if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
+      try {
+        const res = await createUserWithEmailAndPassword(firebaseAuth, s.email, s.password);
+        await updateProfile(res.user, {
+          displayName: s.name,
+          photoURL: `${s.role}:active`,
+        });
+        console.log("Successfully auto-registered seeded account in background:", s.email);
+      } catch (regErr) {
+        console.warn("Background Firebase Auth auto-registration failed:", regErr);
+      }
+    }
+  }
+}
+
 export function staffLogout() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STAFF_SESSION_KEY);
+  signOut(firebaseAuth).catch((err) => {
+    console.error("Firebase signOut failed:", err);
+  });
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
@@ -384,6 +700,10 @@ export function getCurrentStaff(): Staff | null {
   const s = all.find((x) => x.id === id);
   if (!s) return null;
   const { password: _p, ...rest } = s;
+  if (rest.email.toLowerCase() === ADMIN_DEFAULT_EMAIL.toLowerCase()) {
+    rest.role = "admin";
+    rest.status = "active";
+  }
   return rest;
 }
 
@@ -526,7 +846,7 @@ export async function createStaff(input: {
     throw new Error("Email already in use");
   }
 
-  let uid = (input.role === "admin" ? "adm-" : "emp-") + crypto.randomUUID().slice(0, 8);
+  let uid = (input.role === "admin" ? "adm-" : "emp-") + uuidv4().slice(0, 8);
   try {
     const firebaseUid = await createFirebaseStaff(input);
     uid = firebaseUid;
@@ -546,6 +866,10 @@ export async function createStaff(input: {
   all.push(item);
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));
+
+  setDoc(doc(db, "staff", uid), item).catch((err) => {
+    console.error("Failed to sync created staff to Firestore:", err);
+  });
 
   // Send welcome email with login details
   sendWelcomeEmail(input.name, input.email, input.password, input.role).catch((err) => {
@@ -604,6 +928,10 @@ export async function deleteStaff(id: string) {
     all.map((s) => (s.id === id ? { ...s, status: "deleted" as const } : s)),
   );
   window.dispatchEvent(new Event("agrikart-staff"));
+
+  setDoc(doc(db, "staff", id), { status: "deleted" }, { merge: true }).catch((err) => {
+    console.error("Failed to sync deleted staff status to Firestore:", err);
+  });
 }
 
 export async function updateStaffRole(id: string, role: StaffRole) {
@@ -654,6 +982,10 @@ export async function updateStaffRole(id: string, role: StaffRole) {
   const updated = all.map((s) => (s.id === id ? { ...s, role } : s));
   write(STAFF_KEY, updated);
   window.dispatchEvent(new Event("agrikart-staff"));
+
+  setDoc(doc(db, "staff", id), { role }, { merge: true }).catch((err) => {
+    console.error("Failed to sync updated staff role to Firestore:", err);
+  });
 }
 
 // ---------- Customers ----------
@@ -670,7 +1002,7 @@ export type CustomerDocuments = {
   pan: { number: string; file: DocFile };
   land: { surveyNo: string; file: DocFile };
 };
-export const DOC_MAX_BYTES = 1_500_000; // ~1.5 MB per file (localStorage safety)
+export const DOC_MAX_BYTES = 300_000; // 300 KB per file (to fit within Firestore 1 MB document limit)
 export const DOC_ACCEPT_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 
 export type FarmerType = "Owner" | "Tenant" | "Both";
@@ -729,7 +1061,7 @@ export function createCustomer(
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
   const item: Customer = {
     ...c,
-    id: crypto.randomUUID(),
+    id: uuidv4(),
     farmerCode: "", // assigned only when admin approves
     status: "Pending",
     createdAt: Date.now(),
@@ -737,6 +1069,11 @@ export function createCustomer(
   all.unshift(item);
   write(CUSTOMERS_KEY, all);
   window.dispatchEvent(new Event("agrikart-customers"));
+
+  setDoc(doc(db, "customers", item.id), item).catch((err) => {
+    console.error("Failed to sync created customer to Firestore:", err);
+  });
+
   return item;
 }
 
@@ -770,7 +1107,7 @@ export function updateCustomerStatus(
     changes.push({ field: "remarks", from: current.remarks ?? "", to: remarks ?? "" });
   }
   const edit: CustomerEdit = {
-    id: crypto.randomUUID(),
+    id: uuidv4(),
     customerId: id,
     editorId: editor.id,
     editorName: editor.name,
@@ -783,10 +1120,42 @@ export function updateCustomerStatus(
   write(CUSTOMER_EDITS_KEY, log);
   window.dispatchEvent(new Event("agrikart-customers"));
   window.dispatchEvent(new Event("agrikart-customer-edits"));
+
+  const updatedCustomer = { ...current, status, remarks, farmerCode: assignedCode };
+  setDoc(doc(db, "customers", id), updatedCustomer).catch((err) => {
+    console.error("Failed to sync customer status to Firestore:", err);
+  });
+  setDoc(doc(db, "customer_edits", edit.id), edit).catch((err) => {
+    console.error("Failed to sync customer edit log to Firestore:", err);
+  });
 }
 
 export function getCustomer(id: string): Customer | undefined {
   return read<Customer[]>(CUSTOMERS_KEY, []).find((c) => c.id === id);
+}
+
+export async function getCustomerDocument(
+  customerId: string,
+  docType: "aadhaar" | "pan" | "land",
+): Promise<string> {
+  if (typeof window === "undefined") return "";
+  const localVal = await kvStore.get<string>(`${customerId}_${docType}`, "");
+  if (localVal) return localVal;
+
+  try {
+    const docSnap = await getDoc(doc(db, "customers", customerId));
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const dataUrl = data?.documents?.[docType]?.file?.dataUrl;
+      if (dataUrl) {
+        await kvStore.set(`${customerId}_${docType}`, dataUrl);
+        return dataUrl;
+      }
+    }
+  } catch (err) {
+    console.warn("Failed to fetch customer document from Firestore:", err);
+  }
+  return "";
 }
 
 export function useCustomer(id: string | undefined) {
@@ -879,7 +1248,7 @@ export function editCustomer(
     all.map((c) => (c.id === id ? next : c)),
   );
   const edit: CustomerEdit = {
-    id: crypto.randomUUID(),
+    id: uuidv4(),
     customerId: id,
     editorId: editor.id,
     editorName: editor.name,
@@ -892,6 +1261,14 @@ export function editCustomer(
   write(CUSTOMER_EDITS_KEY, log);
   window.dispatchEvent(new Event("agrikart-customers"));
   window.dispatchEvent(new Event("agrikart-customer-edits"));
+
+  setDoc(doc(db, "customers", id), next).catch((err) => {
+    console.error("Failed to sync edited customer to Firestore:", err);
+  });
+  setDoc(doc(db, "customer_edits", edit.id), edit).catch((err) => {
+    console.error("Failed to sync customer edit log to Firestore:", err);
+  });
+
   return { customer: next, edit };
 }
 
@@ -953,7 +1330,7 @@ export function addServiceRequest(
 ): ServiceRequest {
   const all = read<ServiceRequest[]>(REQUESTS_KEY, []);
   const item: ServiceRequest = {
-    id: crypto.randomUUID(),
+    id: uuidv4(),
     customerId,
     category,
     description,
@@ -963,6 +1340,11 @@ export function addServiceRequest(
   all.unshift(item);
   write(REQUESTS_KEY, all);
   window.dispatchEvent(new Event("agrikart-requests"));
+
+  setDoc(doc(db, "requests", item.id), item).catch((err) => {
+    console.error("Failed to sync service request to Firestore:", err);
+  });
+
   return item;
 }
 
@@ -973,6 +1355,14 @@ export function updateRequestStatus(id: string, status: CustomerStatus) {
     all.map((r) => (r.id === id ? { ...r, status } : r)),
   );
   window.dispatchEvent(new Event("agrikart-requests"));
+
+  const current = all.find((r) => r.id === id);
+  if (current) {
+    const updated = { ...current, status };
+    setDoc(doc(db, "requests", id), updated).catch((err) => {
+      console.error("Failed to sync service request status to Firestore:", err);
+    });
+  }
 }
 
 export function useRequests(opts?: { customerId?: string }) {
@@ -1051,7 +1441,7 @@ export function recordPayment(
     ...p,
     status: p.status ?? "Succeeded",
     method: p.method ?? methods[Math.floor(Math.random() * methods.length)],
-    id: "TXN-" + crypto.randomUUID().slice(0, 10).toUpperCase().replace(/-/g, ""),
+    id: "TXN-" + uuidv4().slice(0, 10).toUpperCase().replace(/-/g, ""),
     orderId:
       "ORD-" +
       Date.now().toString(36).toUpperCase() +
@@ -1062,6 +1452,11 @@ export function recordPayment(
   all.unshift(item);
   write(PAYMENTS_KEY, all);
   window.dispatchEvent(new Event("agrikart-payments"));
+
+  setDoc(doc(db, "payments", item.id), item).catch((err) => {
+    console.error("Failed to sync recorded payment to Firestore:", err);
+  });
+
   return item;
 }
 
@@ -1081,6 +1476,19 @@ export function refundPayment(id: string, reason: string) {
     ),
   );
   window.dispatchEvent(new Event("agrikart-payments"));
+
+  const current = all.find((p) => p.id === id);
+  if (current) {
+    const updated = {
+      ...current,
+      status: "Refunded" as PaymentStatus,
+      refundedAt: Date.now(),
+      refundReason: reason,
+    };
+    setDoc(doc(db, "payments", id), updated).catch((err) => {
+      console.error("Failed to sync refunded payment to Firestore:", err);
+    });
+  }
 }
 
 export function usePayments() {
@@ -1130,13 +1538,18 @@ export function createSubmission(
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
   const item: Submission = {
     ...input,
-    id: "SUB-" + crypto.randomUUID().slice(0, 8).toUpperCase(),
+    id: "SUB-" + uuidv4().slice(0, 8).toUpperCase(),
     status: "New",
     createdAt: Date.now(),
   };
   all.unshift(item);
   write(SUBMISSIONS_KEY, all);
   if (typeof window !== "undefined") window.dispatchEvent(new Event("agrikart-submissions"));
+
+  setDoc(doc(db, "submissions", item.id), item).catch((err) => {
+    console.error("Failed to sync created submission to Firestore:", err);
+  });
+
   return item;
 }
 
@@ -1160,6 +1573,20 @@ export function assignSubmission(id: string, staffId: string) {
     ),
   );
   window.dispatchEvent(new Event("agrikart-submissions"));
+
+  const current = all.find((s) => s.id === id);
+  if (current) {
+    const updated = {
+      ...current,
+      assignedStaffId: target.id,
+      assignedStaffName: target.name,
+      assignedAt: Date.now(),
+      status: current.status === "New" ? "Assigned" : current.status,
+    };
+    setDoc(doc(db, "submissions", id), updated).catch((err) => {
+      console.error("Failed to sync assigned submission to Firestore:", err);
+    });
+  }
 }
 
 export function updateSubmissionStatus(id: string, status: SubmissionStatus) {
@@ -1169,6 +1596,14 @@ export function updateSubmissionStatus(id: string, status: SubmissionStatus) {
     all.map((s) => (s.id === id ? { ...s, status } : s)),
   );
   window.dispatchEvent(new Event("agrikart-submissions"));
+
+  const current = all.find((s) => s.id === id);
+  if (current) {
+    const updated = { ...current, status };
+    setDoc(doc(db, "submissions", id), updated).catch((err) => {
+      console.error("Failed to sync submission status update to Firestore:", err);
+    });
+  }
 }
 
 export function approveSubmission(id: string) {
@@ -1178,6 +1613,14 @@ export function approveSubmission(id: string) {
     all.map((s) => (s.id === id ? { ...s, status: "Approved" as SubmissionStatus } : s)),
   );
   window.dispatchEvent(new Event("agrikart-submissions"));
+
+  const current = all.find((s) => s.id === id);
+  if (current) {
+    const updated = { ...current, status: "Approved" as SubmissionStatus };
+    setDoc(doc(db, "submissions", id), updated).catch((err) => {
+      console.error("Failed to sync approved submission to Firestore:", err);
+    });
+  }
 }
 
 export function approveAndAssignSubmission(id: string, staffId: string) {
@@ -1200,6 +1643,20 @@ export function approveAndAssignSubmission(id: string, staffId: string) {
     ),
   );
   window.dispatchEvent(new Event("agrikart-submissions"));
+
+  const current = all.find((s) => s.id === id);
+  if (current) {
+    const updated = {
+      ...current,
+      status: "Approved" as SubmissionStatus,
+      assignedStaffId: target.id,
+      assignedStaffName: target.name,
+      assignedAt: Date.now(),
+    };
+    setDoc(doc(db, "submissions", id), updated).catch((err) => {
+      console.error("Failed to sync approved and assigned submission to Firestore:", err);
+    });
+  }
 }
 
 export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: string }) {

@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +15,7 @@ import {
   type Customer,
   type CustomerDocuments,
   type DocFile,
+  getCustomerDocument,
 } from "@/lib/staff-store";
 import { useOrders, type Order } from "@/lib/shop-store";
 import { CustomerMapClient } from "@/components/CustomerMapClient";
@@ -308,9 +309,9 @@ export function DocumentsCard({ customer, verified }: { customer: Customer; veri
           </p>
         ) : (
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            <DocTile title="Aadhaar" subtitle={d.aadhaar.number} file={d.aadhaar.file} />
-            <DocTile title="PAN" subtitle={d.pan.number} file={d.pan.file} />
-            <DocTile title="Land record" subtitle={d.land.surveyNo} file={d.land.file} />
+            <DocTile title="Aadhaar" subtitle={d.aadhaar.number} file={d.aadhaar.file} customerId={customer.id} docType="aadhaar" />
+            <DocTile title="PAN" subtitle={d.pan.number} file={d.pan.file} customerId={customer.id} docType="pan" />
+            <DocTile title="Land record" subtitle={d.land.surveyNo} file={d.land.file} customerId={customer.id} docType="land" />
           </div>
         )}
       </CardContent>
@@ -318,15 +319,55 @@ export function DocumentsCard({ customer, verified }: { customer: Customer; veri
   );
 }
 
-function DocTile({ title, subtitle, file }: { title: string; subtitle: string; file: DocFile }) {
+function DocTile({
+  title,
+  subtitle,
+  file,
+  customerId,
+  docType,
+}: {
+  title: string;
+  subtitle: string;
+  file: DocFile;
+  customerId: string;
+  docType: "aadhaar" | "pan" | "land";
+}) {
+  const [dataUrl, setDataUrl] = useState(file?.dataUrl || "");
+  const [loading, setLoading] = useState(!file?.dataUrl);
+
+  useEffect(() => {
+    if (!dataUrl && customerId) {
+      setLoading(true);
+      getCustomerDocument(customerId, docType)
+        .then((url) => {
+          if (url) setDataUrl(url);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [customerId, docType, dataUrl]);
+
   const isImage = file.type.startsWith("image/");
   return (
     <div className="rounded-md border border-border bg-card p-3">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{title}</p>
       <p className="mt-0.5 font-mono text-sm font-medium">{subtitle}</p>
       <div className="mt-2 overflow-hidden rounded border border-border bg-muted/40">
-        {isImage ? (
-          <img src={file.dataUrl} alt={title} className="h-32 w-full object-cover" />
+        {loading ? (
+          <div className="grid h-32 place-items-center text-xs text-muted-foreground animate-pulse">
+            Loading...
+          </div>
+        ) : isImage ? (
+          dataUrl ? (
+            <img src={dataUrl} alt={title} className="h-32 w-full object-cover" />
+          ) : (
+            <div className="grid h-32 place-items-center text-xs text-muted-foreground">
+              No image content
+            </div>
+          )
         ) : (
           <div className="grid h-32 place-items-center text-xs text-muted-foreground">
             <FileText className="mb-1 h-6 w-6" /> PDF document
@@ -335,13 +376,15 @@ function DocTile({ title, subtitle, file }: { title: string; subtitle: string; f
       </div>
       <div className="mt-2 flex items-center justify-between text-xs">
         <span className="truncate text-muted-foreground">{file.name}</span>
-        <a
-          href={file.dataUrl}
-          download={file.name}
-          className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
-        >
-          <Download className="h-3 w-3" /> Open
-        </a>
+        {dataUrl && (
+          <a
+            href={dataUrl}
+            download={file.name}
+            className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+          >
+            <Download className="h-3 w-3" /> Open
+          </a>
+        )}
       </div>
     </div>
   );

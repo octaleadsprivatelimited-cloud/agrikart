@@ -1,6 +1,6 @@
-// Customizable site content: testimonials, gallery, videos, partners.
-// LocalStorage-backed, follows the same pattern as shop-store.ts.
 import { useEffect, useState } from "react";
+import { db, safeSetDoc as setDoc } from "./firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 
 export type Testimonial = {
   id: string;
@@ -169,15 +169,23 @@ const EV_T = "agrikart-testimonials";
 export const useTestimonials = () => useStore<Testimonial[]>(TESTI_KEY, EV_T, []);
 export function upsertTestimonial(t: Omit<Testimonial, "id" | "createdAt"> & { id?: string }) {
   const all = read<Testimonial[]>(TESTI_KEY, []);
+  let item: Testimonial;
   if (t.id) {
+    const existing = all.find((x) => x.id === t.id);
+    item = { ...existing, ...t } as Testimonial;
     write(
       TESTI_KEY,
-      all.map((x) => (x.id === t.id ? ({ ...x, ...t } as Testimonial) : x)),
+      all.map((x) => (x.id === t.id ? item : x)),
     );
   } else {
-    write(TESTI_KEY, [{ ...t, id: uid(), createdAt: Date.now() }, ...all]);
+    item = { ...t, id: uid(), createdAt: Date.now() };
+    write(TESTI_KEY, [item, ...all]);
   }
   emit(EV_T);
+
+  setDoc(doc(db, "testimonials", item.id), item).catch((err) => {
+    console.error("Failed to sync testimonial to Firestore:", err);
+  });
 }
 export function deleteTestimonial(id: string) {
   write(
@@ -185,6 +193,10 @@ export function deleteTestimonial(id: string) {
     read<Testimonial[]>(TESTI_KEY, []).filter((x) => x.id !== id),
   );
   emit(EV_T);
+
+  deleteDoc(doc(db, "testimonials", id)).catch((err) => {
+    console.error("Failed to delete testimonial from Firestore:", err);
+  });
 }
 
 // ---------------- Gallery ----------------
@@ -192,15 +204,23 @@ const EV_G = "agrikart-gallery";
 export const useGallery = () => useStore<GalleryImage[]>(GALLERY_KEY, EV_G, []);
 export function upsertGallery(g: Omit<GalleryImage, "id" | "createdAt"> & { id?: string }) {
   const all = read<GalleryImage[]>(GALLERY_KEY, []);
+  let item: GalleryImage;
   if (g.id) {
+    const existing = all.find((x) => x.id === g.id);
+    item = { ...existing, ...g } as GalleryImage;
     write(
       GALLERY_KEY,
-      all.map((x) => (x.id === g.id ? ({ ...x, ...g } as GalleryImage) : x)),
+      all.map((x) => (x.id === g.id ? item : x)),
     );
   } else {
-    write(GALLERY_KEY, [{ ...g, id: uid(), createdAt: Date.now() }, ...all]);
+    item = { ...g, id: uid(), createdAt: Date.now() };
+    write(GALLERY_KEY, [item, ...all]);
   }
   emit(EV_G);
+
+  setDoc(doc(db, "gallery", item.id), item).catch((err) => {
+    console.error("Failed to sync gallery image to Firestore:", err);
+  });
 }
 export function deleteGallery(id: string) {
   write(
@@ -208,6 +228,10 @@ export function deleteGallery(id: string) {
     read<GalleryImage[]>(GALLERY_KEY, []).filter((x) => x.id !== id),
   );
   emit(EV_G);
+
+  deleteDoc(doc(db, "gallery", id)).catch((err) => {
+    console.error("Failed to delete gallery image from Firestore:", err);
+  });
 }
 
 // ---------------- Videos ----------------
@@ -218,15 +242,23 @@ export function upsertVideo(
 ) {
   const all = read<VideoItem[]>(VIDEOS_KEY, []);
   const youtubeId = extractYouTubeId(v.youtubeUrl);
+  let item: VideoItem;
   if (v.id) {
+    const existing = all.find((x) => x.id === v.id);
+    item = { ...existing, ...v, youtubeId } as VideoItem;
     write(
       VIDEOS_KEY,
-      all.map((x) => (x.id === v.id ? ({ ...x, ...v, youtubeId } as VideoItem) : x)),
+      all.map((x) => (x.id === v.id ? item : x)),
     );
   } else {
-    write(VIDEOS_KEY, [{ ...v, youtubeId, id: uid(), createdAt: Date.now() }, ...all]);
+    item = { ...v, youtubeId, id: uid(), createdAt: Date.now() };
+    write(VIDEOS_KEY, [item, ...all]);
   }
   emit(EV_V);
+
+  setDoc(doc(db, "videos", item.id), item).catch((err) => {
+    console.error("Failed to sync video item to Firestore:", err);
+  });
 }
 export function deleteVideo(id: string) {
   write(
@@ -234,6 +266,10 @@ export function deleteVideo(id: string) {
     read<VideoItem[]>(VIDEOS_KEY, []).filter((x) => x.id !== id),
   );
   emit(EV_V);
+
+  deleteDoc(doc(db, "videos", id)).catch((err) => {
+    console.error("Failed to delete video item from Firestore:", err);
+  });
 }
 
 // ---------------- Partners ----------------
@@ -241,15 +277,23 @@ const EV_P = "agrikart-partners";
 export const usePartners = () => useStore<Partner[]>(PARTNERS_KEY, EV_P, []);
 export function upsertPartner(p: Omit<Partner, "id" | "createdAt"> & { id?: string }) {
   const all = read<Partner[]>(PARTNERS_KEY, []);
+  let item: Partner;
   if (p.id) {
+    const existing = all.find((x) => x.id === p.id);
+    item = { ...existing, ...p } as Partner;
     write(
       PARTNERS_KEY,
-      all.map((x) => (x.id === p.id ? ({ ...x, ...p } as Partner) : x)),
+      all.map((x) => (x.id === p.id ? item : x)),
     );
   } else {
-    write(PARTNERS_KEY, [{ ...p, id: uid(), createdAt: Date.now() }, ...all]);
+    item = { ...p, id: uid(), createdAt: Date.now() };
+    write(PARTNERS_KEY, [item, ...all]);
   }
   emit(EV_P);
+
+  setDoc(doc(db, "partners", item.id), item).catch((err) => {
+    console.error("Failed to sync partner to Firestore:", err);
+  });
 }
 export function deletePartner(id: string) {
   write(
@@ -257,6 +301,10 @@ export function deletePartner(id: string) {
     read<Partner[]>(PARTNERS_KEY, []).filter((x) => x.id !== id),
   );
   emit(EV_P);
+
+  deleteDoc(doc(db, "partners", id)).catch((err) => {
+    console.error("Failed to delete partner from Firestore:", err);
+  });
 }
 
 // ---------------- File → data URL helper ----------------
