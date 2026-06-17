@@ -306,6 +306,62 @@ async function createFirebaseStaff(input: { email: string; name: string; passwor
   }
 }
 
+async function sendWelcomeEmail(name: string, email: string, password: string) {
+  const loginLink = typeof window !== "undefined" ? window.location.origin + "/staff/login" : "https://agrikart.vercel.app/staff/login";
+  const subject = "Welcome to AgriKart - Your Staff Account Details";
+  const body = `Hello ${name},
+
+Your staff account has been created on AgriKart.
+
+Here are your login details:
+- Login Link: ${loginLink}
+- Email: ${email}
+- Password: ${password}
+
+Please log in and change your password as soon as possible.
+
+Best regards,
+AgriKart Admin Team`;
+
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  if (serviceId && templateId && publicKey) {
+    try {
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: serviceId,
+          template_id: templateId,
+          user_id: publicKey,
+          template_params: {
+            to_name: name,
+            to_email: email,
+            login_link: loginLink,
+            password: password,
+            message: body,
+          },
+        }),
+      });
+      if (response.ok) {
+        toast.success(`Welcome email sent to ${email} successfully!`);
+        return;
+      }
+      console.warn("EmailJS sending failed, falling back to mailto link");
+    } catch (e) {
+      console.warn("Error sending via EmailJS:", e);
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, "_blank");
+    toast.info("Opened email client to send credentials.");
+  }
+}
+
 export async function createStaff(input: { email: string; name: string; password: string; role: StaffRole }): Promise<Staff> {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   if (all.some(s => s.email.toLowerCase() === input.email.toLowerCase())) {
@@ -328,6 +384,12 @@ export async function createStaff(input: { email: string; name: string; password
   all.push(item);
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));
+
+  // Send welcome email with login details
+  sendWelcomeEmail(input.name, input.email, input.password).catch(err => {
+    console.error("Welcome email delivery error:", err);
+  });
+
   const { password: _p, ...rest } = item;
   return rest;
 }
