@@ -1,7 +1,7 @@
 // Staff (employee/admin) + customer + service-request store. localStorage-backed.
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfig } from "./firebase";
-import { initializeApp, getApp } from "firebase/app";
+import { initializeApp, getApp, deleteApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword } from "firebase/auth";
 
 export type StaffRole = "employee" | "admin";
@@ -215,7 +215,7 @@ async function createFirebaseStaff(input: { email: string; name: string; passwor
     await signOut(tempAuth);
     return userCredential.user.uid;
   } finally {
-    await tempApp.delete();
+    await deleteApp(tempApp);
   }
 }
 

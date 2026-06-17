@@ -1,15 +1,35 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDH9K3jkSSEOcKVyBiBDBquX7a8W6ljHuc",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "agrifincart.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "agrifincart",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "agrifincart.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "377250343115",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:377250343115:web:3dac40ff8d78f94a03d34e",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-WC4GVQMY66",
+  apiKey: "AIzaSyCQeuFABathAEhUsSb7hnrio-Ao8eR3zKA",
+  authDomain: "sangronyx.firebaseapp.com",
+  projectId: "sangronyx",
+  storageBucket: "sangronyx.firebasestorage.app",
+  messagingSenderId: "31802636734",
+  appId: "1:31802636734:web:1cc79606a1934a9d60e1ef",
+  measurementId: "G-G5EP37HL6P"
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
-export const firebaseAuth = getAuth(firebaseApp);
+// Initialize Firebase
+export const app = initializeApp(firebaseConfig);
+export const firebaseAuth = getAuth(app);
+
+export let analytics = null;
+if (typeof window !== "undefined") {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  }).catch((err) => {
+    console.warn("Firebase Analytics not supported:", err);
+  });
+}
+
+
