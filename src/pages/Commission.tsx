@@ -12,7 +12,9 @@ export default function Commission() {
         <Card>
           <CardContent className="p-5 sm:p-8">
             <Wallet className="h-8 w-8 text-primary" />
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">{t("commission.body")}</p>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              {t("commission.body")}
+            </p>
           </CardContent>
         </Card>
       </section>

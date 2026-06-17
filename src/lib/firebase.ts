@@ -14,7 +14,7 @@ export const firebaseConfig = {
   storageBucket: "sangronyx.firebasestorage.app",
   messagingSenderId: "31802636734",
   appId: "1:31802636734:web:1cc79606a1934a9d60e1ef",
-  measurementId: "G-G5EP37HL6P"
+  measurementId: "G-G5EP37HL6P",
 };
 
 // Initialize Firebase
@@ -23,13 +23,13 @@ export const firebaseAuth = getAuth(app);
 
 export let analytics = null;
 if (typeof window !== "undefined") {
-  isSupported().then((supported) => {
-    if (supported) {
-      analytics = getAnalytics(app);
-    }
-  }).catch((err) => {
-    console.warn("Firebase Analytics not supported:", err);
-  });
+  isSupported()
+    .then((supported) => {
+      if (supported) {
+        analytics = getAnalytics(app);
+      }
+    })
+    .catch((err) => {
+      console.warn("Firebase Analytics not supported:", err);
+    });
 }
-
-

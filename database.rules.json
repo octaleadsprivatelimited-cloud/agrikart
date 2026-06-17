@@ -2,7 +2,7 @@
   "rules": {
     ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'admin:active' || auth.token.picture === 'employee' || auth.token.picture === 'employee:active')",
     ".write": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'admin:active')",
-    
+
     "submissions": {
       ".write": true,
       "$submissionId": {

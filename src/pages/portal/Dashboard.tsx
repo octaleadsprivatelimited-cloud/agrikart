@@ -5,20 +5,39 @@ import { Button } from "@/components/ui/button";
 import { useBookings, useCurrentUser } from "@/lib/auth-store";
 import { ListChecks, Clock, CheckCircle2, XCircle, PlusCircle } from "lucide-react";
 
-
 export default function Dashboard() {
   const { t } = useTranslation();
   const user = useCurrentUser();
   const bookings = useBookings(user?.id);
-  const pending = bookings.filter(b => b.status === "Pending").length;
-  const approved = bookings.filter(b => b.status === "Approved").length;
-  const rejected = bookings.filter(b => b.status === "Rejected").length;
+  const pending = bookings.filter((b) => b.status === "Pending").length;
+  const approved = bookings.filter((b) => b.status === "Approved").length;
+  const rejected = bookings.filter((b) => b.status === "Rejected").length;
 
   const stats = [
-    { label: t("portal.totalBookings"), value: bookings.length, Icon: ListChecks, tone: "bg-primary/10 text-primary" },
-    { label: t("portal.pending"), value: pending, Icon: Clock, tone: "bg-accent/20 text-[oklch(0.55_0.15_75)]" },
-    { label: t("portal.approved"), value: approved, Icon: CheckCircle2, tone: "bg-[oklch(0.93_0.08_145)] text-[oklch(0.40_0.13_150)]" },
-    { label: t("portal.rejected"), value: rejected, Icon: XCircle, tone: "bg-destructive/10 text-destructive" },
+    {
+      label: t("portal.totalBookings"),
+      value: bookings.length,
+      Icon: ListChecks,
+      tone: "bg-primary/10 text-primary",
+    },
+    {
+      label: t("portal.pending"),
+      value: pending,
+      Icon: Clock,
+      tone: "bg-accent/20 text-[oklch(0.55_0.15_75)]",
+    },
+    {
+      label: t("portal.approved"),
+      value: approved,
+      Icon: CheckCircle2,
+      tone: "bg-[oklch(0.93_0.08_145)] text-[oklch(0.40_0.13_150)]",
+    },
+    {
+      label: t("portal.rejected"),
+      value: rejected,
+      Icon: XCircle,
+      tone: "bg-destructive/10 text-destructive",
+    },
   ];
 
   return (
@@ -27,16 +46,24 @@ export default function Dashboard() {
         <div>
           <p className="text-sm text-muted-foreground">{t("portal.welcome")},</p>
           <h1 className="text-3xl font-bold">{user?.name}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{user?.village}, {user?.district}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {user?.village}, {user?.district}
+          </p>
         </div>
-        <Button asChild><Link to="/portal/book"><PlusCircle className="h-4 w-4" /> {t("portal.bookService")}</Link></Button>
+        <Button asChild>
+          <Link to="/portal/book">
+            <PlusCircle className="h-4 w-4" /> {t("portal.bookService")}
+          </Link>
+        </Button>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(({ label, value, Icon, tone }) => (
           <Card key={label}>
             <CardContent className="p-5">
-              <div className={`grid h-10 w-10 place-items-center rounded-lg ${tone}`}><Icon className="h-5 w-5" /></div>
+              <div className={`grid h-10 w-10 place-items-center rounded-lg ${tone}`}>
+                <Icon className="h-5 w-5" />
+              </div>
               <p className="mt-3 text-2xl font-bold">{value}</p>
               <p className="text-sm text-muted-foreground">{label}</p>
             </CardContent>
@@ -51,11 +78,13 @@ export default function Dashboard() {
             <p className="mt-3 text-sm text-muted-foreground">{t("portal.empty")}</p>
           ) : (
             <ul className="mt-3 divide-y">
-              {bookings.slice(0, 5).map(b => (
+              {bookings.slice(0, 5).map((b) => (
                 <li key={b.id} className="flex items-center justify-between py-3 text-sm">
                   <div>
                     <p className="font-medium">{b.serviceCategory}</p>
-                    <p className="text-xs text-muted-foreground">{new Date(b.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(b.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                   <StatusPill status={b.status} />
                 </li>
@@ -69,10 +98,15 @@ export default function Dashboard() {
 }
 
 export function StatusPill({ status }: { status: "Pending" | "Approved" | "Rejected" }) {
-  const tone = status === "Approved"
-    ? "bg-[oklch(0.93_0.08_145)] text-[oklch(0.35_0.13_150)]"
-    : status === "Rejected"
-    ? "bg-destructive/10 text-destructive"
-    : "bg-accent/20 text-[oklch(0.45_0.15_75)]";
-  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${tone}`}>{status}</span>;
+  const tone =
+    status === "Approved"
+      ? "bg-[oklch(0.93_0.08_145)] text-[oklch(0.35_0.13_150)]"
+      : status === "Rejected"
+        ? "bg-destructive/10 text-destructive"
+        : "bg-accent/20 text-[oklch(0.45_0.15_75)]";
+  return (
+    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${tone}`}>
+      {status}
+    </span>
+  );
 }

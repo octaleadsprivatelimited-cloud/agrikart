@@ -73,16 +73,33 @@ export default function AdminLogin() {
           <form onSubmit={onSubmit} className="grid gap-4">
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            <Button type="submit" size="lg" disabled={loading}>{loading ? "Signing in…" : "Login"}</Button>
+            <Button type="submit" size="lg" disabled={loading}>
+              {loading ? "Signing in…" : "Login"}
+            </Button>
           </form>
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Field employee? <Link to="/staff/login" className="font-semibold text-primary hover:underline">Staff login</Link>
+            Field employee?{" "}
+            <Link to="/staff/login" className="font-semibold text-primary hover:underline">
+              Staff login
+            </Link>
           </p>
         </CardContent>
       </Card>

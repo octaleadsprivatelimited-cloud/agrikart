@@ -1,8 +1,23 @@
 import { Outlet, Link, useNavigate, NavLink } from "react-router-dom";
 import { getCurrentStaff, staffLogout, useCurrentStaff } from "@/lib/staff-store";
 import {
-  LayoutDashboard, Users, ClipboardList, LogOut, ShieldCheck, UserCog, IndianRupee,
-  Package, Boxes, ShoppingCart, Truck, CreditCard, LifeBuoy, FileBarChart, Settings, Inbox, Sparkles,
+  LayoutDashboard,
+  Users,
+  ClipboardList,
+  LogOut,
+  ShieldCheck,
+  UserCog,
+  IndianRupee,
+  Package,
+  Boxes,
+  ShoppingCart,
+  Truck,
+  CreditCard,
+  LifeBuoy,
+  FileBarChart,
+  Settings,
+  Inbox,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -39,19 +54,32 @@ export default function AdminLayout() {
         </div>
         <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
           {items.map(({ to, label, Icon }) => (
-            <NavLink key={to} to={to}
+            <NavLink
+              key={to}
+              to={to}
               className={({ isActive }) =>
                 `inline-flex items-center gap-2 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground ${isActive ? "bg-primary/10 text-primary" : ""}`
-              }>
+              }
+            >
               <Icon className="h-4 w-4" /> {label}
             </NavLink>
           ))}
-          <Button variant="ghost" size="sm" className="mt-2 justify-start" onClick={() => { staffLogout(); navigate("/"); }}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mt-2 justify-start"
+            onClick={() => {
+              staffLogout();
+              navigate("/");
+            }}
+          >
             <LogOut className="h-4 w-4" /> Logout
           </Button>
         </nav>
       </aside>
-      <div><Outlet /></div>
+      <div>
+        <Outlet />
+      </div>
     </section>
   );
 }

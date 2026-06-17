@@ -36,7 +36,10 @@ export default function Contact() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (!/^[0-9]{10}$/.test(form.phone)) { toast.error(t("validation.phone10")); return; }
+                if (!/^[0-9]{10}$/.test(form.phone)) {
+                  toast.error(t("validation.phone10"));
+                  return;
+                }
                 createSubmission({
                   farmerName: form.name.trim(),
                   mobile: form.phone.trim(),
@@ -52,17 +55,39 @@ export default function Contact() {
             >
               <div>
                 <Label htmlFor="name">{t("contact.nameLabel")}</Label>
-                <Input id="name" required maxLength={100} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                <Input
+                  id="name"
+                  required
+                  maxLength={100}
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                />
               </div>
               <div>
                 <Label htmlFor="phone">{t("contact.phoneLabel")}</Label>
-                <Input id="phone" required pattern="[0-9]{10}" maxLength={10} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                <Input
+                  id="phone"
+                  required
+                  pattern="[0-9]{10}"
+                  maxLength={10}
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                />
               </div>
               <div>
                 <Label htmlFor="message">{t("contact.messageLabel")}</Label>
-                <Textarea id="message" required maxLength={1000} rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+                <Textarea
+                  id="message"
+                  required
+                  maxLength={1000}
+                  rows={5}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                />
               </div>
-              <Button type="submit" size="lg" className="w-full sm:w-auto sm:justify-self-start">{t("contact.submit")}</Button>
+              <Button type="submit" size="lg" className="w-full sm:w-auto sm:justify-self-start">
+                {t("contact.submit")}
+              </Button>
             </form>
           </CardContent>
         </Card>

@@ -28,6 +28,6 @@ if (!rootElement.innerHTML) {
           <App />
         </BrowserRouter>
       </QueryClientProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }

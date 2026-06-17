@@ -24,31 +24,89 @@ export function Footer() {
         </div>
 
         <FooterSection title={t("footer.company")}>
-          <li><Link to="/about" className="hover:text-primary">{t("nav.about")}</Link></li>
-          <li><Link to="/careers" className="hover:text-primary">{t("nav.careers")}</Link></li>
-          <li><Link to="/blog" className="hover:text-primary">{t("nav.blog")}</Link></li>
-          <li><Link to="/contact" className="hover:text-primary">{t("nav.contact")}</Link></li>
+          <li>
+            <Link to="/about" className="hover:text-primary">
+              {t("nav.about")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/careers" className="hover:text-primary">
+              {t("nav.careers")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/blog" className="hover:text-primary">
+              {t("nav.blog")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/contact" className="hover:text-primary">
+              {t("nav.contact")}
+            </Link>
+          </li>
         </FooterSection>
 
         <FooterSection title={t("footer.services")}>
-          <li><Link to="/services" className="hover:text-primary">{t("nav.services")}</Link></li>
-          <li><Link to="/schemes" className="hover:text-primary">{t("nav.schemes")}</Link></li>
-          <li><Link to="/signup" className="hover:text-primary">{t("nav.register")}</Link></li>
-          <li><Link to="/pay" className="hover:text-primary">{t("nav.payNow")}</Link></li>
-          <li><Link to="/commission" className="hover:text-primary">Commission Model</Link></li>
-          <li><Link to="/faq" className="hover:text-primary">{t("nav.faq")}</Link></li>
-          <li><Link to="/staff/login" className="hover:text-primary">Staff Login</Link></li>
+          <li>
+            <Link to="/services" className="hover:text-primary">
+              {t("nav.services")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/schemes" className="hover:text-primary">
+              {t("nav.schemes")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/signup" className="hover:text-primary">
+              {t("nav.register")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/pay" className="hover:text-primary">
+              {t("nav.payNow")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/commission" className="hover:text-primary">
+              Commission Model
+            </Link>
+          </li>
+          <li>
+            <Link to="/faq" className="hover:text-primary">
+              {t("nav.faq")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/staff/login" className="hover:text-primary">
+              Staff Login
+            </Link>
+          </li>
         </FooterSection>
 
         <FooterSection title={t("footer.legal")}>
-          <li><Link to="/privacy" className="hover:text-primary">{t("legal.privacyTitle")}</Link></li>
-          <li><Link to="/terms" className="hover:text-primary">{t("legal.termsTitle")}</Link></li>
-          <li><Link to="/refund" className="hover:text-primary">{t("legal.refundTitle")}</Link></li>
+          <li>
+            <Link to="/privacy" className="hover:text-primary">
+              {t("legal.privacyTitle")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/terms" className="hover:text-primary">
+              {t("legal.termsTitle")}
+            </Link>
+          </li>
+          <li>
+            <Link to="/refund" className="hover:text-primary">
+              {t("legal.refundTitle")}
+            </Link>
+          </li>
         </FooterSection>
       </div>
       <div className="border-t border-border/60">
         <div className="container mx-auto px-4 py-4 text-center text-xs text-muted-foreground md:py-5">
-          <p>© {new Date().getFullYear()} {t("brandFull")}. {t("footer.rights")}</p>
+          <p>
+            © {new Date().getFullYear()} {t("brandFull")}. {t("footer.rights")}
+          </p>
           <p className="mt-1">
             Developed By{" "}
             <a
@@ -73,7 +131,7 @@ function FooterSection({ title, children }: { title: string; children: ReactNode
       {/* Mobile: collapsible header */}
       <button
         type="button"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className="flex w-full items-center justify-between text-sm font-semibold md:hidden"
       >

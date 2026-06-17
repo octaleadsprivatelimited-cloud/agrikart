@@ -6,13 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { createSubmission, serviceCategories, type ServiceCategory } from "@/lib/staff-store";
 import { Sprout, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 const empty = {
-  farmerName: "", mobile: "", village: "", district: "",
+  farmerName: "",
+  mobile: "",
+  village: "",
+  district: "",
   serviceCategory: "" as ServiceCategory | "",
   message: "",
 };
@@ -21,7 +30,7 @@ export default function Apply() {
   const { t } = useTranslation();
   const [form, setForm] = useState(empty);
   const [submittedId, setSubmittedId] = useState<string | null>(null);
-  const set = (k: keyof typeof form) => (v: string) => setForm(f => ({ ...f, [k]: v }));
+  const set = (k: keyof typeof form) => (v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,12 +59,15 @@ export default function Apply() {
             </div>
             <h1 className="mt-5 text-2xl font-bold">{t("apply.received")}</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              {t("apply.refIntro")} <span className="font-mono font-semibold text-foreground">{submittedId}</span>.
-              {" "}{t("apply.refOutro")}
+              {t("apply.refIntro")}{" "}
+              <span className="font-mono font-semibold text-foreground">{submittedId}</span>.{" "}
+              {t("apply.refOutro")}
             </p>
             <div className="mt-6 flex justify-center gap-2">
               <Button onClick={() => setSubmittedId(null)}>{t("apply.submitAnother")}</Button>
-              <Button asChild variant="outline"><Link to="/">{t("apply.backHome")}</Link></Button>
+              <Button asChild variant="outline">
+                <Link to="/">{t("apply.backHome")}</Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -76,30 +88,68 @@ export default function Apply() {
         <CardContent className="p-6 sm:p-8">
           <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
             <Field label={t("apply.farmerName")}>
-              <Input required maxLength={100} value={form.farmerName} onChange={e => set("farmerName")(e.target.value)} />
+              <Input
+                required
+                maxLength={100}
+                value={form.farmerName}
+                onChange={(e) => set("farmerName")(e.target.value)}
+              />
             </Field>
             <Field label={t("apply.mobile")}>
-              <Input required inputMode="numeric" pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={e => set("mobile")(e.target.value)} />
+              <Input
+                required
+                inputMode="numeric"
+                pattern="[0-9]{10}"
+                maxLength={10}
+                value={form.mobile}
+                onChange={(e) => set("mobile")(e.target.value)}
+              />
             </Field>
             <Field label={t("apply.village")}>
-              <Input required maxLength={100} value={form.village} onChange={e => set("village")(e.target.value)} />
+              <Input
+                required
+                maxLength={100}
+                value={form.village}
+                onChange={(e) => set("village")(e.target.value)}
+              />
             </Field>
             <Field label={t("apply.district")}>
-              <Input required maxLength={100} value={form.district} onChange={e => set("district")(e.target.value)} />
+              <Input
+                required
+                maxLength={100}
+                value={form.district}
+                onChange={(e) => set("district")(e.target.value)}
+              />
             </Field>
             <Field label={t("apply.serviceRequired")} className="sm:col-span-2">
               <Select value={form.serviceCategory} onValueChange={(v) => set("serviceCategory")(v)}>
-                <SelectTrigger><SelectValue placeholder={t("apply.selectServicePlaceholder")} /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("apply.selectServicePlaceholder")} />
+                </SelectTrigger>
                 <SelectContent>
-                  {serviceCategories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  {serviceCategories.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </Field>
             <Field label={t("apply.messageLabel")} className="sm:col-span-2">
-              <Textarea required minLength={5} maxLength={500} rows={4} value={form.message} onChange={e => set("message")(e.target.value)} placeholder={t("apply.messagePlaceholder")} />
+              <Textarea
+                required
+                minLength={5}
+                maxLength={500}
+                rows={4}
+                value={form.message}
+                onChange={(e) => set("message")(e.target.value)}
+                placeholder={t("apply.messagePlaceholder")}
+              />
             </Field>
             <div className="sm:col-span-2">
-              <Button type="submit" size="lg" className="w-full">{t("apply.submit")}</Button>
+              <Button type="submit" size="lg" className="w-full">
+                {t("apply.submit")}
+              </Button>
             </div>
           </form>
         </CardContent>
@@ -108,7 +158,15 @@ export default function Apply() {
   );
 }
 
-function Field({ label, className, children }: { label: string; className?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  className,
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className={className}>
       <Label>{label}</Label>

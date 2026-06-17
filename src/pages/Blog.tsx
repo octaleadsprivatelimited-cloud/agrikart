@@ -5,7 +5,11 @@ import { CalendarDays } from "lucide-react";
 
 export default function Blog() {
   const { t } = useTranslation();
-  const posts = t("blog.posts", { returnObjects: true }) as Array<{ title: string; date: string; excerpt: string }>;
+  const posts = t("blog.posts", { returnObjects: true }) as Array<{
+    title: string;
+    date: string;
+    excerpt: string;
+  }>;
   return (
     <>
       <PageHeader title={t("blog.title")} subtitle={t("blog.subtitle")} />

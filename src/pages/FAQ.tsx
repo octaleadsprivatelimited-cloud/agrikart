@@ -1,6 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { PageHeader } from "@/components/PageHeader";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function FAQ() {
   const { t } = useTranslation();
@@ -12,7 +17,9 @@ export default function FAQ() {
         <Accordion type="single" collapsible className="w-full">
           {items.map((it, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
-              <AccordionTrigger className="text-left text-base font-semibold">{it.q}</AccordionTrigger>
+              <AccordionTrigger className="text-left text-base font-semibold">
+                {it.q}
+              </AccordionTrigger>
               <AccordionContent className="text-muted-foreground">{it.a}</AccordionContent>
             </AccordionItem>
           ))}

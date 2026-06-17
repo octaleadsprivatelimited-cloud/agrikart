@@ -2,11 +2,27 @@
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfig } from "./firebase";
 import { initializeApp, getApp, deleteApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword, updatePassword, EmailAuthProvider, reauthenticateWithCredential, sendPasswordResetEmail } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signOut,
+  signInWithEmailAndPassword,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { toast } from "sonner";
 
 export type StaffRole = "employee" | "admin";
-export type Staff = { id: string; email: string; name: string; role: StaffRole; status?: "active" | "deleted" };
+export type Staff = {
+  id: string;
+  email: string;
+  name: string;
+  role: StaffRole;
+  status?: "active" | "deleted";
+};
 type StoredStaff = Staff & { password: string };
 
 const STAFF_KEY = "agrikart.staff";
@@ -27,15 +43,27 @@ export const permissions = {
     if (staff.role === "admin") return true;
     return staff.id === c.employeeId;
   },
-  canDeleteCustomer(_staff: Staff | null): boolean { return false; },
-  canChangeCustomerStatus(staff: Staff | null): boolean { return staff?.role === "admin"; },
-  canManageStaff(staff: Staff | null): boolean { return staff?.role === "admin"; },
-  canViewAllCustomers(staff: Staff | null): boolean { return staff?.role === "admin"; },
+  canDeleteCustomer(_staff: Staff | null): boolean {
+    return false;
+  },
+  canChangeCustomerStatus(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+  canManageStaff(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
+  canViewAllCustomers(staff: Staff | null): boolean {
+    return staff?.role === "admin";
+  },
 };
 
 function read<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
-  try { return JSON.parse(localStorage.getItem(key) ?? "") as T; } catch { return fallback; }
+  try {
+    return JSON.parse(localStorage.getItem(key) ?? "") as T;
+  } catch {
+    return fallback;
+  }
 }
 function write(key: string, val: unknown) {
   if (typeof window === "undefined") return;
@@ -45,8 +73,20 @@ function write(key: string, val: unknown) {
 function seed() {
   if (typeof window === "undefined") return;
   const required: StoredStaff[] = [
-    { id: "emp-demo", email: "employee@agrifincart.com", password: "password123", name: "Ravi Kumar", role: "employee" },
-    { id: "adm-demo", email: ADMIN_DEFAULT_EMAIL, password: ADMIN_DEFAULT_PASSWORD, name: "Site Admin", role: "admin" },
+    {
+      id: "emp-demo",
+      email: "employee@agrifincart.com",
+      password: "password123",
+      name: "Ravi Kumar",
+      role: "employee",
+    },
+    {
+      id: "adm-demo",
+      email: ADMIN_DEFAULT_EMAIL,
+      password: ADMIN_DEFAULT_PASSWORD,
+      name: "Site Admin",
+      role: "admin",
+    },
   ];
   const existing = read<StoredStaff[]>(STAFF_KEY, []);
   const seeded = localStorage.getItem(SEED_KEY);
@@ -62,20 +102,33 @@ function seed() {
 
     // One-time forced rotation: ensure the canonical admin account exists with the
     // configured email/password, and drop any legacy admin@agrifincart.com seed.
-    const legacyIdx = existing.findIndex(s => s.email.toLowerCase() === "admin@agrifincart.com");
-    if (legacyIdx !== -1) { existing.splice(legacyIdx, 1); changed = true; }
-    const admIdx = existing.findIndex(s => s.id === "adm-demo");
+    const legacyIdx = existing.findIndex((s) => s.email.toLowerCase() === "admin@agrifincart.com");
+    if (legacyIdx !== -1) {
+      existing.splice(legacyIdx, 1);
+      changed = true;
+    }
+    const admIdx = existing.findIndex((s) => s.id === "adm-demo");
     const adm = required[1];
-    if (admIdx === -1) { existing.push(adm); changed = true; }
-    else {
-      existing[admIdx] = { ...existing[admIdx], email: adm.email, password: adm.password, role: "admin" };
+    if (admIdx === -1) {
+      existing.push(adm);
+      changed = true;
+    } else {
+      existing[admIdx] = {
+        ...existing[admIdx],
+        email: adm.email,
+        password: adm.password,
+        role: "admin",
+      };
       changed = true;
     }
   }
 
   for (const r of required) {
-    const idx = existing.findIndex(s => s.email.toLowerCase() === r.email.toLowerCase());
-    if (idx === -1) { existing.push(r); changed = true; }
+    const idx = existing.findIndex((s) => s.email.toLowerCase() === r.email.toLowerCase());
+    if (idx === -1) {
+      existing.push(r);
+      changed = true;
+    }
   }
 
   if (changed || !seeded) {
@@ -86,11 +139,20 @@ function seed() {
 seed();
 
 // ---------- Password management ----------
-export async function changeStaffPassword(id: string, currentPassword: string, newPassword: string) {
-  if (!newPassword || newPassword.length < 6) throw new Error("New password must be at least 6 characters.");
-  
+export async function changeStaffPassword(
+  id: string,
+  currentPassword: string,
+  newPassword: string,
+) {
+  if (!newPassword || newPassword.length < 6)
+    throw new Error("New password must be at least 6 characters.");
+
   // Wait for Firebase Auth state to resolve if it hasn't yet (handles race conditions during initial load)
-  if (typeof window !== "undefined" && !firebaseAuth.currentUser && read<string | null>(STAFF_SESSION_KEY, null)) {
+  if (
+    typeof window !== "undefined" &&
+    !firebaseAuth.currentUser &&
+    read<string | null>(STAFF_SESSION_KEY, null)
+  ) {
     await new Promise<void>((resolve) => {
       const unsubscribe = firebaseAuth.onAuthStateChanged(() => {
         unsubscribe();
@@ -104,15 +166,22 @@ export async function changeStaffPassword(id: string, currentPassword: string, n
   }
 
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const idx = all.findIndex(s => s.id === id);
+  const idx = all.findIndex((s) => s.id === id);
   if (idx === -1) throw new Error("Account not found");
 
   let passwordValid = all[idx].password === currentPassword;
 
   // Re-authenticate with Firebase to bypass requires-recent-login and validate out-of-sync credentials
-  if (firebaseAuth.currentUser && firebaseAuth.currentUser.uid === id && firebaseAuth.currentUser.email) {
+  if (
+    firebaseAuth.currentUser &&
+    firebaseAuth.currentUser.uid === id &&
+    firebaseAuth.currentUser.email
+  ) {
     try {
-      const credential = EmailAuthProvider.credential(firebaseAuth.currentUser.email, currentPassword);
+      const credential = EmailAuthProvider.credential(
+        firebaseAuth.currentUser.email,
+        currentPassword,
+      );
       await reauthenticateWithCredential(firebaseAuth.currentUser, credential);
       passwordValid = true;
     } catch (err: any) {
@@ -141,11 +210,16 @@ export async function changeStaffPassword(id: string, currentPassword: string, n
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
-export async function resetStaffPassword(actor: Staff | null, targetId: string, newPassword: string) {
+export async function resetStaffPassword(
+  actor: Staff | null,
+  targetId: string,
+  newPassword: string,
+) {
   if (!actor || actor.role !== "admin") throw new Error("Only admins can reset passwords");
-  if (!newPassword || newPassword.length < 6) throw new Error("Password must be at least 6 characters.");
+  if (!newPassword || newPassword.length < 6)
+    throw new Error("Password must be at least 6 characters.");
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const idx = all.findIndex(s => s.id === targetId);
+  const idx = all.findIndex((s) => s.id === targetId);
   if (idx === -1) throw new Error("Account not found");
 
   const target = all[idx];
@@ -167,7 +241,11 @@ export async function resetStaffPassword(actor: Staff | null, targetId: string, 
     if (tempApp) {
       const tempAuth = getAuth(tempApp);
       try {
-        const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
+        const credential = await signInWithEmailAndPassword(
+          tempAuth,
+          target.email,
+          target.password,
+        );
         if (credential.user) {
           await updatePassword(credential.user, newPassword);
           await signOut(tempAuth);
@@ -190,10 +268,14 @@ export async function resetStaffPassword(actor: Staff | null, targetId: string, 
   if (!firebaseSyncSucceeded && !targetId.startsWith("emp-") && !targetId.startsWith("adm-")) {
     try {
       await sendPasswordResetEmail(firebaseAuth, target.email);
-      toast.info(`Sent standard Firebase password reset email to ${target.email} because direct password sync failed (${syncErrorMsg || "missing local credentials"}).`);
+      toast.info(
+        `Sent standard Firebase password reset email to ${target.email} because direct password sync failed (${syncErrorMsg || "missing local credentials"}).`,
+      );
     } catch (emailErr: any) {
       console.error("Failed to send fallback password reset email:", emailErr);
-      toast.warning(`Could not sync password to Firebase: ${syncErrorMsg || "missing local credentials"}. Also failed to send reset email: ${emailErr.message}`);
+      toast.warning(
+        `Could not sync password to Firebase: ${syncErrorMsg || "missing local credentials"}. Also failed to send reset email: ${emailErr.message}`,
+      );
     }
   }
 
@@ -216,12 +298,16 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   }
 
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const existing = all.find(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
+  const existing = all.find((s) => s.email.toLowerCase() === cleanEmail.toLowerCase());
 
   // Block deleted/deactivated accounts if they exist locally
   if (existing && existing.status === "deleted") {
     if (firebaseUser) {
-      try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
+      try {
+        await signOut(firebaseAuth);
+      } catch (e) {
+        console.error(e);
+      }
     }
     throw new Error("This account has been deleted and cannot access the portal.");
   }
@@ -229,7 +315,7 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   if (firebaseUser) {
     const uid = firebaseUser.uid;
     const name = firebaseUser.displayName || "Staff Member";
-    
+
     // Parse role and status from photoURL
     const photoURL = firebaseUser.photoURL || "employee";
     let role: StaffRole = "employee";
@@ -243,13 +329,17 @@ export async function staffLogin(email: string, password: string): Promise<Staff
     }
 
     if (status === "deleted") {
-      try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
+      try {
+        await signOut(firebaseAuth);
+      } catch (e) {
+        console.error(e);
+      }
       throw new Error("This account has been deleted and cannot access the portal.");
     }
 
     const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password, status };
-    
-    const existingIdx = all.findIndex(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
+
+    const existingIdx = all.findIndex((s) => s.email.toLowerCase() === cleanEmail.toLowerCase());
     if (existingIdx !== -1) {
       all[existingIdx] = staffData;
     } else {
@@ -262,7 +352,12 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   }
 
   // Fallback to local storage (e.g. initial demo login credentials or offline)
-  const s = all.find(x => x.email.toLowerCase() === cleanEmail.toLowerCase() && x.password === password && x.status !== "deleted");
+  const s = all.find(
+    (x) =>
+      x.email.toLowerCase() === cleanEmail.toLowerCase() &&
+      x.password === password &&
+      x.status !== "deleted",
+  );
   if (!s) {
     if (loginError) {
       throw new Error(loginError.message || "INVALID_LOGIN");
@@ -286,7 +381,7 @@ export function getCurrentStaff(): Staff | null {
   const id = read<string | null>(STAFF_SESSION_KEY, null);
   if (!id) return null;
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const s = all.find(x => x.id === id);
+  const s = all.find((x) => x.id === id);
   if (!s) return null;
   const { password: _p, ...rest } = s;
   return rest;
@@ -312,7 +407,7 @@ export function useStaffList() {
   useEffect(() => {
     const sync = () => {
       const all = read<StoredStaff[]>(STAFF_KEY, []);
-      setItems(all.filter(s => s.status !== "deleted").map(({ password: _p, ...rest }) => rest));
+      setItems(all.filter((s) => s.status !== "deleted").map(({ password: _p, ...rest }) => rest));
     };
     sync();
     window.addEventListener("agrikart-staff", sync);
@@ -325,7 +420,12 @@ export function useStaffList() {
   return items;
 }
 
-async function createFirebaseStaff(input: { email: string; name: string; password: string; role: StaffRole }): Promise<string> {
+async function createFirebaseStaff(input: {
+  email: string;
+  name: string;
+  password: string;
+  role: StaffRole;
+}): Promise<string> {
   let tempApp;
   try {
     tempApp = getApp("TempRegistrationApp");
@@ -334,7 +434,11 @@ async function createFirebaseStaff(input: { email: string; name: string; passwor
   }
   const tempAuth = getAuth(tempApp);
   try {
-    const userCredential = await createUserWithEmailAndPassword(tempAuth, input.email, input.password);
+    const userCredential = await createUserWithEmailAndPassword(
+      tempAuth,
+      input.email,
+      input.password,
+    );
     await updateProfile(userCredential.user, {
       displayName: input.name,
       photoURL: `${input.role}:active`,
@@ -352,7 +456,10 @@ async function createFirebaseStaff(input: { email: string; name: string; passwor
 
 async function sendWelcomeEmail(name: string, email: string, password: string, role: StaffRole) {
   const path = role === "admin" ? "/admin/login" : "/staff/login";
-  const loginLink = typeof window !== "undefined" ? window.location.origin + path : `https://agrikart.vercel.app${path}`;
+  const loginLink =
+    typeof window !== "undefined"
+      ? window.location.origin + path
+      : `https://agrikart.vercel.app${path}`;
   const subject = "Welcome to AgriKart - Your Staff Account Details";
   const body = `Hello ${name},
 
@@ -407,19 +514,28 @@ AgriKart Admin Team`;
   }
 }
 
-export async function createStaff(input: { email: string; name: string; password: string; role: StaffRole }): Promise<Staff> {
+export async function createStaff(input: {
+  email: string;
+  name: string;
+  password: string;
+  role: StaffRole;
+}): Promise<Staff> {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  if (all.some(s => s.email.toLowerCase() === input.email.toLowerCase())) {
+  if (all.some((s) => s.email.toLowerCase() === input.email.toLowerCase())) {
     throw new Error("Email already in use");
   }
-  
+
   let uid = (input.role === "admin" ? "adm-" : "emp-") + crypto.randomUUID().slice(0, 8);
   try {
     const firebaseUid = await createFirebaseStaff(input);
     uid = firebaseUid;
   } catch (err: any) {
     console.warn("Firebase staff creation failed, falling back to local storage only:", err);
-    if (err.code === "auth/email-already-in-use" || err.code === "auth/invalid-email" || err.code === "auth/weak-password") {
+    if (
+      err.code === "auth/email-already-in-use" ||
+      err.code === "auth/invalid-email" ||
+      err.code === "auth/weak-password"
+    ) {
       throw new Error(err.message || "Firebase validation failed");
     }
     toast.warning("Firebase sync failed. Added staff locally only.");
@@ -431,7 +547,7 @@ export async function createStaff(input: { email: string; name: string; password
   window.dispatchEvent(new Event("agrikart-staff"));
 
   // Send welcome email with login details
-  sendWelcomeEmail(input.name, input.email, input.password, input.role).catch(err => {
+  sendWelcomeEmail(input.name, input.email, input.password, input.role).catch((err) => {
     console.error("Welcome email delivery error:", err);
   });
 
@@ -441,7 +557,7 @@ export async function createStaff(input: { email: string; name: string; password
 
 export async function deleteStaff(id: string) {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const target = all.find(s => s.id === id);
+  const target = all.find((s) => s.id === id);
   if (!target) return;
 
   // Attempt client-side Firebase Auth sync using impersonation if it's not a local demo user
@@ -459,7 +575,11 @@ export async function deleteStaff(id: string) {
     if (tempApp) {
       const tempAuth = getAuth(tempApp);
       try {
-        const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
+        const credential = await signInWithEmailAndPassword(
+          tempAuth,
+          target.email,
+          target.password,
+        );
         if (credential.user) {
           await updateProfile(credential.user, {
             photoURL: `${target.role}:deleted`,
@@ -478,13 +598,16 @@ export async function deleteStaff(id: string) {
     }
   }
 
-  write(STAFF_KEY, all.map(s => s.id === id ? { ...s, status: "deleted" as const } : s));
+  write(
+    STAFF_KEY,
+    all.map((s) => (s.id === id ? { ...s, status: "deleted" as const } : s)),
+  );
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
 export async function updateStaffRole(id: string, role: StaffRole) {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  const target = all.find(s => s.id === id);
+  const target = all.find((s) => s.id === id);
   if (!target) throw new Error("Staff member not found");
 
   // Attempt client-side Firebase Auth sync using impersonation if it's not a local demo user
@@ -502,7 +625,11 @@ export async function updateStaffRole(id: string, role: StaffRole) {
     if (tempApp) {
       const tempAuth = getAuth(tempApp);
       try {
-        const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
+        const credential = await signInWithEmailAndPassword(
+          tempAuth,
+          target.email,
+          target.password,
+        );
         if (credential.user) {
           const currentStatus = target.status || "active";
           await updateProfile(credential.user, {
@@ -523,7 +650,7 @@ export async function updateStaffRole(id: string, role: StaffRole) {
     }
   }
 
-  const updated = all.map(s => s.id === id ? { ...s, role } : s);
+  const updated = all.map((s) => (s.id === id ? { ...s, role } : s));
   write(STAFF_KEY, updated);
   window.dispatchEvent(new Event("agrikart-staff"));
 }
@@ -533,14 +660,14 @@ export type CustomerStatus = "Pending" | "Approved" | "Rejected";
 // Base64 data URL upload (kept small — single doc, max ~1.5 MB).
 export type DocFile = {
   name: string;
-  type: string;       // MIME
-  size: number;       // bytes
-  dataUrl: string;    // data:...;base64,...
+  type: string; // MIME
+  size: number; // bytes
+  dataUrl: string; // data:...;base64,...
 };
 export type CustomerDocuments = {
   aadhaar: { number: string; file: DocFile };
-  pan:     { number: string; file: DocFile };
-  land:    { surveyNo: string; file: DocFile };
+  pan: { number: string; file: DocFile };
+  land: { surveyNo: string; file: DocFile };
 };
 export const DOC_MAX_BYTES = 1_500_000; // ~1.5 MB per file (localStorage safety)
 export const DOC_ACCEPT_MIME = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
@@ -558,7 +685,7 @@ export type Customer = {
   farmerName: string;
   farmerType?: FarmerType;
   mobile: string;
-  aadhaar?: string;        // legacy plain number (deprecated, kept for old records)
+  aadhaar?: string; // legacy plain number (deprecated, kept for old records)
   village: string;
   district: string;
   landSize: string;
@@ -572,7 +699,9 @@ export type Customer = {
   documents?: CustomerDocuments;
 };
 
-export function isFarmerVerified(c: Pick<Customer, "status" | "documents"> | null | undefined): boolean {
+export function isFarmerVerified(
+  c: Pick<Customer, "status" | "documents"> | null | undefined,
+): boolean {
   if (!c) return false;
   if (c.status !== "Approved") return false;
   const d = c.documents;
@@ -580,7 +709,7 @@ export function isFarmerVerified(c: Pick<Customer, "status" | "documents"> | nul
 }
 
 function generateFarmerCode(existing: Pick<Customer, "farmerCode">[]): string {
-  const used = new Set(existing.map(c => c.farmerCode).filter(Boolean));
+  const used = new Set(existing.map((c) => c.farmerCode).filter(Boolean));
   let code = "";
   do {
     code = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -588,7 +717,9 @@ function generateFarmerCode(existing: Pick<Customer, "farmerCode">[]): string {
   return code;
 }
 
-export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt" | "farmerCode">): Customer {
+export function createCustomer(
+  c: Omit<Customer, "id" | "status" | "createdAt" | "farmerCode">,
+): Customer {
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
   const item: Customer = {
     ...c,
@@ -605,19 +736,27 @@ export function createCustomer(c: Omit<Customer, "id" | "status" | "createdAt" |
 
 export function findCustomerByCode(code: string): Customer | undefined {
   const q = code.trim().toUpperCase();
-  return read<Customer[]>(CUSTOMERS_KEY, []).find(c => c.farmerCode?.toUpperCase() === q);
+  return read<Customer[]>(CUSTOMERS_KEY, []).find((c) => c.farmerCode?.toUpperCase() === q);
 }
 
-export function updateCustomerStatus(id: string, status: CustomerStatus, editor: Staff, remarks?: string) {
+export function updateCustomerStatus(
+  id: string,
+  status: CustomerStatus,
+  editor: Staff,
+  remarks?: string,
+) {
   if (!permissions.canChangeCustomerStatus(editor)) {
     throw new Error("Only admins can change customer status");
   }
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
-  const current = all.find(c => c.id === id);
+  const current = all.find((c) => c.id === id);
   if (!current) throw new Error("Customer not found");
   // Assign permanent Farmer ID at first approval
-  const assignedCode = status === "Approved" && !current.farmerCode ? generateFarmerCode(all) : current.farmerCode;
-  const next = all.map(c => c.id === id ? { ...c, status, remarks, farmerCode: assignedCode } : c);
+  const assignedCode =
+    status === "Approved" && !current.farmerCode ? generateFarmerCode(all) : current.farmerCode;
+  const next = all.map((c) =>
+    c.id === id ? { ...c, status, remarks, farmerCode: assignedCode } : c,
+  );
   write(CUSTOMERS_KEY, next);
   // Log status change to audit
   const changes: CustomerEditChange[] = [{ field: "status", from: current.status, to: status }];
@@ -625,9 +764,13 @@ export function updateCustomerStatus(id: string, status: CustomerStatus, editor:
     changes.push({ field: "remarks", from: current.remarks ?? "", to: remarks ?? "" });
   }
   const edit: CustomerEdit = {
-    id: crypto.randomUUID(), customerId: id,
-    editorId: editor.id, editorName: editor.name, editorRole: editor.role,
-    changes, at: Date.now(),
+    id: crypto.randomUUID(),
+    customerId: id,
+    editorId: editor.id,
+    editorName: editor.name,
+    editorRole: editor.role,
+    changes,
+    at: Date.now(),
   };
   const log = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
   log.unshift(edit);
@@ -637,7 +780,7 @@ export function updateCustomerStatus(id: string, status: CustomerStatus, editor:
 }
 
 export function getCustomer(id: string): Customer | undefined {
-  return read<Customer[]>(CUSTOMERS_KEY, []).find(c => c.id === id);
+  return read<Customer[]>(CUSTOMERS_KEY, []).find((c) => c.id === id);
 }
 
 export function useCustomer(id: string | undefined) {
@@ -661,7 +804,7 @@ export function useCustomers(opts?: { employeeId?: string }) {
   useEffect(() => {
     const sync = () => {
       const all = read<Customer[]>(CUSTOMERS_KEY, []);
-      setItems(opts?.employeeId ? all.filter(c => c.employeeId === opts.employeeId) : all);
+      setItems(opts?.employeeId ? all.filter((c) => c.employeeId === opts.employeeId) : all);
     };
     sync();
     window.addEventListener("agrikart-customers", sync);
@@ -687,7 +830,15 @@ export type CustomerEdit = {
 };
 
 const EDITABLE_FIELDS = [
-  "farmerName", "farmerType", "mobile", "aadhaar", "village", "district", "landSize", "crops", "remarks",
+  "farmerName",
+  "farmerType",
+  "mobile",
+  "aadhaar",
+  "village",
+  "district",
+  "landSize",
+  "crops",
+  "remarks",
 ] as const;
 type EditableField = (typeof EDITABLE_FIELDS)[number];
 
@@ -697,7 +848,7 @@ export function editCustomer(
   editor: Staff,
 ): { customer: Customer; edit: CustomerEdit | null } {
   const all = read<Customer[]>(CUSTOMERS_KEY, []);
-  const current = all.find(c => c.id === id);
+  const current = all.find((c) => c.id === id);
   if (!current) throw new Error("Customer not found");
   if (!permissions.canEditCustomer(editor, current)) {
     throw new Error("You don't have permission to edit this customer");
@@ -708,7 +859,7 @@ export function editCustomer(
   for (const f of EDITABLE_FIELDS) {
     if (!(f in patch)) continue;
     const newVal = (patch[f] ?? "") as string;
-    const oldVal = ((current[f] as string | undefined) ?? "");
+    const oldVal = (current[f] as string | undefined) ?? "";
     if (String(newVal).trim() !== String(oldVal).trim()) {
       changes.push({ field: f, from: String(oldVal), to: String(newVal) });
       (next[f] as string) = String(newVal);
@@ -717,7 +868,10 @@ export function editCustomer(
 
   if (changes.length === 0) return { customer: current, edit: null };
 
-  write(CUSTOMERS_KEY, all.map(c => c.id === id ? next : c));
+  write(
+    CUSTOMERS_KEY,
+    all.map((c) => (c.id === id ? next : c)),
+  );
   const edit: CustomerEdit = {
     id: crypto.randomUUID(),
     customerId: id,
@@ -741,7 +895,7 @@ export function useCustomerEdits(customerId: string | undefined) {
     if (!customerId) return;
     const sync = () => {
       const all = read<CustomerEdit[]>(CUSTOMER_EDITS_KEY, []);
-      setItems(all.filter(e => e.customerId === customerId).sort((a, b) => b.at - a.at));
+      setItems(all.filter((e) => e.customerId === customerId).sort((a, b) => b.at - a.at));
     };
     sync();
     window.addEventListener("agrikart-customer-edits", sync);
@@ -755,7 +909,16 @@ export function useCustomerEdits(customerId: string | undefined) {
 }
 
 // ---------- Service requests (per customer) ----------
-export type ServiceCategory = "Drone" | "Seeds" | "Fertilizers" | "Pesticides" | "Loan" | "Insurance" | "Cold Storage" | "Market Linkage & Buy-back" | "General Inquiry";
+export type ServiceCategory =
+  | "Drone"
+  | "Seeds"
+  | "Fertilizers"
+  | "Pesticides"
+  | "Loan"
+  | "Insurance"
+  | "Cold Storage"
+  | "Market Linkage & Buy-back"
+  | "General Inquiry";
 export type ServiceRequest = {
   id: string;
   customerId: string;
@@ -765,13 +928,31 @@ export type ServiceRequest = {
   createdAt: number;
 };
 
-export const serviceCategories: ServiceCategory[] = ["Drone","Seeds","Fertilizers","Pesticides","Loan","Insurance","Cold Storage","Market Linkage & Buy-back","General Inquiry"];
+export const serviceCategories: ServiceCategory[] = [
+  "Drone",
+  "Seeds",
+  "Fertilizers",
+  "Pesticides",
+  "Loan",
+  "Insurance",
+  "Cold Storage",
+  "Market Linkage & Buy-back",
+  "General Inquiry",
+];
 
-export function addServiceRequest(customerId: string, category: ServiceCategory, description: string): ServiceRequest {
+export function addServiceRequest(
+  customerId: string,
+  category: ServiceCategory,
+  description: string,
+): ServiceRequest {
   const all = read<ServiceRequest[]>(REQUESTS_KEY, []);
   const item: ServiceRequest = {
-    id: crypto.randomUUID(), customerId, category, description,
-    status: "Pending", createdAt: Date.now(),
+    id: crypto.randomUUID(),
+    customerId,
+    category,
+    description,
+    status: "Pending",
+    createdAt: Date.now(),
   };
   all.unshift(item);
   write(REQUESTS_KEY, all);
@@ -781,7 +962,10 @@ export function addServiceRequest(customerId: string, category: ServiceCategory,
 
 export function updateRequestStatus(id: string, status: CustomerStatus) {
   const all = read<ServiceRequest[]>(REQUESTS_KEY, []);
-  write(REQUESTS_KEY, all.map(r => r.id === id ? { ...r, status } : r));
+  write(
+    REQUESTS_KEY,
+    all.map((r) => (r.id === id ? { ...r, status } : r)),
+  );
   window.dispatchEvent(new Event("agrikart-requests"));
 }
 
@@ -790,7 +974,7 @@ export function useRequests(opts?: { customerId?: string }) {
   useEffect(() => {
     const sync = () => {
       const all = read<ServiceRequest[]>(REQUESTS_KEY, []);
-      setItems(opts?.customerId ? all.filter(r => r.customerId === opts.customerId) : all);
+      setItems(opts?.customerId ? all.filter((r) => r.customerId === opts.customerId) : all);
     };
     sync();
     window.addEventListener("agrikart-requests", sync);
@@ -804,19 +988,25 @@ export function useRequests(opts?: { customerId?: string }) {
 }
 
 // ---------- Geolocation helper ----------
-export function captureGps(): Promise<{ lat: number; lng: number; accuracy: number; timestamp: number }> {
+export function captureGps(): Promise<{
+  lat: number;
+  lng: number;
+  accuracy: number;
+  timestamp: number;
+}> {
   return new Promise((resolve, reject) => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       reject(new Error("Geolocation is not supported by this browser."));
       return;
     }
     navigator.geolocation.getCurrentPosition(
-      (pos) => resolve({
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-        accuracy: pos.coords.accuracy,
-        timestamp: pos.timestamp,
-      }),
+      (pos) =>
+        resolve({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          accuracy: pos.coords.accuracy,
+          timestamp: pos.timestamp,
+        }),
       (err) => reject(new Error(err.message || "Geolocation permission denied.")),
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
     );
@@ -827,8 +1017,8 @@ export function captureGps(): Promise<{ lat: number; lng: number; accuracy: numb
 export type PaymentKind = "joining" | "renewal";
 export type PaymentStatus = "Succeeded" | "Refunded" | "Failed";
 export type Payment = {
-  id: string;          // Transaction ID
-  orderId: string;     // Order ID
+  id: string; // Transaction ID
+  orderId: string; // Order ID
   farmerId: string;
   farmerName?: string;
   mobile?: string;
@@ -837,16 +1027,18 @@ export type Payment = {
   amount: number;
   status: PaymentStatus;
   method?: "Cash" | "UPI" | "Card" | "NetBanking";
-  reference?: string;   // UPI ref / cheque no / receipt no
+  reference?: string; // UPI ref / cheque no / receipt no
   note?: string;
-  collectedById?: string;   // staff id who collected
+  collectedById?: string; // staff id who collected
   collectedByName?: string;
   refundedAt?: number;
   refundReason?: string;
   createdAt: number;
 };
 
-export function recordPayment(p: Omit<Payment, "id" | "orderId" | "createdAt" | "status"> & { status?: PaymentStatus }): Payment {
+export function recordPayment(
+  p: Omit<Payment, "id" | "orderId" | "createdAt" | "status"> & { status?: PaymentStatus },
+): Payment {
   const all = read<Payment[]>(PAYMENTS_KEY, []);
   const methods: NonNullable<Payment["method"]>[] = ["UPI", "Card", "NetBanking"];
   const item: Payment = {
@@ -854,7 +1046,11 @@ export function recordPayment(p: Omit<Payment, "id" | "orderId" | "createdAt" | 
     status: p.status ?? "Succeeded",
     method: p.method ?? methods[Math.floor(Math.random() * methods.length)],
     id: "TXN-" + crypto.randomUUID().slice(0, 10).toUpperCase().replace(/-/g, ""),
-    orderId: "ORD-" + Date.now().toString(36).toUpperCase() + "-" + Math.floor(Math.random() * 9000 + 1000),
+    orderId:
+      "ORD-" +
+      Date.now().toString(36).toUpperCase() +
+      "-" +
+      Math.floor(Math.random() * 9000 + 1000),
     createdAt: Date.now(),
   };
   all.unshift(item);
@@ -865,7 +1061,19 @@ export function recordPayment(p: Omit<Payment, "id" | "orderId" | "createdAt" | 
 
 export function refundPayment(id: string, reason: string) {
   const all = read<Payment[]>(PAYMENTS_KEY, []);
-  write(PAYMENTS_KEY, all.map(p => p.id === id ? { ...p, status: "Refunded" as PaymentStatus, refundedAt: Date.now(), refundReason: reason } : p));
+  write(
+    PAYMENTS_KEY,
+    all.map((p) =>
+      p.id === id
+        ? {
+            ...p,
+            status: "Refunded" as PaymentStatus,
+            refundedAt: Date.now(),
+            refundReason: reason,
+          }
+        : p,
+    ),
+  );
   window.dispatchEvent(new Event("agrikart-payments"));
 }
 
@@ -885,7 +1093,13 @@ export function usePayments() {
 }
 
 // ---------- Public submissions (farmers submit forms without login) ----------
-export type SubmissionStatus = "New" | "Approved" | "Assigned" | "In Progress" | "Completed" | "Rejected";
+export type SubmissionStatus =
+  | "New"
+  | "Approved"
+  | "Assigned"
+  | "In Progress"
+  | "Completed"
+  | "Rejected";
 export type Submission = {
   id: string;
   farmerName: string;
@@ -901,7 +1115,12 @@ export type Submission = {
   createdAt: number;
 };
 
-export function createSubmission(input: Omit<Submission, "id" | "status" | "createdAt" | "assignedStaffId" | "assignedStaffName" | "assignedAt">): Submission {
+export function createSubmission(
+  input: Omit<
+    Submission,
+    "id" | "status" | "createdAt" | "assignedStaffId" | "assignedStaffName" | "assignedAt"
+  >,
+): Submission {
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
   const item: Submission = {
     ...input,
@@ -917,38 +1136,65 @@ export function createSubmission(input: Omit<Submission, "id" | "status" | "crea
 
 export function assignSubmission(id: string, staffId: string) {
   const staffList = read<StoredStaff[]>(STAFF_KEY, []);
-  const target = staffList.find(s => s.id === staffId);
+  const target = staffList.find((s) => s.id === staffId);
   if (!target || target.status === "deleted") throw new Error("Staff member not found or inactive");
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
-  write(SUBMISSIONS_KEY, all.map(s => s.id === id
-    ? { ...s, assignedStaffId: target.id, assignedStaffName: target.name, assignedAt: Date.now(), status: s.status === "New" ? "Assigned" : s.status }
-    : s));
+  write(
+    SUBMISSIONS_KEY,
+    all.map((s) =>
+      s.id === id
+        ? {
+            ...s,
+            assignedStaffId: target.id,
+            assignedStaffName: target.name,
+            assignedAt: Date.now(),
+            status: s.status === "New" ? "Assigned" : s.status,
+          }
+        : s,
+    ),
+  );
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
 
 export function updateSubmissionStatus(id: string, status: SubmissionStatus) {
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
-  write(SUBMISSIONS_KEY, all.map(s => s.id === id ? { ...s, status } : s));
+  write(
+    SUBMISSIONS_KEY,
+    all.map((s) => (s.id === id ? { ...s, status } : s)),
+  );
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
 
 export function approveSubmission(id: string) {
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
-  write(SUBMISSIONS_KEY, all.map(s => s.id === id ? { ...s, status: "Approved" as SubmissionStatus } : s));
+  write(
+    SUBMISSIONS_KEY,
+    all.map((s) => (s.id === id ? { ...s, status: "Approved" as SubmissionStatus } : s)),
+  );
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
 
 export function approveAndAssignSubmission(id: string, staffId: string) {
   const staffList = read<StoredStaff[]>(STAFF_KEY, []);
-  const target = staffList.find(s => s.id === staffId);
+  const target = staffList.find((s) => s.id === staffId);
   if (!target || target.status === "deleted") throw new Error("Staff member not found or inactive");
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
-  write(SUBMISSIONS_KEY, all.map(s => s.id === id
-    ? { ...s, status: "Assigned" as SubmissionStatus, assignedStaffId: target.id, assignedStaffName: target.name, assignedAt: Date.now() }
-    : s));
+  write(
+    SUBMISSIONS_KEY,
+    all.map((s) =>
+      s.id === id
+        ? {
+            ...s,
+            status: "Assigned" as SubmissionStatus,
+            assignedStaffId: target.id,
+            assignedStaffName: target.name,
+            assignedAt: Date.now(),
+          }
+        : s,
+    ),
+  );
   window.dispatchEvent(new Event("agrikart-submissions"));
 }
-
 
 export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: string }) {
   const [items, setItems] = useState<Submission[]>([]);
@@ -956,11 +1202,13 @@ export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: s
     const sync = () => {
       const all = read<Submission[]>(SUBMISSIONS_KEY, []);
       let r = all;
-      if (opts?.assignedStaffId) r = r.filter(s => s.assignedStaffId === opts.assignedStaffId);
+      if (opts?.assignedStaffId) r = r.filter((s) => s.assignedStaffId === opts.assignedStaffId);
       if (opts?.forStaffId) {
-        r = r.filter(s =>
-          s.assignedStaffId === opts.forStaffId ||
-          (["Approved", "In Progress", "Completed"] as SubmissionStatus[]).includes(s.status) && !s.assignedStaffId
+        r = r.filter(
+          (s) =>
+            s.assignedStaffId === opts.forStaffId ||
+            ((["Approved", "In Progress", "Completed"] as SubmissionStatus[]).includes(s.status) &&
+              !s.assignedStaffId),
         );
       }
       setItems(r);
@@ -975,5 +1223,3 @@ export function useSubmissions(opts?: { assignedStaffId?: string; forStaffId?: s
   }, [opts?.assignedStaffId, opts?.forStaffId]);
   return items;
 }
-
-

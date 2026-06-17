@@ -4,10 +4,31 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Banknote, ShieldCheck, Sprout, Snowflake, Ship, ArrowRight,
-  Timer, BadgeCheck, Leaf, Users, Headphones, SprayCan, Package,
-  Handshake, MapPin, IndianRupee, Star, PlayCircle, Quote, HelpCircle, Plus,
-  RefreshCw, TrendingUp, Truck, Wallet,
+  Banknote,
+  ShieldCheck,
+  Sprout,
+  Snowflake,
+  Ship,
+  ArrowRight,
+  Timer,
+  BadgeCheck,
+  Leaf,
+  Users,
+  Headphones,
+  SprayCan,
+  Package,
+  Handshake,
+  MapPin,
+  IndianRupee,
+  Star,
+  PlayCircle,
+  Quote,
+  HelpCircle,
+  Plus,
+  RefreshCw,
+  TrendingUp,
+  Truck,
+  Wallet,
 } from "lucide-react";
 import { useTestimonials, useGallery, useVideos, usePartners } from "@/lib/content-store";
 import imgValues from "@/assets/about-values.jpg";
@@ -31,12 +52,48 @@ const heroIcons = [
 ] as const;
 
 const serviceCards = [
-  { title: "Loan Assistance Services", desc: "Easy & quick loans for crops, agriculture equipment and all other needs.", Icon: Banknote, img: imgLoans, to: "/services/loans" },
-  { title: "Insurance Services", desc: "Crop insurance, health insurance, equipment insurance and more.", Icon: ShieldCheck, img: imgInsurance, to: "/services/insurance" },
-  { title: "Seeds, Pesticides & Fertilisers", desc: "High quality seeds, pesticides and fertilisers at best prices.", Icon: Sprout, img: imgSeeds, to: "/services/seeds" },
-  { title: "Drone Services", desc: "Spraying, surveying, crop monitoring and other drone based services.", Icon: SprayCan, img: imgDrone, to: "/drone-services" },
-  { title: "Cold Storage Services", desc: "Modern cold storage services for better storage and quality preservation.", Icon: Snowflake, img: imgCold, to: "/services/cold" },
-  { title: "Import & Export Services", desc: "Import and export of agriculture products and allied goods.", Icon: Ship, img: imgTrade, to: "/services/trade" },
+  {
+    title: "Loan Assistance Services",
+    desc: "Easy & quick loans for crops, agriculture equipment and all other needs.",
+    Icon: Banknote,
+    img: imgLoans,
+    to: "/services/loans",
+  },
+  {
+    title: "Insurance Services",
+    desc: "Crop insurance, health insurance, equipment insurance and more.",
+    Icon: ShieldCheck,
+    img: imgInsurance,
+    to: "/services/insurance",
+  },
+  {
+    title: "Seeds, Pesticides & Fertilisers",
+    desc: "High quality seeds, pesticides and fertilisers at best prices.",
+    Icon: Sprout,
+    img: imgSeeds,
+    to: "/services/seeds",
+  },
+  {
+    title: "Drone Services",
+    desc: "Spraying, surveying, crop monitoring and other drone based services.",
+    Icon: SprayCan,
+    img: imgDrone,
+    to: "/drone-services",
+  },
+  {
+    title: "Cold Storage Services",
+    desc: "Modern cold storage services for better storage and quality preservation.",
+    Icon: Snowflake,
+    img: imgCold,
+    to: "/services/cold",
+  },
+  {
+    title: "Import & Export Services",
+    desc: "Import and export of agriculture products and allied goods.",
+    Icon: Ship,
+    img: imgTrade,
+    to: "/services/trade",
+  },
 ] as const;
 
 const whyItems = [
@@ -60,7 +117,9 @@ export default function Home() {
   const gallery = useGallery();
   const videos = useVideos();
   const partners = usePartners();
-  const faqItems = (t("faq.items", { returnObjects: true }) as Array<{ q: string; a: string }>).slice(0, 4);
+  const faqItems = (
+    t("faq.items", { returnObjects: true }) as Array<{ q: string; a: string }>
+  ).slice(0, 4);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -99,17 +158,26 @@ export default function Home() {
             {/* Text */}
             <div className="animate-fade-up max-w-xl pb-0 md:pb-14">
               <h1 className="text-balance text-3xl font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
-                One Stop Digital Platform{" "}
-                <span className="text-primary">for Farmers</span>
+                One Stop Digital Platform <span className="text-primary">for Farmers</span>
               </h1>
               <p className="mt-4 max-w-md text-sm font-medium text-foreground/80 sm:text-base">
                 Loans, Insurance, Agri Inputs, Technology &amp; More — All in One Place.
               </p>
               <div className="mt-5 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
-                <Button asChild size="lg" className="gap-2 bg-primary text-primary-foreground shadow-elegant hover:bg-primary/90">
-                  <Link to="/apply">Apply for Loan <ArrowRight className="h-4 w-4" /></Link>
+                <Button
+                  asChild
+                  size="lg"
+                  className="gap-2 bg-primary text-primary-foreground shadow-elegant hover:bg-primary/90"
+                >
+                  <Link to="/apply">
+                    Apply for Loan <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </Button>
-                <Button asChild size="lg" className="gap-2 bg-[hsl(45_95%_55%)] text-foreground shadow-elegant hover:bg-[hsl(45_95%_50%)]">
+                <Button
+                  asChild
+                  size="lg"
+                  className="gap-2 bg-[hsl(45_95%_55%)] text-foreground shadow-elegant hover:bg-[hsl(45_95%_50%)]"
+                >
                   <Link to="/careers">Join as Field Executive</Link>
                 </Button>
               </div>
@@ -136,7 +204,9 @@ export default function Home() {
                 <span className="grid h-12 w-12 place-items-center rounded-xl bg-background text-primary shadow-sm sm:h-14 sm:w-14">
                   <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.75} />
                 </span>
-                <span className="text-[11px] font-semibold leading-tight text-foreground sm:text-xs">{label}</span>
+                <span className="text-[11px] font-semibold leading-tight text-foreground sm:text-xs">
+                  {label}
+                </span>
               </div>
             </Link>
           ))}
@@ -156,14 +226,34 @@ export default function Home() {
                   const isImage = p.logo.startsWith("data:") || p.logo.startsWith("http");
                   const inner = (
                     <div className="grid h-14 w-32 shrink-0 place-items-center sm:h-16 sm:w-40">
-                      {isImage
-                        ? <img src={p.logo} alt={p.name} className="max-h-12 max-w-full object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0" />
-                        : <span className="text-3xl opacity-80 transition hover:opacity-100 sm:text-4xl">{p.logo}</span>}
+                      {isImage ? (
+                        <img
+                          src={p.logo}
+                          alt={p.name}
+                          className="max-h-12 max-w-full object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0"
+                        />
+                      ) : (
+                        <span className="text-3xl opacity-80 transition hover:opacity-100 sm:text-4xl">
+                          {p.logo}
+                        </span>
+                      )}
                     </div>
                   );
-                  return p.website && p.website !== "#"
-                    ? <a key={`${p.id}-${idx}`} href={p.website} target="_blank" rel="noreferrer" title={p.name}>{inner}</a>
-                    : <div key={`${p.id}-${idx}`} title={p.name}>{inner}</div>;
+                  return p.website && p.website !== "#" ? (
+                    <a
+                      key={`${p.id}-${idx}`}
+                      href={p.website}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={p.name}
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <div key={`${p.id}-${idx}`} title={p.name}>
+                      {inner}
+                    </div>
+                  );
                 })}
               </div>
             </div>
@@ -225,18 +315,37 @@ export default function Home() {
             Buy Back Support for Your Harvest
           </h2>
           <p className="mt-3 text-sm text-muted-foreground sm:text-base">
-            Grow with confidence. We guarantee a fair market price and pick up your produce
-            right from the farm — no middlemen, no delays.
+            Grow with confidence. We guarantee a fair market price and pick up your produce right
+            from the farm — no middlemen, no delays.
           </p>
         </div>
         <div className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-4 sm:gap-4">
           {[
-            { Icon: RefreshCw, title: "Guaranteed Buy Back", desc: "Pre-agreed purchase of your produce post harvest." },
-            { Icon: TrendingUp, title: "Fair Market Price", desc: "Transparent pricing benchmarked to mandi rates." },
-            { Icon: Truck, title: "Farm Gate Pickup", desc: "Logistics handled by us — no transport hassle." },
-            { Icon: Wallet, title: "Quick Payments", desc: "Direct bank transfer within 24–48 hours." },
+            {
+              Icon: RefreshCw,
+              title: "Guaranteed Buy Back",
+              desc: "Pre-agreed purchase of your produce post harvest.",
+            },
+            {
+              Icon: TrendingUp,
+              title: "Fair Market Price",
+              desc: "Transparent pricing benchmarked to mandi rates.",
+            },
+            {
+              Icon: Truck,
+              title: "Farm Gate Pickup",
+              desc: "Logistics handled by us — no transport hassle.",
+            },
+            {
+              Icon: Wallet,
+              title: "Quick Payments",
+              desc: "Direct bank transfer within 24–48 hours.",
+            },
           ].map(({ Icon, title, desc }) => (
-            <div key={title} className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-4 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5">
+            <div
+              key={title}
+              className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-4 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5"
+            >
               <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/10 text-primary sm:h-12 sm:w-12">
                 <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
               </span>
@@ -247,7 +356,9 @@ export default function Home() {
         </div>
         <div className="mt-6 text-center sm:mt-8">
           <Button asChild size="sm" className="sm:size-default gap-2">
-            <Link to="/contact">Register for Buy Back <ArrowRight className="h-4 w-4" /></Link>
+            <Link to="/contact">
+              Register for Buy Back <ArrowRight className="h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </section>
@@ -256,14 +367,19 @@ export default function Home() {
       <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Why Choose Agrikart?</h2>
+            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">
+              Why Choose Agrikart?
+            </h2>
             <p className="mt-3 text-sm text-muted-foreground sm:text-base">
               Trusted by thousands of farmers across India for quality, speed and transparency.
             </p>
           </div>
           <ul className="mx-auto mt-6 grid max-w-5xl grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
             {whyItems.map(({ Icon, label }) => (
-              <li key={label} className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5">
+              <li
+                key={label}
+                className="flex flex-col items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-center transition hover:border-primary/40 hover:shadow-elegant sm:p-5"
+              >
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-primary/10 text-primary sm:h-12 sm:w-12">
                   <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
@@ -278,7 +394,10 @@ export default function Home() {
       <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-4">
           {stats.map(({ Icon, value, label }) => (
-            <div key={label} className="rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm sm:p-6">
+            <div
+              key={label}
+              className="rounded-2xl border border-border/60 bg-card p-5 text-center shadow-sm sm:p-6"
+            >
               <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
                 <Icon className="h-6 w-6" />
               </span>
@@ -310,7 +429,10 @@ export default function Home() {
 
             {/* Mobile slider */}
             <div className="md:hidden -mx-4 px-4">
-              <div ref={sliderRef} className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div
+                ref={sliderRef}
+                className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
                 {testimonials.map((tt) => (
                   <article
                     key={tt.id}
@@ -318,7 +440,10 @@ export default function Home() {
                   >
                     <div className="mb-2 flex gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={`h-3 w-3 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`} />
+                        <Star
+                          key={i}
+                          className={`h-3 w-3 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`}
+                        />
                       ))}
                     </div>
                     <p className="font-display text-sm leading-relaxed text-[#1a3c2a] line-clamp-5">
@@ -326,7 +451,11 @@ export default function Home() {
                     </p>
                     <div className="mt-3 flex items-center gap-2 border-t border-[#a0c49d]/20 pt-3">
                       {tt.avatar ? (
-                        <img src={tt.avatar} alt={tt.name} className="h-8 w-8 rounded-full object-cover" />
+                        <img
+                          src={tt.avatar}
+                          alt={tt.name}
+                          className="h-8 w-8 rounded-full object-cover"
+                        />
                       ) : (
                         <span className="grid h-8 w-8 place-items-center rounded-full bg-[#a0c49d]/20 text-xs font-bold text-[#1a3c2a]">
                           {tt.name.charAt(0)}
@@ -363,7 +492,11 @@ export default function Home() {
                       </p>
                       <div className="mt-6 flex items-center gap-4 border-t border-white/15 pt-5 sm:mt-8 sm:pt-6">
                         {testimonials[0].avatar ? (
-                          <img src={testimonials[0].avatar} alt={testimonials[0].name} className="h-12 w-12 rounded-full object-cover ring-2 ring-[#a0c49d]/40" />
+                          <img
+                            src={testimonials[0].avatar}
+                            alt={testimonials[0].name}
+                            className="h-12 w-12 rounded-full object-cover ring-2 ring-[#a0c49d]/40"
+                          />
                         ) : (
                           <span className="grid h-12 w-12 place-items-center rounded-full bg-[#a0c49d]/30 text-base font-bold text-white ring-2 ring-[#a0c49d]/40">
                             {testimonials[0].name.charAt(0)}
@@ -375,7 +508,10 @@ export default function Home() {
                         </div>
                         <div className="ml-auto flex gap-0.5">
                           {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} className={`h-3.5 w-3.5 ${i < testimonials[0].rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-white/20"}`} />
+                            <Star
+                              key={i}
+                              className={`h-3.5 w-3.5 ${i < testimonials[0].rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-white/20"}`}
+                            />
                           ))}
                         </div>
                       </div>
@@ -386,10 +522,16 @@ export default function Home() {
 
               {/* Side quotes — stacked */}
               {testimonials.slice(1, 3).map((tt) => (
-                <article key={tt.id} className="overflow-hidden rounded-3xl border border-[#a0c49d]/20 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl sm:p-8 md:col-span-4 lg:col-span-2">
+                <article
+                  key={tt.id}
+                  className="overflow-hidden rounded-3xl border border-[#a0c49d]/20 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl sm:p-8 md:col-span-4 lg:col-span-2"
+                >
                   <div className="mb-3 flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`h-3.5 w-3.5 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`} />
+                      <Star
+                        key={i}
+                        className={`h-3.5 w-3.5 ${i < tt.rating ? "fill-[#a0c49d] text-[#a0c49d]" : "text-[#a0c49d]/20"}`}
+                      />
                     ))}
                   </div>
                   <p className="font-display text-base leading-relaxed text-[#1a3c2a] sm:text-lg">
@@ -397,7 +539,11 @@ export default function Home() {
                   </p>
                   <div className="mt-5 flex items-center gap-3 border-t border-[#a0c49d]/20 pt-4">
                     {tt.avatar ? (
-                      <img src={tt.avatar} alt={tt.name} className="h-10 w-10 rounded-full object-cover" />
+                      <img
+                        src={tt.avatar}
+                        alt={tt.name}
+                        className="h-10 w-10 rounded-full object-cover"
+                      />
                     ) : (
                       <span className="grid h-10 w-10 place-items-center rounded-full bg-[#a0c49d]/20 text-sm font-bold text-[#1a3c2a]">
                         {tt.name.charAt(0)}
@@ -411,12 +557,9 @@ export default function Home() {
                 </article>
               ))}
             </div>
-
           </div>
         </section>
       )}
-
-
 
       {/* FAQ PREVIEW — editorial split */}
       <section className="bg-[#fcfdfc] py-12 sm:py-20">
@@ -425,7 +568,13 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-5">
               {/* Left — title block */}
               <div className="relative min-h-[280px] lg:col-span-2">
-                <img src={imgValues} alt="" aria-hidden="true" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                <img
+                  src={imgValues}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#1a3c2a]/90 via-[#1a3c2a]/75 to-[#2d5a3d]/60" />
                 <div className="relative flex h-full flex-col justify-between p-8 text-white sm:p-12 lg:p-14">
                   <div>
@@ -436,14 +585,26 @@ export default function Home() {
                       Questions, answered.
                     </h2>
                     <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/85 sm:text-base">
-                      The most common things farmers ask before joining Agrikart. Still curious? Our team is one call away.
+                      The most common things farmers ask before joining Agrikart. Still curious? Our
+                      team is one call away.
                     </p>
                   </div>
                   <div className="mt-8 flex flex-wrap gap-3">
-                    <Button asChild size="sm" className="bg-white text-[#1a3c2a] hover:bg-[#a0c49d]/30 hover:text-white">
-                      <Link to="/faq">All FAQs <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+                    <Button
+                      asChild
+                      size="sm"
+                      className="bg-white text-[#1a3c2a] hover:bg-[#a0c49d]/30 hover:text-white"
+                    >
+                      <Link to="/faq">
+                        All FAQs <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                      </Link>
                     </Button>
-                    <Button asChild size="sm" variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="outline"
+                      className="border-white/30 bg-transparent text-white hover:bg-white/10"
+                    >
                       <Link to="/contact">Talk to us</Link>
                     </Button>
                   </div>
@@ -467,9 +628,7 @@ export default function Home() {
                         <Plus className="h-4 w-4" />
                       </span>
                     </summary>
-                    <p className="mt-3 pl-10 text-sm leading-relaxed text-[#5a8a5c]">
-                      {item.a}
-                    </p>
+                    <p className="mt-3 pl-10 text-sm leading-relaxed text-[#5a8a5c]">{item.a}</p>
                   </details>
                 ))}
               </div>
@@ -478,18 +637,27 @@ export default function Home() {
         </div>
       </section>
 
-
       {/* GALLERY */}
       {gallery.length > 0 && (
         <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Gallery</h2>
-            <p className="mt-2 text-sm text-muted-foreground sm:text-base">Moments from the field.</p>
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+              Moments from the field.
+            </p>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-10 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
-            {gallery.slice(0, 8).map(g => (
-              <div key={g.id} className="group relative aspect-square overflow-hidden rounded-xl border border-border/60">
-                <img src={g.image} alt={g.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {gallery.slice(0, 8).map((g) => (
+              <div
+                key={g.id}
+                className="group relative aspect-square overflow-hidden rounded-xl border border-border/60"
+              >
+                <img
+                  src={g.image}
+                  alt={g.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="absolute bottom-0 left-0 right-0 translate-y-2 p-3 text-white opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
                   <p className="text-xs font-semibold">{g.title}</p>
@@ -506,22 +674,40 @@ export default function Home() {
         <section className="bg-muted/40 py-10 sm:py-14 md:py-20">
           <div className="container mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Watch & Learn</h2>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">Short videos about our services and farmer stories.</p>
+              <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">
+                Watch & Learn
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                Short videos about our services and farmer stories.
+              </p>
             </div>
             <div className="mt-6 grid gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
-              {videos.slice(0, 6).map(v => (
+              {videos.slice(0, 6).map((v) => (
                 <Card key={v.id} className="overflow-hidden">
-                  <a href={`https://www.youtube.com/watch?v=${v.youtubeId}`} target="_blank" rel="noreferrer" className="group block">
+                  <a
+                    href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group block"
+                  >
                     <div className="relative aspect-video bg-muted">
-                      <img src={`https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg`} alt={v.title} loading="lazy" className="h-full w-full object-cover" />
+                      <img
+                        src={`https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg`}
+                        alt={v.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
                       <div className="absolute inset-0 grid place-items-center bg-black/30 transition group-hover:bg-black/50">
                         <PlayCircle className="h-14 w-14 text-white drop-shadow-lg" />
                       </div>
                     </div>
                     <CardContent className="p-4">
                       <p className="font-semibold">{v.title}</p>
-                      {v.description && <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{v.description}</p>}
+                      {v.description && (
+                        <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                          {v.description}
+                        </p>
+                      )}
                     </CardContent>
                   </a>
                 </Card>
@@ -535,22 +721,38 @@ export default function Home() {
       {partners.length > 0 && (
         <section className="container mx-auto px-4 py-10 sm:py-14 md:py-20">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">Our Partners</h2>
-            <p className="mt-2 text-sm text-muted-foreground sm:text-base">Trusted institutions and brands we work with.</p>
+            <h2 className="text-balance text-2xl font-bold sm:text-3xl md:text-4xl">
+              Our Partners
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+              Trusted institutions and brands we work with.
+            </p>
           </div>
           <div className="mt-6 grid grid-cols-3 gap-3 sm:mt-10 sm:grid-cols-4 sm:gap-4 md:grid-cols-6">
-            {partners.map(p => {
+            {partners.map((p) => {
               const isImage = p.logo.startsWith("data:") || p.logo.startsWith("http");
               const inner = (
                 <div className="grid h-20 w-full place-items-center rounded-xl border border-border/60 bg-card p-3 transition hover:border-primary/40 hover:shadow-elegant">
-                  {isImage
-                    ? <img src={p.logo} alt={p.name} className="max-h-12 max-w-full object-contain grayscale transition hover:grayscale-0" />
-                    : <span className="text-3xl">{p.logo}</span>}
+                  {isImage ? (
+                    <img
+                      src={p.logo}
+                      alt={p.name}
+                      className="max-h-12 max-w-full object-contain grayscale transition hover:grayscale-0"
+                    />
+                  ) : (
+                    <span className="text-3xl">{p.logo}</span>
+                  )}
                 </div>
               );
-              return p.website
-                ? <a key={p.id} href={p.website} target="_blank" rel="noreferrer" title={p.name}>{inner}</a>
-                : <div key={p.id} title={p.name}>{inner}</div>;
+              return p.website ? (
+                <a key={p.id} href={p.website} target="_blank" rel="noreferrer" title={p.name}>
+                  {inner}
+                </a>
+              ) : (
+                <div key={p.id} title={p.name}>
+                  {inner}
+                </div>
+              );
             })}
           </div>
         </section>
@@ -574,14 +776,26 @@ export default function Home() {
                     Ready to grow with <span className="text-[#a0c49d]">Agrikart?</span>
                   </h2>
                   <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/85 sm:text-base">
-                    Apply in minutes. A village-level field executive will reach out to walk you through every step — loans, insurance, inputs, or drone services.
+                    Apply in minutes. A village-level field executive will reach out to walk you
+                    through every step — loans, insurance, inputs, or drone services.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <Button asChild size="lg" className="gap-2 bg-white text-[#1a3c2a] shadow-elegant hover:bg-[#a0c49d]/40 hover:text-white">
-                    <Link to="/apply">Apply Now <ArrowRight className="h-4 w-4" /></Link>
+                  <Button
+                    asChild
+                    size="lg"
+                    className="gap-2 bg-white text-[#1a3c2a] shadow-elegant hover:bg-[#a0c49d]/40 hover:text-white"
+                  >
+                    <Link to="/apply">
+                      Apply Now <ArrowRight className="h-4 w-4" />
+                    </Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10">
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="border-white/40 bg-transparent text-white hover:bg-white/10"
+                  >
                     <Link to="/contact">Contact Us</Link>
                   </Button>
                 </div>
@@ -599,11 +813,18 @@ export default function Home() {
                     Become a village field executive.
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-[#5a8a5c]">
-                    Earn commissions while serving farmers in your own village. Training and tools included.
+                    Earn commissions while serving farmers in your own village. Training and tools
+                    included.
                   </p>
                 </div>
-                <Button asChild variant="ghost" className="mt-6 w-fit gap-2 px-0 text-[#1a3c2a] hover:bg-transparent hover:text-[#5a8a5c]">
-                  <Link to="/careers">Join the team <ArrowRight className="h-4 w-4" /></Link>
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="mt-6 w-fit gap-2 px-0 text-[#1a3c2a] hover:bg-transparent hover:text-[#5a8a5c]"
+                >
+                  <Link to="/careers">
+                    Join the team <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </Button>
               </div>
               <div className="absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-[#a0c49d]/15 blur-2xl" />
@@ -611,7 +832,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
     </>
   );
 }

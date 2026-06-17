@@ -94,8 +94,7 @@ const en = {
   about: {
     title: "About AgriKart",
     whoTitle: "Who We Are",
-    who:
-      "AGRI KART is a rural agri-fintech company dedicated to supporting farmers with financial and agricultural solutions. We provide crop loan assistance, insurance services, seeds, fertilizers, pesticides, agri inputs, drone services, cold storage support, and digital agriculture solutions. Our goal is to connect farmers with modern technology, trusted financial services, and quality agricultural products through a single platform.",
+    who: "AGRI KART is a rural agri-fintech company dedicated to supporting farmers with financial and agricultural solutions. We provide crop loan assistance, insurance services, seeds, fertilizers, pesticides, agri inputs, drone services, cold storage support, and digital agriculture solutions. Our goal is to connect farmers with modern technology, trusted financial services, and quality agricultural products through a single platform.",
     visionTitle: "Our Vision",
     vision:
       "To become India's most trusted rural agri-fintech platform by transforming agriculture through finance, technology, innovation, and farmer-focused services.",
@@ -104,11 +103,26 @@ const en = {
       "To empower farmers by providing easy access to agricultural finance, insurance, quality agri inputs, and modern farming technology while improving rural livelihoods and agricultural productivity.",
     valuesTitle: "Our Values",
     values: [
-      { name: "Farmer First", desc: "Every service we provide is designed to support and benefit farmers." },
-      { name: "Trust & Transparency", desc: "We believe in honest communication, ethical business practices, and transparent services." },
-      { name: "Innovation", desc: "We use modern technology and digital solutions to simplify agriculture and rural finance." },
-      { name: "Commitment", desc: "We are committed to delivering quality services with dedication and responsibility." },
-      { name: "Growth Together", desc: "We grow along with farmers, partners, employees, and rural communities." },
+      {
+        name: "Farmer First",
+        desc: "Every service we provide is designed to support and benefit farmers.",
+      },
+      {
+        name: "Trust & Transparency",
+        desc: "We believe in honest communication, ethical business practices, and transparent services.",
+      },
+      {
+        name: "Innovation",
+        desc: "We use modern technology and digital solutions to simplify agriculture and rural finance.",
+      },
+      {
+        name: "Commitment",
+        desc: "We are committed to delivering quality services with dedication and responsibility.",
+      },
+      {
+        name: "Growth Together",
+        desc: "We grow along with farmers, partners, employees, and rural communities.",
+      },
     ],
   },
   schemes: {
@@ -136,8 +150,7 @@ const en = {
     joiningFee: "Basic Plan: ₹1,499 per year",
     renewalFee: "Premium Plan: ₹4,999 per year",
     paymentMode: "Payment Mode: Rojaripay online payment",
-    note:
-      "No one-time joining fee. Your registration will be activated only after successful payment through Rojaripay.",
+    note: "No one-time joining fee. Your registration will be activated only after successful payment through Rojaripay.",
     fields: {
       name: "Farmer Name",
       mobile: "Mobile Number",
@@ -186,8 +199,7 @@ const en = {
   },
   commission: {
     title: "Commission Model",
-    body:
-      "Commission on loan assistance closures, insurance policies and agri input sales based on slabs, with monthly payout directly to bank account and digital payslip.",
+    body: "Commission on loan assistance closures, insurance policies and agri input sales based on slabs, with monthly payout directly to bank account and digital payslip.",
   },
   faq: {
     title: "Frequently Asked Questions",
@@ -233,9 +245,21 @@ const en = {
     title: "Insights & News",
     subtitle: "Tips, schemes and stories from the field.",
     posts: [
-      { title: "Understanding PMFBY: A Complete Guide", date: "May 2026", excerpt: "Everything you need to know about the Pradhan Mantri Fasal Bima Yojana." },
-      { title: "How to Get Your KCC Loan in 7 Days", date: "Apr 2026", excerpt: "Step-by-step process to apply for a Kisan Credit Card loan." },
-      { title: "Cold Storage: Reducing Post-Harvest Loss", date: "Mar 2026", excerpt: "Why digital slot booking matters for small farmers." },
+      {
+        title: "Understanding PMFBY: A Complete Guide",
+        date: "May 2026",
+        excerpt: "Everything you need to know about the Pradhan Mantri Fasal Bima Yojana.",
+      },
+      {
+        title: "How to Get Your KCC Loan in 7 Days",
+        date: "Apr 2026",
+        excerpt: "Step-by-step process to apply for a Kisan Credit Card loan.",
+      },
+      {
+        title: "Cold Storage: Reducing Post-Harvest Loss",
+        date: "Mar 2026",
+        excerpt: "Why digital slot booking matters for small farmers.",
+      },
     ],
   },
   contact: {
@@ -254,7 +278,8 @@ const en = {
     refundTitle: "Refund Policy",
     updated: "Last updated: May 2026",
     privacy: {
-      intro: "AGRIKART FIN TECH PRIVATE LIMITED (\"we\", \"us\") respects your privacy. This policy explains what data we collect and how we use it.",
+      intro:
+        'AGRIKART FIN TECH PRIVATE LIMITED ("we", "us") respects your privacy. This policy explains what data we collect and how we use it.',
       points: [
         "We collect farmer name, mobile, Aadhaar (optional), village, district, land details, crop information, and payment details.",
         "We use your data only to deliver services, process payments, verify identity, and share scheme/insurance updates.",
@@ -523,8 +548,7 @@ const te: typeof en = {
       loans: {
         title: "రుణ సహాయం",
         short: "రైతులు మరియు భాగస్వామ్య NBFCల మధ్య సమన్వయం.",
-        desc:
-          "AgriKart Fin ద్వారా మేము రైతులకు నేరుగా రుణాలు ఇవ్వము. మేము కేవలం రైతులు మరియు మా భాగస్వామ్య NBFCలు / రుణ సంస్థల మధ్య సమన్వయకర్త (mediator / facilitator) గా మాత్రమే పని చేస్తాము. రైతులు NBFC లేదా బ్యాంకు నుంచే రుణం తీసుకుంటారు; మేము కేవలం రుణ సహాయం – గైడెన్స్, డాక్యుమెంటేషన్, అప్లికేషన్ నింపడం, ఫాలో-అప్ – మాత్రమే చేస్తాము.",
+        desc: "AgriKart Fin ద్వారా మేము రైతులకు నేరుగా రుణాలు ఇవ్వము. మేము కేవలం రైతులు మరియు మా భాగస్వామ్య NBFCలు / రుణ సంస్థల మధ్య సమన్వయకర్త (mediator / facilitator) గా మాత్రమే పని చేస్తాము. రైతులు NBFC లేదా బ్యాంకు నుంచే రుణం తీసుకుంటారు; మేము కేవలం రుణ సహాయం – గైడెన్స్, డాక్యుమెంటేషన్, అప్లికేషన్ నింపడం, ఫాలో-అప్ – మాత్రమే చేస్తాము.",
       },
       insurance: {
         title: "ఇన్సూరెన్స్",
@@ -534,26 +558,22 @@ const te: typeof en = {
       seeds: {
         title: "విత్తనాలు, పురుగుమందులు & ఎరువులు",
         short: "సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన పురుగుమందులు, ఎరువులు.",
-        desc:
-          "కంపెనీ సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు, పంట రక్షణ ఉత్పత్తులు, పంట & సీజన్–వైజ్ సూచనలు.",
+        desc: "కంపెనీ సర్టిఫైడ్ అధిక దిగుబడి విత్తనాలు, నాణ్యమైన ఎరువులు, పంట రక్షణ ఉత్పత్తులు, పంట & సీజన్–వైజ్ సూచనలు.",
       },
       soil: {
         title: "మట్టి పరీక్ష",
         short: "ల్యాబ్ స్థాయి మట్టి విశ్లేషణ, పంట వారీ ఎరువుల సూచనలు.",
-        desc:
-          "పొలంలోనే మట్టి నమూనా సేకరణ, pH, EC, ఆర్గానిక్ కార్బన్, NPK మరియు ముఖ్య సూక్ష్మపోషకాల కోసం ల్యాబ్ స్థాయి పరీక్షలు. పంటకు తగిన ఎరువుల మోతాదు, లైమ్/జిప్సం/సేంద్రియ సవరణలు మరియు అగ్రోనామిస్ట్ సలహాతో డిజిటల్ సాయిల్ హెల్త్ రిపోర్ట్ అందిస్తాము — ప్రతి రూపాయి ఇన్‌పుట్ మెరుగైన దిగుబడి ఇవ్వడానికి.",
+        desc: "పొలంలోనే మట్టి నమూనా సేకరణ, pH, EC, ఆర్గానిక్ కార్బన్, NPK మరియు ముఖ్య సూక్ష్మపోషకాల కోసం ల్యాబ్ స్థాయి పరీక్షలు. పంటకు తగిన ఎరువుల మోతాదు, లైమ్/జిప్సం/సేంద్రియ సవరణలు మరియు అగ్రోనామిస్ట్ సలహాతో డిజిటల్ సాయిల్ హెల్త్ రిపోర్ట్ అందిస్తాము — ప్రతి రూపాయి ఇన్‌పుట్ మెరుగైన దిగుబడి ఇవ్వడానికి.",
       },
       cold: {
         title: "కోల్డ్ స్టోరేజ్",
         short: "డిజిటల్ స్లాట్ బుకింగ్, పారదర్శక చార్జీలు.",
-        desc:
-          "కూరగాయలు, పండ్లు, ఇతర పంటల కోసం సురక్షిత కోల్డ్ స్టోరేజ్, డిజిటల్ బుకింగ్, రోజువారీ/వారానికి/నెలకు పారదర్శక చార్జీలు. రైతులు రైతు ID, పంట పేరు, బస్తాల సంఖ్య, నిల్వ రోజులను నమోదు చేసి ఆన్‌లైన్‌లో స్లాట్ బుక్ చేసుకోవచ్చు.",
+        desc: "కూరగాయలు, పండ్లు, ఇతర పంటల కోసం సురక్షిత కోల్డ్ స్టోరేజ్, డిజిటల్ బుకింగ్, రోజువారీ/వారానికి/నెలకు పారదర్శక చార్జీలు. రైతులు రైతు ID, పంట పేరు, బస్తాల సంఖ్య, నిల్వ రోజులను నమోదు చేసి ఆన్‌లైన్‌లో స్లాట్ బుక్ చేసుకోవచ్చు.",
       },
       trade: {
         title: "ఇంపోర్ట్ & ఎక్స్‌పోర్ట్",
         short: "దేశీయ & అంతర్జాతీయ కొనుగోలుదారులతో కనెక్షన్.",
-        desc:
-          "రైతులు, FPOలను దేశీయ & అంతర్జాతీయ కొనుగోలుదారులతో కనెక్ట్ చేయడం, నాణ్యత ప్రమాణాలు, ప్యాకింగ్, డాక్యుమెంటేషన్, లాజిస్టిక్స్‌లో సహాయం.",
+        desc: "రైతులు, FPOలను దేశీయ & అంతర్జాతీయ కొనుగోలుదారులతో కనెక్ట్ చేయడం, నాణ్యత ప్రమాణాలు, ప్యాకింగ్, డాక్యుమెంటేషన్, లాజిస్టిక్స్‌లో సహాయం.",
       },
       schemes: {
         title: "ప్రభుత్వ పథకాలు",
@@ -570,8 +590,7 @@ const te: typeof en = {
   about: {
     title: "AgriKart Fin గురించి",
     whoTitle: "మేము ఎవరం",
-    who:
-      "AgriKart Fin Pvt Ltd రైతుల ఆదాయం పెరగటానికి, ప్రమాదం తగ్గించటానికి ఫైనాన్స్ సహాయం, ఇన్సూరెన్స్, నాణ్యమైన ఇన్పుట్లు, మార్కెట్ కనెక్షన్లు అందించే ఫిన్‌టెక్–అగ్రి సంస్థ.",
+    who: "AgriKart Fin Pvt Ltd రైతుల ఆదాయం పెరగటానికి, ప్రమాదం తగ్గించటానికి ఫైనాన్స్ సహాయం, ఇన్సూరెన్స్, నాణ్యమైన ఇన్పుట్లు, మార్కెట్ కనెక్షన్లు అందించే ఫిన్‌టెక్–అగ్రి సంస్థ.",
     visionTitle: "విజన్",
     vision: "ప్రతి భారతీయ రైతుకు నమ్మకమైన డిజిటల్ భాగస్వామిగా ఎదగడం.",
     missionTitle: "మిషన్",
@@ -579,10 +598,22 @@ const te: typeof en = {
     valuesTitle: "మా విలువలు",
     values: [
       { name: "రైతు ముందుగా", desc: "మేము అందించే ప్రతి సేవ రైతులకు మద్దతు మరియు ప్రయోజనం కోసమే." },
-      { name: "నమ్మకం & పారదర్శకత", desc: "నిజాయితీ కమ్యూనికేషన్, నైతిక వ్యాపార పద్ధతులు, పారదర్శక సేవలను మేము నమ్ముతాం." },
-      { name: "నూతనత", desc: "వ్యవసాయం మరియు గ్రామీణ ఫైనాన్స్‌ను సులభతరం చేయడానికి ఆధునిక సాంకేతికత ఉపయోగిస్తాం." },
-      { name: "నిబద్ధత", desc: "అంకితభావం మరియు బాధ్యతతో నాణ్యమైన సేవలు అందించడానికి కట్టుబడి ఉన్నాం." },
-      { name: "కలిసి ఎదగడం", desc: "రైతులు, భాగస్వాములు, ఉద్యోగులు, గ్రామీణ సమాజాలతో కలిసి మేము ఎదుగుతాం." },
+      {
+        name: "నమ్మకం & పారదర్శకత",
+        desc: "నిజాయితీ కమ్యూనికేషన్, నైతిక వ్యాపార పద్ధతులు, పారదర్శక సేవలను మేము నమ్ముతాం.",
+      },
+      {
+        name: "నూతనత",
+        desc: "వ్యవసాయం మరియు గ్రామీణ ఫైనాన్స్‌ను సులభతరం చేయడానికి ఆధునిక సాంకేతికత ఉపయోగిస్తాం.",
+      },
+      {
+        name: "నిబద్ధత",
+        desc: "అంకితభావం మరియు బాధ్యతతో నాణ్యమైన సేవలు అందించడానికి కట్టుబడి ఉన్నాం.",
+      },
+      {
+        name: "కలిసి ఎదగడం",
+        desc: "రైతులు, భాగస్వాములు, ఉద్యోగులు, గ్రామీణ సమాజాలతో కలిసి మేము ఎదుగుతాం.",
+      },
     ],
   },
   schemes: {
@@ -659,8 +690,7 @@ const te: typeof en = {
   },
   commission: {
     title: "కమిషన్ మోడల్",
-    body:
-      "రుణ సహాయం ద్వారా పూర్తయిన కేసులు, ఇన్సూరెన్స్ పాలసీలు, విత్తనాలు–ఎరువుల సేల్స్‌పై స్లాబ్–వైజ్ కమిషన్, ప్రతి నెల బ్యాంక్ ఖాతాకు నేరుగా జమ చేసి డిజిటల్ పేస్లిప్ అందించబడుతుంది.",
+    body: "రుణ సహాయం ద్వారా పూర్తయిన కేసులు, ఇన్సూరెన్స్ పాలసీలు, విత్తనాలు–ఎరువుల సేల్స్‌పై స్లాబ్–వైజ్ కమిషన్, ప్రతి నెల బ్యాంక్ ఖాతాకు నేరుగా జమ చేసి డిజిటల్ పేస్లిప్ అందించబడుతుంది.",
   },
   faq: {
     title: "తరచూ అడిగే ప్రశ్నలు",
@@ -693,7 +723,8 @@ const te: typeof en = {
   },
   careers: {
     title: "AgriKart Finలో ఉద్యోగాలు",
-    intro: "భారత వ్యవసాయాన్ని మార్చడంలో మాతో చేరండి. ఫీల్డ్, టెక్నాలజీ, కస్టమర్ సపోర్ట్‌లో అవకాశాలు.",
+    intro:
+      "భారత వ్యవసాయాన్ని మార్చడంలో మాతో చేరండి. ఫీల్డ్, టెక్నాలజీ, కస్టమర్ సపోర్ట్‌లో అవకాశాలు.",
     openings: [
       { role: "ఫీల్డ్ ఆపరేషన్స్ ఎగ్జిక్యూటివ్", loc: "వరంగల్ / కరీంనగర్", type: "ఫుల్-టైమ్" },
       { role: "కస్టమర్ సపోర్ట్ — తెలుగు", loc: "హైదరాబాద్", type: "ఫుల్-టైమ్" },
@@ -705,9 +736,21 @@ const te: typeof en = {
     title: "సమాచారం & వార్తలు",
     subtitle: "క్షేత్ర స్థాయి చిట్కాలు, పథకాలు, కథలు.",
     posts: [
-      { title: "PMFBY అర్థం: పూర్తి గైడ్", date: "మే 2026", excerpt: "ప్రధాన మంత్రి ఫసల్ బీమా యోజన గురించి మీరు తెలుసుకోవలసినవి." },
-      { title: "7 రోజుల్లో KCC రుణం పొందండి", date: "ఏప్రి 2026", excerpt: "కిసాన్ క్రెడిట్ కార్డ్ రుణం కోసం స్టెప్-బై-స్టెప్." },
-      { title: "కోల్డ్ స్టోరేజ్: పంట కోత తర్వాత నష్టాలు తగ్గించడం", date: "మార్చి 2026", excerpt: "చిన్న రైతులకు డిజిటల్ స్లాట్ బుకింగ్ ఎందుకు ముఖ్యం." },
+      {
+        title: "PMFBY అర్థం: పూర్తి గైడ్",
+        date: "మే 2026",
+        excerpt: "ప్రధాన మంత్రి ఫసల్ బీమా యోజన గురించి మీరు తెలుసుకోవలసినవి.",
+      },
+      {
+        title: "7 రోజుల్లో KCC రుణం పొందండి",
+        date: "ఏప్రి 2026",
+        excerpt: "కిసాన్ క్రెడిట్ కార్డ్ రుణం కోసం స్టెప్-బై-స్టెప్.",
+      },
+      {
+        title: "కోల్డ్ స్టోరేజ్: పంట కోత తర్వాత నష్టాలు తగ్గించడం",
+        date: "మార్చి 2026",
+        excerpt: "చిన్న రైతులకు డిజిటల్ స్లాట్ బుకింగ్ ఎందుకు ముఖ్యం.",
+      },
     ],
   },
   contact: {
@@ -726,7 +769,8 @@ const te: typeof en = {
     refundTitle: "రీఫండ్ పాలసీ",
     updated: "చివరిగా అప్‌డేట్: మే 2026",
     privacy: {
-      intro: "AGRIKART FIN TECH PRIVATE LIMITED (\"మేము\") మీ గోప్యతను గౌరవిస్తుంది. మేము ఏ డేటాను సేకరిస్తాము మరియు ఎలా ఉపయోగిస్తామో ఈ పాలసీ వివరిస్తుంది.",
+      intro:
+        'AGRIKART FIN TECH PRIVATE LIMITED ("మేము") మీ గోప్యతను గౌరవిస్తుంది. మేము ఏ డేటాను సేకరిస్తాము మరియు ఎలా ఉపయోగిస్తామో ఈ పాలసీ వివరిస్తుంది.',
       points: [
         "మేము రైతు పేరు, మొబైల్, ఆధార్ (ఐచ్ఛికం), గ్రామం, జిల్లా, భూమి వివరాలు, పంట సమాచారం, చెల్లింపు వివరాలు మాత్రమే సేకరిస్తాము.",
         "మీ డేటాను సేవలు అందించడం, చెల్లింపులు ప్రాసెస్ చేయడం, గుర్తింపు ధృవీకరణ, పథకాలు/ఇన్సూరెన్స్ అప్‌డేట్‌లకు మాత్రమే ఉపయోగిస్తాము.",
@@ -747,7 +791,8 @@ const te: typeof en = {
       ],
     },
     refund: {
-      intro: "జాయినింగ్ ఫీజులు, రీన్యువల్‌లు, సేవా చార్జీలు ఎలా రీఫండ్ అవుతాయో ఈ పాలసీ వివరిస్తుంది.",
+      intro:
+        "జాయినింగ్ ఫీజులు, రీన్యువల్‌లు, సేవా చార్జీలు ఎలా రీఫండ్ అవుతాయో ఈ పాలసీ వివరిస్తుంది.",
       points: [
         "రైతు ID యాక్టివేట్ అయిన తర్వాత జాయినింగ్ ఫీజు & వార్షిక రీన్యువల్ ఫీజు రీఫండ్ చేయబడవు.",
         "సేవా బుకింగ్‌లు (కోల్డ్ స్టోరేజ్, డ్రోన్ మొదలైనవి) మా టీమ్ ఆమోదానికి ముందు ఉచితంగా రద్దు చేయవచ్చు.",
@@ -945,14 +990,18 @@ const te: typeof en = {
 };
 
 const isBrowser = typeof window !== "undefined";
-const chain = isBrowser ? i18n.use(LanguageDetector).use(initReactI18next) : i18n.use(initReactI18next);
+const chain = isBrowser
+  ? i18n.use(LanguageDetector).use(initReactI18next)
+  : i18n.use(initReactI18next);
 
 void chain.init({
   resources: { en: { translation: en }, te: { translation: te } },
   lng: isBrowser ? undefined : "en",
   fallbackLng: "en",
   interpolation: { escapeValue: false },
-  detection: isBrowser ? { order: ["localStorage", "navigator"], caches: ["localStorage"] } : undefined,
+  detection: isBrowser
+    ? { order: ["localStorage", "navigator"], caches: ["localStorage"] }
+    : undefined,
   react: { useSuspense: false },
 });
 

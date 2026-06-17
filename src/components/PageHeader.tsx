@@ -1,4 +1,12 @@
-export function PageHeader({ title, subtitle, eyebrow }: { title: string; subtitle?: string; eyebrow?: string }) {
+export function PageHeader({
+  title,
+  subtitle,
+  eyebrow,
+}: {
+  title: string;
+  subtitle?: string;
+  eyebrow?: string;
+}) {
   return (
     <section className="relative overflow-hidden border-b border-border/60 bg-hero-gradient">
       <div className="absolute inset-0 bg-grain opacity-40 pointer-events-none" />

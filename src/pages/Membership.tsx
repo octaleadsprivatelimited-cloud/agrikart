@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Check, Crown, Sprout, ShieldCheck, Users, Headset, Star, ArrowRight, Sparkles,
+  Check,
+  Crown,
+  Sprout,
+  ShieldCheck,
+  Users,
+  Headset,
+  Star,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -107,9 +115,7 @@ export default function Membership() {
                 )}
                 style={{ animationDelay: `${idx * 80}ms` }}
               >
-                {plan.highlight && (
-                  <div className="absolute inset-x-0 top-0 h-1 bg-cta-gradient" />
-                )}
+                {plan.highlight && <div className="absolute inset-x-0 top-0 h-1 bg-cta-gradient" />}
                 {plan.badge && (
                   <Badge className="absolute right-4 top-4 gap-1 bg-cta-gradient text-primary-foreground shadow">
                     <Sparkles className="h-3 w-3" />
@@ -139,17 +145,16 @@ export default function Membership() {
                     <span className="mb-2 text-sm text-muted-foreground">{suffix}</span>
                   </div>
                   {plan.priceNote && (
-                    <p className="mt-1 text-xs font-medium text-muted-foreground">{plan.priceNote}</p>
+                    <p className="mt-1 text-xs font-medium text-muted-foreground">
+                      {plan.priceNote}
+                    </p>
                   )}
 
                   <Button
                     asChild
                     size="lg"
                     variant={plan.highlight ? "default" : "outline"}
-                    className={cn(
-                      "mt-6 w-full gap-2",
-                      plan.highlight && "shadow-elegant",
-                    )}
+                    className={cn("mt-6 w-full gap-2", plan.highlight && "shadow-elegant")}
                   >
                     <Link to="/apply">
                       {plan.cta} <ArrowRight className="h-4 w-4" />
@@ -201,9 +206,7 @@ export default function Membership() {
                 )}
               >
                 <div className="font-medium text-foreground/90">{row.label}</div>
-                <div className="text-center text-muted-foreground">
-                  {renderCell(row.basic)}
-                </div>
+                <div className="text-center text-muted-foreground">{renderCell(row.basic)}</div>
                 <div className="text-center font-semibold text-primary">
                   {renderCell(row.premium)}
                 </div>

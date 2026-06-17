@@ -7,16 +7,21 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
-  findCustomerByCode, isFarmerVerified, recordPayment,
-  useCurrentStaff, type Customer,
+  findCustomerByCode,
+  isFarmerVerified,
+  recordPayment,
+  useCurrentStaff,
+  type Customer,
 } from "@/lib/staff-store";
-import {
-  useProducts, placeOrder, fmt, type Address, type PaymentMode,
-} from "@/lib/shop-store";
+import { useProducts, placeOrder, fmt, type Address, type PaymentMode } from "@/lib/shop-store";
 import { Search, Plus, Minus, Trash2, ShieldCheck, ShieldAlert, ShoppingCart } from "lucide-react";
 
 type Line = { productId: string; qty: number };
@@ -41,17 +46,28 @@ export default function PlaceOrder() {
   const verified = isFarmerVerified(farmer);
 
   const productMap = useMemo(() => {
-    const m = new Map(products.map(p => [p.id, p]));
+    const m = new Map(products.map((p) => [p.id, p]));
     return m;
   }, [products]);
 
-  const orderLines = useMemo(() => lines.map(l => {
-    const p = productMap.get(l.productId);
-    if (!p) return null;
-    const price = p.discountPrice ?? p.price;
-    return { productId: p.id, name: p.name, price, qty: l.qty, stock: p.stock };
-  }).filter(Boolean) as { productId: string; name: string; price: number; qty: number; stock: number }[],
-  [lines, productMap]);
+  const orderLines = useMemo(
+    () =>
+      lines
+        .map((l) => {
+          const p = productMap.get(l.productId);
+          if (!p) return null;
+          const price = p.discountPrice ?? p.price;
+          return { productId: p.id, name: p.name, price, qty: l.qty, stock: p.stock };
+        })
+        .filter(Boolean) as {
+        productId: string;
+        name: string;
+        price: number;
+        qty: number;
+        stock: number;
+      }[],
+    [lines, productMap],
+  );
 
   const subtotal = orderLines.reduce((s, l) => s + l.price * l.qty, 0);
 
@@ -68,8 +84,8 @@ export default function PlaceOrder() {
 
   function addLine() {
     if (!pickId) return;
-    setLines(prev => {
-      const i = prev.findIndex(l => l.productId === pickId);
+    setLines((prev) => {
+      const i = prev.findIndex((l) => l.productId === pickId);
       if (i >= 0) {
         const next = [...prev];
         next[i] = { ...next[i], qty: next[i].qty + 1 };
@@ -81,20 +97,35 @@ export default function PlaceOrder() {
   }
 
   function setQty(id: string, qty: number) {
-    setLines(prev => prev.map(l => l.productId === id ? { ...l, qty: Math.max(1, qty) } : l));
+    setLines((prev) => prev.map((l) => (l.productId === id ? { ...l, qty: Math.max(1, qty) } : l)));
   }
-  function remove(id: string) { setLines(prev => prev.filter(l => l.productId !== id)); }
+  function remove(id: string) {
+    setLines((prev) => prev.filter((l) => l.productId !== id));
+  }
 
   async function submit() {
     if (!staff) return;
-    if (!farmer) { toast.error("Look up a farmer first"); return; }
-    if (!verified) { toast.error("Farmer is not verified. Admin must approve KYC documents first."); return; }
-    if (orderLines.length === 0) { toast.error("Add at least one product"); return; }
+    if (!farmer) {
+      toast.error("Look up a farmer first");
+      return;
+    }
+    if (!verified) {
+      toast.error("Farmer is not verified. Admin must approve KYC documents first.");
+      return;
+    }
+    if (orderLines.length === 0) {
+      toast.error("Add at least one product");
+      return;
+    }
     for (const l of orderLines) {
-      if (l.qty > l.stock) { toast.error(`Only ${l.stock} in stock for ${l.name}`); return; }
+      if (l.qty > l.stock) {
+        toast.error(`Only ${l.stock} in stock for ${l.name}`);
+        return;
+      }
     }
     if ((pay === "UPI" || pay === "Card" || pay === "NetBanking") && !reference.trim()) {
-      toast.error("Enter the payment reference / transaction ID"); return;
+      toast.error("Enter the payment reference / transaction ID");
+      return;
     }
 
     setSubmitting(true);
@@ -119,7 +150,12 @@ export default function PlaceOrder() {
         userName: farmer.farmerName,
         mobile: farmer.mobile,
         address,
-        lines: orderLines.map(l => ({ productId: l.productId, name: l.name, price: l.price, qty: l.qty })),
+        lines: orderLines.map((l) => ({
+          productId: l.productId,
+          name: l.name,
+          price: l.price,
+          qty: l.qty,
+        })),
         paymentMode,
       });
 
@@ -152,21 +188,37 @@ export default function PlaceOrder() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Place Order</h1>
-        <p className="text-sm text-muted-foreground">Place an order on behalf of a verified farmer.</p>
+        <p className="text-sm text-muted-foreground">
+          Place an order on behalf of a verified farmer.
+        </p>
       </div>
 
       {/* Step 1: farmer lookup */}
       <Card>
-        <CardHeader><CardTitle className="text-lg">1. Farmer</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-lg">1. Farmer</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-end gap-3">
             <div className="flex-1 min-w-[200px]">
               <Label htmlFor="code">Farmer ID</Label>
-              <Input id="code" placeholder="e.g. AKF7XK2P" value={code}
+              <Input
+                id="code"
+                placeholder="e.g. AKF7XK2P"
+                value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); lookup(); } }} />
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    lookup();
+                  }
+                }}
+              />
             </div>
-            <Button type="button" onClick={lookup}><Search className="mr-2 h-4 w-4" />Look up</Button>
+            <Button type="button" onClick={lookup}>
+              <Search className="mr-2 h-4 w-4" />
+              Look up
+            </Button>
           </div>
           {lookupErr && <p className="text-sm text-destructive">{lookupErr}</p>}
 
@@ -176,20 +228,33 @@ export default function PlaceOrder() {
                 <div>
                   <p className="font-semibold">
                     {farmer.farmerName}
-                    <span className="ml-2 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-mono font-bold text-primary">{farmer.farmerCode}</span>
+                    <span className="ml-2 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-mono font-bold text-primary">
+                      {farmer.farmerCode}
+                    </span>
                   </p>
-                  <p className="text-xs text-muted-foreground">{farmer.village}, {farmer.district} · {farmer.mobile}</p>
-                  <p className="text-xs text-muted-foreground">Land: {farmer.landSize} · Crops: {farmer.crops}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {farmer.village}, {farmer.district} · {farmer.mobile}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Land: {farmer.landSize} · Crops: {farmer.crops}
+                  </p>
                 </div>
                 {verified ? (
-                  <Badge className="bg-emerald-600 hover:bg-emerald-600"><ShieldCheck className="mr-1 h-3 w-3" />Verified</Badge>
+                  <Badge className="bg-emerald-600 hover:bg-emerald-600">
+                    <ShieldCheck className="mr-1 h-3 w-3" />
+                    Verified
+                  </Badge>
                 ) : (
-                  <Badge variant="destructive"><ShieldAlert className="mr-1 h-3 w-3" />Not verified</Badge>
+                  <Badge variant="destructive">
+                    <ShieldAlert className="mr-1 h-3 w-3" />
+                    Not verified
+                  </Badge>
                 )}
               </div>
               {!verified && (
                 <p className="mt-2 text-xs text-destructive">
-                  Status: <b>{farmer.status}</b>. Orders can only be placed for farmers whose KYC documents (Aadhaar, PAN, Land) have been approved by an admin.
+                  Status: <b>{farmer.status}</b>. Orders can only be placed for farmers whose KYC
+                  documents (Aadhaar, PAN, Land) have been approved by an admin.
                 </p>
               )}
             </div>
@@ -199,43 +264,86 @@ export default function PlaceOrder() {
 
       {/* Step 2: products */}
       <Card>
-        <CardHeader><CardTitle className="text-lg">2. Products</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-lg">2. Products</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-end gap-3">
             <div className="flex-1 min-w-[220px]">
               <Label>Add product</Label>
               <Select value={pickId} onValueChange={setPickId}>
-                <SelectTrigger><SelectValue placeholder="Select a product" /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a product" />
+                </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
-                  {products.filter(p => p.status === "Active").map(p => (
-                    <SelectItem key={p.id} value={p.id} disabled={p.stock === 0}>
-                      {p.name} · {fmt(p.discountPrice ?? p.price)} {p.stock === 0 ? "(Out of stock)" : `· stock ${p.stock}`}
-                    </SelectItem>
-                  ))}
+                  {products
+                    .filter((p) => p.status === "Active")
+                    .map((p) => (
+                      <SelectItem key={p.id} value={p.id} disabled={p.stock === 0}>
+                        {p.name} · {fmt(p.discountPrice ?? p.price)}{" "}
+                        {p.stock === 0 ? "(Out of stock)" : `· stock ${p.stock}`}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
-            <Button type="button" onClick={addLine} disabled={!pickId}><Plus className="mr-2 h-4 w-4" />Add</Button>
+            <Button type="button" onClick={addLine} disabled={!pickId}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add
+            </Button>
           </div>
 
           {orderLines.length === 0 ? (
             <p className="text-sm text-muted-foreground">No items added.</p>
           ) : (
             <div className="divide-y divide-border rounded-md border border-border">
-              {orderLines.map(l => (
+              {orderLines.map((l) => (
                 <div key={l.productId} className="flex flex-wrap items-center gap-3 p-3">
                   <div className="flex-1 min-w-[180px]">
                     <p className="text-sm font-medium">{l.name}</p>
-                    <p className="text-xs text-muted-foreground">{fmt(l.price)} · stock {l.stock}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {fmt(l.price)} · stock {l.stock}
+                    </p>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Button type="button" size="icon" variant="outline" className="h-8 w-8" onClick={() => setQty(l.productId, l.qty - 1)}><Minus className="h-3 w-3" /></Button>
-                    <Input className="h-8 w-14 text-center" value={l.qty}
-                      onChange={(e) => setQty(l.productId, Math.max(1, parseInt(e.target.value || "1", 10)))} />
-                    <Button type="button" size="icon" variant="outline" className="h-8 w-8" onClick={() => setQty(l.productId, l.qty + 1)}><Plus className="h-3 w-3" /></Button>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="outline"
+                      className="h-8 w-8"
+                      onClick={() => setQty(l.productId, l.qty - 1)}
+                    >
+                      <Minus className="h-3 w-3" />
+                    </Button>
+                    <Input
+                      className="h-8 w-14 text-center"
+                      value={l.qty}
+                      onChange={(e) =>
+                        setQty(l.productId, Math.max(1, parseInt(e.target.value || "1", 10)))
+                      }
+                    />
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="outline"
+                      className="h-8 w-8"
+                      onClick={() => setQty(l.productId, l.qty + 1)}
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
                   </div>
-                  <div className="w-24 text-right text-sm font-semibold">{fmt(l.price * l.qty)}</div>
-                  <Button type="button" size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => remove(l.productId)}><Trash2 className="h-4 w-4" /></Button>
+                  <div className="w-24 text-right text-sm font-semibold">
+                    {fmt(l.price * l.qty)}
+                  </div>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8 text-destructive"
+                    onClick={() => remove(l.productId)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
               <div className="flex items-center justify-between p-3 bg-muted/30">
@@ -249,13 +357,17 @@ export default function PlaceOrder() {
 
       {/* Step 3: payment */}
       <Card>
-        <CardHeader><CardTitle className="text-lg">3. Payment</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-lg">3. Payment</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <Label>Method</Label>
               <Select value={pay} onValueChange={(v) => setPay(v as PayChoice)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Cash">Cash (collected now)</SelectItem>
                   <SelectItem value="UPI">UPI</SelectItem>
@@ -268,8 +380,17 @@ export default function PlaceOrder() {
             {pay !== "COD" && (
               <div>
                 <Label>Reference / Txn No.{pay !== "Cash" ? " *" : ""}</Label>
-                <Input value={reference} onChange={(e) => setReference(e.target.value)}
-                  placeholder={pay === "UPI" ? "UPI ref id" : pay === "Cash" ? "Receipt no. (optional)" : "Txn id"} />
+                <Input
+                  value={reference}
+                  onChange={(e) => setReference(e.target.value)}
+                  placeholder={
+                    pay === "UPI"
+                      ? "UPI ref id"
+                      : pay === "Cash"
+                        ? "Receipt no. (optional)"
+                        : "Txn id"
+                  }
+                />
               </div>
             )}
           </div>
@@ -287,7 +408,11 @@ export default function PlaceOrder() {
           <p className="text-xs text-muted-foreground">Order total (excl. shipping)</p>
           <p className="text-2xl font-bold">{fmt(subtotal)}</p>
         </div>
-        <Button size="lg" onClick={submit} disabled={submitting || !farmer || !verified || orderLines.length === 0}>
+        <Button
+          size="lg"
+          onClick={submit}
+          disabled={submitting || !farmer || !verified || orderLines.length === 0}
+        >
           <ShoppingCart className="mr-2 h-4 w-4" />
           {submitting ? "Placing…" : "Place Order"}
         </Button>

@@ -6,7 +6,11 @@ import { Briefcase, MapPin } from "lucide-react";
 
 export default function Careers() {
   const { t } = useTranslation();
-  const openings = t("careers.openings", { returnObjects: true }) as Array<{ role: string; loc: string; type: string }>;
+  const openings = t("careers.openings", { returnObjects: true }) as Array<{
+    role: string;
+    loc: string;
+    type: string;
+  }>;
   return (
     <>
       <PageHeader title={t("careers.title")} subtitle={t("careers.intro")} />
@@ -17,11 +21,19 @@ export default function Careers() {
               <div>
                 <h3 className="text-lg font-semibold">{o.role}</h3>
                 <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                  <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{o.loc}</span>
-                  <span className="inline-flex items-center gap-1"><Briefcase className="h-3.5 w-3.5" />{o.type}</span>
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5" />
+                    {o.loc}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Briefcase className="h-3.5 w-3.5" />
+                    {o.type}
+                  </span>
                 </div>
               </div>
-              <Button asChild variant="outline"><a href="mailto:careers@agrifincart.com">{t("careers.apply")}</a></Button>
+              <Button asChild variant="outline">
+                <a href="mailto:careers@agrifincart.com">{t("careers.apply")}</a>
+              </Button>
             </CardContent>
           </Card>
         ))}

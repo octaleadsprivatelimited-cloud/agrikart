@@ -4,17 +4,38 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  createCustomer, recordPayment, useCurrentStaff,
-  type PaymentKind, type Payment, type DocFile, type CustomerDocuments,
-  type FarmerType, FARMER_TYPE_LABELS,
-  DOC_MAX_BYTES, DOC_ACCEPT_MIME,
+  createCustomer,
+  recordPayment,
+  useCurrentStaff,
+  type PaymentKind,
+  type Payment,
+  type DocFile,
+  type CustomerDocuments,
+  type FarmerType,
+  FARMER_TYPE_LABELS,
+  DOC_MAX_BYTES,
+  DOC_ACCEPT_MIME,
 } from "@/lib/staff-store";
 import {
-  MapPin, Loader2, CheckCircle2, AlertCircle, RefreshCw, IndianRupee, Banknote,
-  FileText, Upload, ShieldCheck,
+  MapPin,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  RefreshCw,
+  IndianRupee,
+  Banknote,
+  FileText,
+  Upload,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,18 +48,21 @@ const PAY_METHODS: { value: PayMethod; label: string }[] = [
 ];
 const KIND_AMOUNTS: Record<PaymentKind, number> = { joining: 1499, renewal: 4999 };
 
-
 type Gps = { lat: number; lng: number; accuracy: number; timestamp: number };
 
 const TARGET_ACCURACY_M = 20; // stop refining once within 20m
-const MAX_WATCH_MS = 25_000;  // give up after 25s and use best fix so far
+const MAX_WATCH_MS = 25_000; // give up after 25s and use best fix so far
 
 export default function AddCustomer() {
   const staff = useCurrentStaff();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    farmerName: "", mobile: "", village: "", district: "",
-    landSize: "", crops: "",
+    farmerName: "",
+    mobile: "",
+    village: "",
+    district: "",
+    landSize: "",
+    crops: "",
   });
   const [farmerType, setFarmerType] = useState<FarmerType>("Owner");
 
@@ -76,31 +100,35 @@ export default function AddCustomer() {
     setPayAmount(String(KIND_AMOUNTS[k]));
   };
 
-  const pickFile = (setter: (f: DocFile | null) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) { setter(null); return; }
-    if (!DOC_ACCEPT_MIME.includes(file.type)) {
-      toast.error("Only JPG, PNG, WEBP or PDF allowed.");
-      e.target.value = "";
-      return;
-    }
-    if (file.size > DOC_MAX_BYTES) {
-      toast.error(`File is too large (max ${Math.round(DOC_MAX_BYTES / 1024)} KB).`);
-      e.target.value = "";
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      setter({
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        dataUrl: String(reader.result ?? ""),
-      });
+  const pickFile =
+    (setter: (f: DocFile | null) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) {
+        setter(null);
+        return;
+      }
+      if (!DOC_ACCEPT_MIME.includes(file.type)) {
+        toast.error("Only JPG, PNG, WEBP or PDF allowed.");
+        e.target.value = "";
+        return;
+      }
+      if (file.size > DOC_MAX_BYTES) {
+        toast.error(`File is too large (max ${Math.round(DOC_MAX_BYTES / 1024)} KB).`);
+        e.target.value = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setter({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          dataUrl: String(reader.result ?? ""),
+        });
+      };
+      reader.onerror = () => toast.error("Could not read file. Try a smaller one.");
+      reader.readAsDataURL(file);
     };
-    reader.onerror = () => toast.error("Could not read file. Try a smaller one.");
-    reader.readAsDataURL(file);
-  };
 
   const stopWatch = () => {
     if (watchRef.current !== null && navigator.geolocation) {
@@ -118,7 +146,7 @@ export default function AddCustomer() {
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
-        { headers: { "Accept": "application/json" } },
+        { headers: { Accept: "application/json" } },
       );
       if (!res.ok) return;
       const data = await res.json();
@@ -223,8 +251,8 @@ export default function AddCustomer() {
     }
     const documents: CustomerDocuments = {
       aadhaar: { number: aadhaarNo.trim(), file: aadhaarFile },
-      pan:     { number: panNo.trim().toUpperCase(), file: panFile },
-      land:    { surveyNo: surveyNo.trim(), file: landFile },
+      pan: { number: panNo.trim().toUpperCase(), file: panFile },
+      land: { surveyNo: surveyNo.trim(), file: landFile },
     };
     const c = createCustomer({
       ...formRef.current,
@@ -249,7 +277,9 @@ export default function AddCustomer() {
         collectedById: staff.id,
         collectedByName: staff.name,
       });
-      toast.success(`${c.farmerName} enrolled · ₹${amountNum} collected (${p.id}). Farmer ID will be issued after admin approval.`);
+      toast.success(
+        `${c.farmerName} enrolled · ₹${amountNum} collected (${p.id}). Farmer ID will be issued after admin approval.`,
+      );
     } else {
       toast.success(`Enrollment submitted. Farmer ID will be issued after admin approval.`);
     }
@@ -273,16 +303,37 @@ export default function AddCustomer() {
         </p>
 
         <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
-          <Field label="Farmer Name"><Input required maxLength={100} value={form.farmerName} onChange={update("farmerName")} /></Field>
-          <Field label="Mobile Number"><Input required pattern="[0-9]{10}" maxLength={10} value={form.mobile} onChange={update("mobile")} /></Field>
+          <Field label="Farmer Name">
+            <Input
+              required
+              maxLength={100}
+              value={form.farmerName}
+              onChange={update("farmerName")}
+            />
+          </Field>
+          <Field label="Mobile Number">
+            <Input
+              required
+              pattern="[0-9]{10}"
+              maxLength={10}
+              value={form.mobile}
+              onChange={update("mobile")}
+            />
+          </Field>
 
           <div className="sm:col-span-2">
-            <Label>Farmer Type <span className="text-destructive">*</span></Label>
+            <Label>
+              Farmer Type <span className="text-destructive">*</span>
+            </Label>
             <Select value={farmerType} onValueChange={(v) => setFarmerType(v as FarmerType)}>
-              <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="mt-1.5">
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 {(Object.keys(FARMER_TYPE_LABELS) as FarmerType[]).map((k) => (
-                  <SelectItem key={k} value={k}>{FARMER_TYPE_LABELS[k]}</SelectItem>
+                  <SelectItem key={k} value={k}>
+                    {FARMER_TYPE_LABELS[k]}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -291,11 +342,31 @@ export default function AddCustomer() {
             </p>
           </div>
 
-          
-          <Field label="Village"><Input required maxLength={100} value={form.village} onChange={update("village")} /></Field>
-          <Field label="District"><Input required maxLength={100} value={form.district} onChange={update("district")} /></Field>
-          <Field label="Land Size (acres)"><Input required type="number" min="0" step="0.1" value={form.landSize} onChange={update("landSize")} /></Field>
-          <Field label="Crops Grown"><Input required maxLength={200} value={form.crops} onChange={update("crops")} placeholder="Cotton, Paddy" /></Field>
+          <Field label="Village">
+            <Input required maxLength={100} value={form.village} onChange={update("village")} />
+          </Field>
+          <Field label="District">
+            <Input required maxLength={100} value={form.district} onChange={update("district")} />
+          </Field>
+          <Field label="Land Size (acres)">
+            <Input
+              required
+              type="number"
+              min="0"
+              step="0.1"
+              value={form.landSize}
+              onChange={update("landSize")}
+            />
+          </Field>
+          <Field label="Crops Grown">
+            <Input
+              required
+              maxLength={200}
+              value={form.crops}
+              onChange={update("crops")}
+              placeholder="Cotton, Paddy"
+            />
+          </Field>
 
           {/* ---------- KYC Documents (mandatory) ---------- */}
           <div className="sm:col-span-2">
@@ -305,9 +376,12 @@ export default function AddCustomer() {
                   <ShieldCheck className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold">KYC & land documents <span className="text-destructive">*</span></p>
+                  <p className="text-sm font-semibold">
+                    KYC & land documents <span className="text-destructive">*</span>
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    Aadhaar, PAN and a land record are required. JPG / PNG / PDF, max {Math.round(DOC_MAX_BYTES / 1024)} KB each.
+                    Aadhaar, PAN and a land record are required. JPG / PNG / PDF, max{" "}
+                    {Math.round(DOC_MAX_BYTES / 1024)} KB each.
                   </p>
                 </div>
               </div>
@@ -346,12 +420,23 @@ export default function AddCustomer() {
             </div>
           </div>
 
-
           <div className="sm:col-span-2">
             <div className="flex items-center justify-between">
-              <Label>GPS Location <span className="text-destructive">*</span></Label>
-              <Button type="button" variant="ghost" size="sm" onClick={startCapture} disabled={capturing}>
-                {capturing ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              <Label>
+                GPS Location <span className="text-destructive">*</span>
+              </Label>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={startCapture}
+                disabled={capturing}
+              >
+                {capturing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-4 w-4" />
+                )}
                 {capturing ? "Locating…" : "Recapture"}
               </Button>
             </div>
@@ -363,11 +448,18 @@ export default function AddCustomer() {
                   <div className="text-sm">
                     <p className="font-semibold">
                       Location captured
-                      {capturing && <span className="ml-2 text-xs font-normal text-muted-foreground">Refining…</span>}
+                      {capturing && (
+                        <span className="ml-2 text-xs font-normal text-muted-foreground">
+                          Refining…
+                        </span>
+                      )}
                     </p>
-                    <p className="text-muted-foreground">Lat: {gps.lat.toFixed(6)} · Lng: {gps.lng.toFixed(6)}</p>
+                    <p className="text-muted-foreground">
+                      Lat: {gps.lat.toFixed(6)} · Lng: {gps.lng.toFixed(6)}
+                    </p>
                     <p className="text-xs text-muted-foreground">
-                      Accuracy: ±{Math.round(gps.accuracy)}m · {new Date(gps.timestamp).toLocaleString()}
+                      Accuracy: ±{Math.round(gps.accuracy)}m ·{" "}
+                      {new Date(gps.timestamp).toLocaleString()}
                     </p>
                     {address && <p className="mt-1 text-xs text-foreground/80">{address}</p>}
                   </div>
@@ -377,7 +469,9 @@ export default function AddCustomer() {
                   <AlertCircle className="mt-0.5 h-5 w-5 text-destructive" />
                   <div className="text-sm">
                     <p className="font-semibold text-destructive">{gpsErr}</p>
-                    <p className="text-xs text-muted-foreground">Enable location permissions in your browser and click Recapture.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Enable location permissions in your browser and click Recapture.
+                    </p>
                   </div>
                 </div>
               ) : (
@@ -385,7 +479,9 @@ export default function AddCustomer() {
                   <Loader2 className="mt-0.5 h-5 w-5 animate-spin text-primary" />
                   <div className="text-sm">
                     <p className="font-semibold">Detecting your location…</p>
-                    <p className="text-xs text-muted-foreground">Please allow location access when prompted.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Please allow location access when prompted.
+                    </p>
                   </div>
                 </div>
               )}
@@ -402,7 +498,12 @@ export default function AddCustomer() {
                     <span className="inline-flex items-center gap-1 text-muted-foreground">
                       <MapPin className="h-3 w-3" /> OpenStreetMap
                     </span>
-                    <a href={osmLink!} target="_blank" rel="noreferrer" className="font-medium text-primary hover:underline">
+                    <a
+                      href={osmLink!}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-primary hover:underline"
+                    >
                       View larger map
                     </a>
                   </div>
@@ -421,11 +522,16 @@ export default function AddCustomer() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Collect enrollment payment</p>
-                    <p className="text-xs text-muted-foreground">Record cash, UPI, card, or net-banking payment now.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Record cash, UPI, card, or net-banking payment now.
+                    </p>
                   </div>
                 </div>
                 <label className="inline-flex items-center gap-2 text-xs">
-                  <Checkbox checked={collectPayment} onCheckedChange={(v) => setCollectPayment(v === true)} />
+                  <Checkbox
+                    checked={collectPayment}
+                    onCheckedChange={(v) => setCollectPayment(v === true)}
+                  />
                   <span className="font-medium">{collectPayment ? "Enabled" : "Skip"}</span>
                 </label>
               </div>
@@ -435,7 +541,9 @@ export default function AddCustomer() {
                   <div>
                     <Label>Plan</Label>
                     <Select value={payKind} onValueChange={(v) => onKindChange(v as PaymentKind)}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="joining">Basic Plan · ₹1,499 / year</SelectItem>
                         <SelectItem value="renewal">Premium Plan · ₹4,999 / year</SelectItem>
@@ -444,25 +552,39 @@ export default function AddCustomer() {
                   </div>
                   <div>
                     <Label>Amount (₹)</Label>
-                    <Input type="number" min="0" step="1" value={payAmount} onChange={(e) => setPayAmount(e.target.value)} required={collectPayment} />
+                    <Input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={payAmount}
+                      onChange={(e) => setPayAmount(e.target.value)}
+                      required={collectPayment}
+                    />
                   </div>
                   <div>
                     <Label>Method</Label>
                     <Select value={payMethod} onValueChange={(v) => setPayMethod(v as PayMethod)}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
                       <SelectContent>
                         {PAY_METHODS.map((m) => (
-                          <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                          <SelectItem key={m.value} value={m.value}>
+                            {m.label}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
                     <Label>
-                      {payMethod === "Cash" ? "Receipt no. (optional)"
-                        : payMethod === "UPI" ? "UPI ref / txn ID"
-                        : payMethod === "Card" ? "Card last 4 / auth code"
-                        : "Bank ref no."}
+                      {payMethod === "Cash"
+                        ? "Receipt no. (optional)"
+                        : payMethod === "UPI"
+                          ? "UPI ref / txn ID"
+                          : payMethod === "Card"
+                            ? "Card last 4 / auth code"
+                            : "Bank ref no."}
                     </Label>
                     <Input
                       value={payReference}
@@ -474,11 +596,18 @@ export default function AddCustomer() {
                   </div>
                   <div className="sm:col-span-2">
                     <Label>Note (optional)</Label>
-                    <Input value={payNote} onChange={(e) => setPayNote(e.target.value)} maxLength={200} placeholder="Any remark for this collection" />
+                    <Input
+                      value={payNote}
+                      onChange={(e) => setPayNote(e.target.value)}
+                      maxLength={200}
+                      placeholder="Any remark for this collection"
+                    />
                   </div>
                   <div className="sm:col-span-2 inline-flex items-center gap-2 rounded-md bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
                     <Banknote className="h-3.5 w-3.5" />
-                    Collected by <span className="font-semibold text-foreground">{staff?.name}</span>. A receipt with txn ID is generated on save.
+                    Collected by{" "}
+                    <span className="font-semibold text-foreground">{staff?.name}</span>. A receipt
+                    with txn ID is generated on save.
                   </div>
                 </div>
               )}
@@ -487,7 +616,11 @@ export default function AddCustomer() {
 
           <div className="sm:col-span-2">
             <Button type="submit" size="lg" className="w-full" disabled={!gps}>
-              {!gps ? "Waiting for GPS…" : collectPayment ? `Enroll farmer & collect ₹${payAmount || 0}` : "Save Customer"}
+              {!gps
+                ? "Waiting for GPS…"
+                : collectPayment
+                  ? `Enroll farmer & collect ₹${payAmount || 0}`
+                  : "Save Customer"}
             </Button>
           </div>
         </form>
@@ -496,7 +629,15 @@ export default function AddCustomer() {
   );
 }
 
-function Field({ label, className, children }: { label: string; className?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  className,
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className={className}>
       <Label>{label}</Label>
@@ -514,7 +655,8 @@ function DocBlock(props: {
   file: DocFile | null;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
-  const { label, numberLabel, numberValue, onNumberChange, numberInputProps, file, onFileChange } = props;
+  const { label, numberLabel, numberValue, onNumberChange, numberInputProps, file, onFileChange } =
+    props;
   return (
     <div className="rounded-md border border-border bg-background p-3">
       <div className="flex items-center justify-between gap-2">
@@ -539,7 +681,15 @@ function DocBlock(props: {
         <label className="mt-1 flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border bg-muted/40 px-3 py-2 text-xs hover:bg-muted">
           <Upload className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="flex-1 truncate text-foreground">
-            {file ? <><FileText className="mr-1 inline h-3 w-3" />{file.name} <span className="text-muted-foreground">· {(file.size / 1024).toFixed(0)} KB</span></> : "Choose JPG / PNG / PDF…"}
+            {file ? (
+              <>
+                <FileText className="mr-1 inline h-3 w-3" />
+                {file.name}{" "}
+                <span className="text-muted-foreground">· {(file.size / 1024).toFixed(0)} KB</span>
+              </>
+            ) : (
+              "Choose JPG / PNG / PDF…"
+            )}
           </span>
           <input
             type="file"

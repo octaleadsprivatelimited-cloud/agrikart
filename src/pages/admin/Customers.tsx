@@ -6,7 +6,6 @@ import { useCustomers, type CustomerStatus } from "@/lib/staff-store";
 import { StatusPill } from "../staff/Dashboard";
 import { Search, MapPin, ChevronRight } from "lucide-react";
 
-
 const tabs: Array<{ key: "All" | CustomerStatus; label: string }> = [
   { key: "All", label: "All" },
   { key: "Pending", label: "Pending" },
@@ -21,16 +20,17 @@ export default function AdminCustomers() {
 
   const filtered = useMemo(() => {
     let r = customers;
-    if (tab !== "All") r = r.filter(c => c.status === tab);
+    if (tab !== "All") r = r.filter((c) => c.status === tab);
     if (q) {
       const s = q.toLowerCase();
-      r = r.filter(c =>
-        c.farmerName.toLowerCase().includes(s) ||
-        c.mobile.includes(q) ||
-        (c.farmerCode ?? "").toLowerCase().includes(s) ||
-        c.village.toLowerCase().includes(s) ||
-        c.district.toLowerCase().includes(s) ||
-        c.employeeName.toLowerCase().includes(s)
+      r = r.filter(
+        (c) =>
+          c.farmerName.toLowerCase().includes(s) ||
+          c.mobile.includes(q) ||
+          (c.farmerCode ?? "").toLowerCase().includes(s) ||
+          c.village.toLowerCase().includes(s) ||
+          c.district.toLowerCase().includes(s) ||
+          c.employeeName.toLowerCase().includes(s),
       );
     }
     return r;
@@ -43,13 +43,20 @@ export default function AdminCustomers() {
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search name, mobile, village, district, employee…" value={q} onChange={(e) => setQ(e.target.value)} className="pl-9" />
+          <Input
+            placeholder="Search name, mobile, village, district, employee…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="pl-9"
+          />
         </div>
         <div className="flex flex-wrap gap-1 rounded-md border border-border bg-card p-1">
-          {tabs.map(t => (
-            <button key={t.key}
+          {tabs.map((t) => (
+            <button
+              key={t.key}
               onClick={() => setTab(t.key)}
-              className={`rounded px-3 py-1.5 text-sm font-medium transition-colors ${tab === t.key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+              className={`rounded px-3 py-1.5 text-sm font-medium transition-colors ${tab === t.key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
               {t.label}
             </button>
           ))}
@@ -57,7 +64,11 @@ export default function AdminCustomers() {
       </div>
 
       {filtered.length === 0 ? (
-        <Card className="mt-6"><CardContent className="p-5 sm:p-8 text-center text-muted-foreground">No customers match the current filter.</CardContent></Card>
+        <Card className="mt-6">
+          <CardContent className="p-5 sm:p-8 text-center text-muted-foreground">
+            No customers match the current filter.
+          </CardContent>
+        </Card>
       ) : (
         <Card className="mt-6">
           <div className="overflow-x-auto">
@@ -72,19 +83,43 @@ export default function AdminCustomers() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(c => (
+                {filtered.map((c) => (
                   <tr key={c.id} className="border-b border-border last:border-0 hover:bg-muted/40">
                     <td className="px-4 py-3">
-                      <Link to={`/admin/customers/${c.id}`} className="font-medium hover:text-primary">{c.farmerName}</Link>
-                      <p className="text-xs text-muted-foreground">{c.farmerCode ? (<span className="font-mono font-semibold text-primary">{c.farmerCode}</span>) : (<span className="italic text-muted-foreground">ID pending</span>)} · {c.mobile}</p>
+                      <Link
+                        to={`/admin/customers/${c.id}`}
+                        className="font-medium hover:text-primary"
+                      >
+                        {c.farmerName}
+                      </Link>
+                      <p className="text-xs text-muted-foreground">
+                        {c.farmerCode ? (
+                          <span className="font-mono font-semibold text-primary">
+                            {c.farmerCode}
+                          </span>
+                        ) : (
+                          <span className="italic text-muted-foreground">ID pending</span>
+                        )}{" "}
+                        · {c.mobile}
+                      </p>
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
-                      <span className="inline-flex items-center gap-1 text-xs"><MapPin className="h-3 w-3" />{c.village}, {c.district}</span>
+                      <span className="inline-flex items-center gap-1 text-xs">
+                        <MapPin className="h-3 w-3" />
+                        {c.village}, {c.district}
+                      </span>
                     </td>
-                    <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">{c.employeeName}</td>
-                    <td className="px-4 py-3"><StatusPill status={c.status} /></td>
+                    <td className="px-4 py-3 hidden lg:table-cell text-xs text-muted-foreground">
+                      {c.employeeName}
+                    </td>
+                    <td className="px-4 py-3">
+                      <StatusPill status={c.status} />
+                    </td>
                     <td className="px-4 py-3 text-right">
-                      <Link to={`/admin/customers/${c.id}`} className="inline-flex items-center text-xs font-semibold text-primary hover:underline">
+                      <Link
+                        to={`/admin/customers/${c.id}`}
+                        className="inline-flex items-center text-xs font-semibold text-primary hover:underline"
+                      >
                         View <ChevronRight className="h-3 w-3" />
                       </Link>
                     </td>

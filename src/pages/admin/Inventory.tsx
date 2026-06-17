@@ -1,18 +1,40 @@
-
 import { useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  useProducts, useStockMoves, adjustStock, lowStock, outOfStock, nearExpiry, type Product,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  useProducts,
+  useStockMoves,
+  adjustStock,
+  lowStock,
+  outOfStock,
+  nearExpiry,
+  type Product,
 } from "@/lib/shop-store";
-import { AlertTriangle, PackageX, CalendarClock, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import {
+  AlertTriangle,
+  PackageX,
+  CalendarClock,
+  ArrowUpCircle,
+  ArrowDownCircle,
+} from "lucide-react";
 import { toast } from "sonner";
-
 
 export default function AdminInventory() {
   const products = useProducts();
@@ -28,7 +50,11 @@ export default function AdminInventory() {
   const expiring = useMemo(() => nearExpiry(products, 90), [products]);
 
   const startMove = (p: Product, d: "in" | "out") => {
-    setProdId(p.id); setDir(d); setQty(0); setReason(d === "in" ? "Purchase received" : "Damaged / lost"); setOpen(true);
+    setProdId(p.id);
+    setDir(d);
+    setQty(0);
+    setReason(d === "in" ? "Purchase received" : "Damaged / lost");
+    setOpen(true);
   };
   const submit = () => {
     if (qty <= 0) return toast.error("Quantity must be > 0");
@@ -45,14 +71,31 @@ export default function AdminInventory() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <Alert tone="text-destructive bg-destructive/10" Icon={PackageX} label="Out of stock" value={out.length} />
-        <Alert tone="text-[oklch(0.55_0.16_75)] bg-[oklch(0.95_0.06_75)]" Icon={AlertTriangle} label="Low stock" value={low.length} />
-        <Alert tone="text-[oklch(0.50_0.18_25)] bg-[oklch(0.95_0.05_25)]" Icon={CalendarClock} label="Expiring < 90 days" value={expiring.length} />
+        <Alert
+          tone="text-destructive bg-destructive/10"
+          Icon={PackageX}
+          label="Out of stock"
+          value={out.length}
+        />
+        <Alert
+          tone="text-[oklch(0.55_0.16_75)] bg-[oklch(0.95_0.06_75)]"
+          Icon={AlertTriangle}
+          label="Low stock"
+          value={low.length}
+        />
+        <Alert
+          tone="text-[oklch(0.50_0.18_25)] bg-[oklch(0.95_0.05_25)]"
+          Icon={CalendarClock}
+          label="Expiring < 90 days"
+          value={expiring.length}
+        />
       </div>
 
       <Card>
         <CardContent className="p-0">
-          <div className="border-b p-4"><h2 className="text-base font-semibold">Stock levels</h2></div>
+          <div className="border-b p-4">
+            <h2 className="text-base font-semibold">Stock levels</h2>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-muted/50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -66,7 +109,7 @@ export default function AdminInventory() {
                 </tr>
               </thead>
               <tbody className="divide-y">
-                {products.map(p => {
+                {products.map((p) => {
                   const isOut = p.stock === 0;
                   const isLow = !isOut && p.stock <= p.reorderLevel;
                   const isExp = new Date(p.expiryDate).getTime() <= Date.now() + 90 * 86400000;
@@ -78,13 +121,27 @@ export default function AdminInventory() {
                       <td className="px-4 py-3 text-muted-foreground">{p.expiryDate}</td>
                       <td className="px-4 py-3 space-x-1">
                         {isOut && <Badge variant="destructive">Out</Badge>}
-                        {isLow && <Badge className="bg-[oklch(0.70_0.16_75)] text-white hover:bg-[oklch(0.70_0.16_75)]">Low</Badge>}
-                        {isExp && <Badge variant="outline" className="border-destructive text-destructive">Expiring</Badge>}
-                        {!isOut && !isLow && !isExp && <span className="text-xs text-muted-foreground">OK</span>}
+                        {isLow && (
+                          <Badge className="bg-[oklch(0.70_0.16_75)] text-white hover:bg-[oklch(0.70_0.16_75)]">
+                            Low
+                          </Badge>
+                        )}
+                        {isExp && (
+                          <Badge variant="outline" className="border-destructive text-destructive">
+                            Expiring
+                          </Badge>
+                        )}
+                        {!isOut && !isLow && !isExp && (
+                          <span className="text-xs text-muted-foreground">OK</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-right">
-                        <Button variant="ghost" size="sm" onClick={() => startMove(p, "in")}><ArrowUpCircle className="h-4 w-4 text-primary" /> In</Button>
-                        <Button variant="ghost" size="sm" onClick={() => startMove(p, "out")}><ArrowDownCircle className="h-4 w-4 text-destructive" /> Out</Button>
+                        <Button variant="ghost" size="sm" onClick={() => startMove(p, "in")}>
+                          <ArrowUpCircle className="h-4 w-4 text-primary" /> In
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => startMove(p, "out")}>
+                          <ArrowDownCircle className="h-4 w-4 text-destructive" /> Out
+                        </Button>
                       </td>
                     </tr>
                   );
@@ -97,21 +154,37 @@ export default function AdminInventory() {
 
       <Card>
         <CardContent className="p-0">
-          <div className="border-b p-4"><h2 className="text-base font-semibold">Recent stock movements</h2></div>
+          <div className="border-b p-4">
+            <h2 className="text-base font-semibold">Recent stock movements</h2>
+          </div>
           {moves.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">No stock movements yet.</p>
+            <p className="py-8 text-center text-sm text-muted-foreground">
+              No stock movements yet.
+            </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-muted/50 text-left text-xs uppercase tracking-wide text-muted-foreground">
-                  <tr><th className="px-4 py-3">Date</th><th className="px-4 py-3">Product</th><th className="px-4 py-3">Change</th><th className="px-4 py-3">Reason</th></tr>
+                  <tr>
+                    <th className="px-4 py-3">Date</th>
+                    <th className="px-4 py-3">Product</th>
+                    <th className="px-4 py-3">Change</th>
+                    <th className="px-4 py-3">Reason</th>
+                  </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {moves.slice(0, 50).map(m => (
+                  {moves.slice(0, 50).map((m) => (
                     <tr key={m.id}>
-                      <td className="px-4 py-3 text-muted-foreground">{new Date(m.ts).toLocaleString()}</td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {new Date(m.ts).toLocaleString()}
+                      </td>
                       <td className="px-4 py-3">{m.productName}</td>
-                      <td className={`px-4 py-3 font-medium ${m.delta >= 0 ? "text-primary" : "text-destructive"}`}>{m.delta >= 0 ? "+" : ""}{m.delta}</td>
+                      <td
+                        className={`px-4 py-3 font-medium ${m.delta >= 0 ? "text-primary" : "text-destructive"}`}
+                      >
+                        {m.delta >= 0 ? "+" : ""}
+                        {m.delta}
+                      </td>
                       <td className="px-4 py-3 text-muted-foreground">{m.reason}</td>
                     </tr>
                   ))}
@@ -124,26 +197,38 @@ export default function AdminInventory() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>{dir === "in" ? "Stock In" : "Stock Out"}</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{dir === "in" ? "Stock In" : "Stock Out"}</DialogTitle>
+          </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
               <Label className="text-xs">Product</Label>
               <Select value={prodId} onValueChange={setProdId}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{products.map(p => <SelectItem key={p.id} value={p.id}>{p.name} (stock: {p.stock})</SelectItem>)}</SelectContent>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {products.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.name} (stock: {p.stock})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Quantity</Label>
-              <Input type="number" value={qty} onChange={e => setQty(+e.target.value)} />
+              <Input type="number" value={qty} onChange={(e) => setQty(+e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Reason</Label>
-              <Input value={reason} onChange={e => setReason(e.target.value)} />
+              <Input value={reason} onChange={(e) => setReason(e.target.value)} />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
             <Button onClick={submit}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
@@ -152,11 +237,28 @@ export default function AdminInventory() {
   );
 }
 
-function Alert({ tone, Icon, label, value }: { tone: string; Icon: typeof AlertTriangle; label: string; value: number }) {
+function Alert({
+  tone,
+  Icon,
+  label,
+  value,
+}: {
+  tone: string;
+  Icon: typeof AlertTriangle;
+  label: string;
+  value: number;
+}) {
   return (
-    <Card><CardContent className="flex items-center gap-3 p-5">
-      <div className={`grid h-10 w-10 place-items-center rounded-lg ${tone}`}><Icon className="h-5 w-5" /></div>
-      <div><p className="text-xs text-muted-foreground">{label}</p><p className="text-2xl font-bold">{value}</p></div>
-    </CardContent></Card>
+    <Card>
+      <CardContent className="flex items-center gap-3 p-5">
+        <div className={`grid h-10 w-10 place-items-center rounded-lg ${tone}`}>
+          <Icon className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="text-2xl font-bold">{value}</p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

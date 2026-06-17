@@ -5,12 +5,27 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { createBooking, useCurrentUser } from "@/lib/auth-store";
 import { toast } from "sonner";
 
-
-const serviceKeys = ["drone","seeds","pesticides","cold","trade","loans","insurance","schemes","support"] as const;
+const serviceKeys = [
+  "drone",
+  "seeds",
+  "pesticides",
+  "cold",
+  "trade",
+  "loans",
+  "insurance",
+  "schemes",
+  "support",
+] as const;
 
 export default function BookService() {
   const { t } = useTranslation();
@@ -35,19 +50,33 @@ export default function BookService() {
           <div>
             <Label>{t("portal.chooseService")}</Label>
             <Select value={category} onValueChange={setCategory} required>
-              <SelectTrigger><SelectValue placeholder={t("portal.chooseService")} /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder={t("portal.chooseService")} />
+              </SelectTrigger>
               <SelectContent>
-                {serviceKeys.map(k => (
-                  <SelectItem key={k} value={k}>{t(`services.items.${k}.title`)}</SelectItem>
+                {serviceKeys.map((k) => (
+                  <SelectItem key={k} value={k}>
+                    {t(`services.items.${k}.title`)}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div>
             <Label htmlFor="desc">{t("portal.describe")}</Label>
-            <Textarea id="desc" required minLength={5} maxLength={1000} rows={5} value={description} onChange={(e) => setDescription(e.target.value)} />
+            <Textarea
+              id="desc"
+              required
+              minLength={5}
+              maxLength={1000}
+              rows={5}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
-          <Button type="submit" size="lg" disabled={!category}>{t("portal.submit")}</Button>
+          <Button type="submit" size="lg" disabled={!category}>
+            {t("portal.submit")}
+          </Button>
         </form>
       </CardContent>
     </Card>

@@ -5,7 +5,10 @@ import { Landmark } from "lucide-react";
 
 export default function Schemes() {
   const { t } = useTranslation();
-  const items = t("schemes.items", { returnObjects: true }) as Array<{ name: string; desc: string }>;
+  const items = t("schemes.items", { returnObjects: true }) as Array<{
+    name: string;
+    desc: string;
+  }>;
   return (
     <>
       <PageHeader title={t("schemes.title")} subtitle={t("schemes.intro")} />
