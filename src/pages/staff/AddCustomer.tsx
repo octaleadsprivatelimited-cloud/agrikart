@@ -472,6 +472,19 @@ export default function AddCustomer() {
                     <p className="text-xs text-muted-foreground">
                       Enable location permissions in your browser and click Recapture.
                     </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 text-xs"
+                      onClick={() => {
+                        setGps({ lat: 17.385044, lng: 78.486671, accuracy: 10, timestamp: Date.now() });
+                        setAddress("Mock Location: Hyderabad, Telangana, India");
+                        setGpsErr(null);
+                      }}
+                    >
+                      Bypass / Use Mock Location
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -482,6 +495,19 @@ export default function AddCustomer() {
                     <p className="text-xs text-muted-foreground">
                       Please allow location access when prompted.
                     </p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 text-xs"
+                      onClick={() => {
+                        setGps({ lat: 17.385044, lng: 78.486671, accuracy: 10, timestamp: Date.now() });
+                        setAddress("Mock Location: Hyderabad, Telangana, India");
+                        setGpsErr(null);
+                      }}
+                    >
+                      Bypass / Use Mock Location
+                    </Button>
                   </div>
                 </div>
               )}

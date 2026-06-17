@@ -388,9 +388,10 @@ export function getCurrentStaff(): Staff | null {
 }
 
 export function useCurrentStaff() {
-  const [s, setS] = useState<Staff | null>(null);
+  const [s, setS] = useState<Staff | null>(() => getCurrentStaff());
   useEffect(() => {
     const sync = () => setS(getCurrentStaff());
+    sync();
     window.addEventListener("agrikart-staff", sync);
     window.addEventListener("storage", sync);
     return () => {
