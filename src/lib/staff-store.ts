@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signIn
 import { toast } from "sonner";
 
 export type StaffRole = "employee" | "admin";
-export type Staff = { id: string; email: string; name: string; role: StaffRole };
+export type Staff = { id: string; email: string; name: string; role: StaffRole; status?: "active" | "deleted" };
 type StoredStaff = Staff & { password: string };
 
 const STAFF_KEY = "agrikart.staff";
@@ -201,15 +201,31 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   }
 
   const all = read<StoredStaff[]>(STAFF_KEY, []);
+  const existing = all.find(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
+
+  // Block deleted/deactivated accounts
+  if (existing && existing.status === "deleted") {
+    if (firebaseUser) {
+      try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
+    }
+    throw new Error("This account has been deleted and cannot access the portal.");
+  }
+
+  // Block unregistered accounts
+  if (!existing) {
+    if (firebaseUser) {
+      try { await signOut(firebaseAuth); } catch (e) { console.error(e); }
+    }
+    throw new Error("Account not found in local database.");
+  }
 
   if (firebaseUser) {
     const uid = firebaseUser.uid;
     const name = firebaseUser.displayName || "Staff Member";
-
-    const existingIdx = all.findIndex(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
-    const role = existingIdx !== -1 ? all[existingIdx].role : ((firebaseUser.photoURL === "admin" ? "admin" : "employee") as StaffRole);
-    const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password };
+    const role = existing.role;
+    const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password, status: existing.status };
     
+    const existingIdx = all.findIndex(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
     if (existingIdx !== -1) {
       all[existingIdx] = staffData;
     } else {
@@ -218,11 +234,11 @@ export async function staffLogin(email: string, password: string): Promise<Staff
     write(STAFF_KEY, all);
     write(STAFF_SESSION_KEY, uid);
     window.dispatchEvent(new Event("agrikart-staff"));
-    return { id: uid, email: cleanEmail, name, role };
+    return { id: uid, email: cleanEmail, name, role, status: existing.status };
   }
 
   // Fallback to local storage (e.g. initial demo login credentials or offline)
-  const s = all.find(x => x.email.toLowerCase() === cleanEmail.toLowerCase() && x.password === password);
+  const s = all.find(x => x.email.toLowerCase() === cleanEmail.toLowerCase() && x.password === password && x.status !== "deleted");
   if (!s) {
     if (loginError) {
       throw new Error(loginError.message || "INVALID_LOGIN");
@@ -272,7 +288,7 @@ export function useStaffList() {
   useEffect(() => {
     const sync = () => {
       const all = read<StoredStaff[]>(STAFF_KEY, []);
-      setItems(all.map(({ password: _p, ...rest }) => rest));
+      setItems(all.filter(s => s.status !== "deleted").map(({ password: _p, ...rest }) => rest));
     };
     sync();
     window.addEventListener("agrikart-staff", sync);
@@ -397,7 +413,7 @@ export async function createStaff(input: { email: string; name: string; password
 
 export function deleteStaff(id: string) {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  write(STAFF_KEY, all.filter(s => s.id !== id));
+  write(STAFF_KEY, all.map(s => s.id === id ? { ...s, status: "deleted" as const } : s));
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
@@ -836,7 +852,7 @@ export function createSubmission(input: Omit<Submission, "id" | "status" | "crea
 export function assignSubmission(id: string, staffId: string) {
   const staffList = read<StoredStaff[]>(STAFF_KEY, []);
   const target = staffList.find(s => s.id === staffId);
-  if (!target) throw new Error("Staff not found");
+  if (!target || target.status === "deleted") throw new Error("Staff member not found or inactive");
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
   write(SUBMISSIONS_KEY, all.map(s => s.id === id
     ? { ...s, assignedStaffId: target.id, assignedStaffName: target.name, assignedAt: Date.now(), status: s.status === "New" ? "Assigned" : s.status }
@@ -859,7 +875,7 @@ export function approveSubmission(id: string) {
 export function approveAndAssignSubmission(id: string, staffId: string) {
   const staffList = read<StoredStaff[]>(STAFF_KEY, []);
   const target = staffList.find(s => s.id === staffId);
-  if (!target) throw new Error("Staff not found");
+  if (!target || target.status === "deleted") throw new Error("Staff member not found or inactive");
   const all = read<Submission[]>(SUBMISSIONS_KEY, []);
   write(SUBMISSIONS_KEY, all.map(s => s.id === id
     ? { ...s, status: "Assigned" as SubmissionStatus, assignedStaffId: target.id, assignedStaffName: target.name, assignedAt: Date.now() }
