@@ -1191,7 +1191,7 @@ export function approveAndAssignSubmission(id: string, staffId: string) {
       s.id === id
         ? {
             ...s,
-            status: "Assigned" as SubmissionStatus,
+            status: "Approved" as SubmissionStatus,
             assignedStaffId: target.id,
             assignedStaffName: target.name,
             assignedAt: Date.now(),
