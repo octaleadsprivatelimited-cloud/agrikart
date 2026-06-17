@@ -1,0 +1,18 @@
+{
+  "rules": {
+    ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'employee')",
+    ".write": "auth != null && auth.token.picture === 'admin'",
+    
+    "submissions": {
+      ".write": true,
+      "$submissionId": {
+        ".read": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'employee')"
+      }
+    },
+    "customers": {
+      "$customerId": {
+        ".write": "auth != null && (auth.token.picture === 'admin' || auth.token.picture === 'employee')"
+      }
+    }
+  }
+}

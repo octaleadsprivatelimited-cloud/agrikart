@@ -1,0 +1,35 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.picture == 'admin';
+    }
+    
+    function isEmployee() {
+      return isAuthenticated() && (request.auth.token.picture == 'employee' || request.auth.token.picture == 'admin');
+    }
+
+    // Customer documents folder (Aadhaar, PAN, Land records)
+    match /customer-docs/{documentId} {
+      allow read: if isEmployee();
+      allow write: if isEmployee();
+    }
+
+    // Public submissions files (from the /apply registration form)
+    match /submissions/{fileId} {
+      allow write: if true;
+      allow read: if isEmployee();
+    }
+
+    // Delivery proofs (delivered orders photo proof)
+    match /delivery-proofs/{proofId} {
+      allow read, write: if isEmployee();
+    }
+  }
+}
