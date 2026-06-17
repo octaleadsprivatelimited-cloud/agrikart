@@ -15,11 +15,15 @@ export default function StaffLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // If an admin (or any non-employee) is currently signed in, clear that session
-  // so opening the staff portal always shows the staff login form — not the admin dashboard.
   useEffect(() => {
     const s = getCurrentStaff();
-    if (s && s.role !== "employee") staffLogout();
+    if (s) {
+      if (s.role === "admin") {
+        void navigate("/admin/dashboard");
+      } else {
+        void navigate("/staff/dashboard");
+      }
+    }
   }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -27,10 +31,9 @@ export default function StaffLogin() {
     setLoading(true);
     try {
       const s = await staffLogin(email.trim(), password);
-      if (s.role !== "employee") {
-        staffLogout();
-        toast.error("Admins must sign in at the admin portal.");
-        void navigate("/admin/login");
+      if (s.role === "admin") {
+        toast.success(`Welcome Admin, ${s.name}`);
+        void navigate("/admin/dashboard");
         return;
       }
       toast.success(`Welcome, ${s.name}`);

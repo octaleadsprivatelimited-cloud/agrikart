@@ -306,8 +306,9 @@ async function createFirebaseStaff(input: { email: string; name: string; passwor
   }
 }
 
-async function sendWelcomeEmail(name: string, email: string, password: string) {
-  const loginLink = typeof window !== "undefined" ? window.location.origin + "/staff/login" : "https://agrikart.vercel.app/staff/login";
+async function sendWelcomeEmail(name: string, email: string, password: string, role: StaffRole) {
+  const path = role === "admin" ? "/admin/login" : "/staff/login";
+  const loginLink = typeof window !== "undefined" ? window.location.origin + path : `https://agrikart.vercel.app${path}`;
   const subject = "Welcome to AgriKart - Your Staff Account Details";
   const body = `Hello ${name},
 
@@ -386,7 +387,7 @@ export async function createStaff(input: { email: string; name: string; password
   window.dispatchEvent(new Event("agrikart-staff"));
 
   // Send welcome email with login details
-  sendWelcomeEmail(input.name, input.email, input.password).catch(err => {
+  sendWelcomeEmail(input.name, input.email, input.password, input.role).catch(err => {
     console.error("Welcome email delivery error:", err);
   });
 

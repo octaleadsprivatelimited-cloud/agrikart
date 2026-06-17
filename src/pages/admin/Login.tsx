@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ShieldCheck } from "lucide-react";
-import { staffLogin, staffLogout, ADMIN_DEFAULT_EMAIL } from "@/lib/staff-store";
+import { staffLogin, staffLogout, ADMIN_DEFAULT_EMAIL, getCurrentStaff } from "@/lib/staff-store";
 import { toast } from "sonner";
 import { firebaseAuth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -15,6 +15,17 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const s = getCurrentStaff();
+    if (s) {
+      if (s.role === "admin") {
+        void navigate("/admin/dashboard");
+      } else {
+        void navigate("/staff/dashboard");
+      }
+    }
+  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,12 +45,12 @@ export default function AdminLogin() {
         }
       }
       const s = await staffLogin(cleanEmail, password);
-      if (s.role !== "admin") {
-        staffLogout();
-        toast.error("This portal is for administrators only.");
+      if (s.role === "employee") {
+        toast.success(`Welcome, ${s.name}`);
+        void navigate("/staff/dashboard");
         return;
       }
-      toast.success(`Welcome, ${s.name}`);
+      toast.success(`Welcome Admin, ${s.name}`);
       void navigate("/admin/dashboard");
     } catch {
       toast.error("Invalid email or password.");
