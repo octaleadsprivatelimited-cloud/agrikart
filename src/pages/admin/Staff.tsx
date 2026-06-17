@@ -40,12 +40,22 @@ export default function AdminStaff() {
     toast.success("Removed");
   };
 
-  const resetPw = (id: string, name: string) => {
+  const resetPw = async (id: string, name: string) => {
     const next = prompt(`Set a new password for ${name} (min 6 chars):`);
     if (next == null) return;
     try {
-      resetStaffPassword(me, id, next);
+      await resetStaffPassword(me, id, next);
       toast.success(`Password reset for ${name}`);
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
+  };
+
+  const handleToggleRole = async (id: string, currentRole: StaffRole) => {
+    const nextRole = currentRole === "admin" ? "employee" : "admin";
+    try {
+      await updateStaffRole(id, nextRole);
+      toast.success(`Updated role to ${nextRole}`);
     } catch (err) {
       toast.error((err as Error).message);
     }
@@ -107,7 +117,7 @@ export default function AdminStaff() {
                       <Button size="sm" variant="ghost" onClick={() => resetPw(s.id, s.name)} title="Reset password">
                         <KeyRound className="h-4 w-4" />
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => updateStaffRole(s.id, s.role === "admin" ? "employee" : "admin")} disabled={s.id === me?.id}>
+                      <Button size="sm" variant="ghost" onClick={() => handleToggleRole(s.id, s.role)} disabled={s.id === me?.id}>
                         Make {s.role === "admin" ? "Employee" : "Admin"}
                       </Button>
                       <Button size="sm" variant="ghost" onClick={() => remove(s.id, s.name)} disabled={s.id === me?.id}>

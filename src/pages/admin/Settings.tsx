@@ -21,12 +21,12 @@ export default function AdminSettings() {
 
   const save = () => { updateSettings(s); toast.success("Settings saved"); };
 
-  const submitPw = (e: React.FormEvent) => {
+  const submitPw = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!me) return;
     if (pw.next !== pw.confirm) { toast.error("New passwords do not match"); return; }
     try {
-      changeStaffPassword(me.id, pw.current, pw.next);
+      await changeStaffPassword(me.id, pw.current, pw.next);
       toast.success("Password changed");
       setPw({ current: "", next: "", confirm: "" });
     } catch (err) {

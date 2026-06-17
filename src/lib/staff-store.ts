@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { firebaseAuth, firebaseConfig } from "./firebase";
 import { initializeApp, getApp, deleteApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+import { toast } from "sonner";
 
 export type StaffRole = "employee" | "admin";
 export type Staff = { id: string; email: string; name: string; role: StaffRole };
@@ -78,23 +79,72 @@ function seed() {
 seed();
 
 // ---------- Password management ----------
-export function changeStaffPassword(id: string, currentPassword: string, newPassword: string) {
+export async function changeStaffPassword(id: string, currentPassword: string, newPassword: string) {
   if (!newPassword || newPassword.length < 6) throw new Error("New password must be at least 6 characters.");
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   const idx = all.findIndex(s => s.id === id);
   if (idx === -1) throw new Error("Account not found");
   if (all[idx].password !== currentPassword) throw new Error("Current password is incorrect");
+
+  // Sync with Firebase Auth for currently logged in user
+  if (firebaseAuth.currentUser && firebaseAuth.currentUser.uid === id) {
+    try {
+      await updatePassword(firebaseAuth.currentUser, newPassword);
+    } catch (err: any) {
+      console.error("Firebase password change failed:", err);
+      if (err.code === "auth/requires-recent-login") {
+        throw new Error("Changing password requires logging in again recently. Please log out, log back in, and try again.");
+      }
+      throw new Error(err.message || "Failed to update password in Firebase Auth");
+    }
+  }
+
   all[idx] = { ...all[idx], password: newPassword };
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
-export function resetStaffPassword(actor: Staff | null, targetId: string, newPassword: string) {
+export async function resetStaffPassword(actor: Staff | null, targetId: string, newPassword: string) {
   if (!actor || actor.role !== "admin") throw new Error("Only admins can reset passwords");
   if (!newPassword || newPassword.length < 6) throw new Error("Password must be at least 6 characters.");
   const all = read<StoredStaff[]>(STAFF_KEY, []);
   const idx = all.findIndex(s => s.id === targetId);
   if (idx === -1) throw new Error("Account not found");
+
+  const target = all[idx];
+  // Attempt client-side Firebase Auth sync using impersonation if it's not a local demo user
+  if (target.password && !targetId.startsWith("emp-") && !targetId.startsWith("adm-")) {
+    let tempApp;
+    try {
+      tempApp = getApp("TempRegistrationApp");
+    } catch {
+      try {
+        tempApp = initializeApp(firebaseConfig, "TempRegistrationApp");
+      } catch (e) {
+        console.error("Failed to initialize TempRegistrationApp for password reset sync:", e);
+      }
+    }
+    if (tempApp) {
+      const tempAuth = getAuth(tempApp);
+      try {
+        const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
+        if (credential.user) {
+          await updatePassword(credential.user, newPassword);
+          await signOut(tempAuth);
+        }
+      } catch (err: any) {
+        console.warn("Firebase password reset sync failed, update will only apply locally:", err);
+        toast.warning(`Firebase password sync failed: ${err.message || "Connection error"}`);
+      } finally {
+        try {
+          await deleteApp(tempApp);
+        } catch (e) {
+          console.error("Failed to delete tempApp:", e);
+        }
+      }
+    }
+  }
+
   all[idx] = { ...all[idx], password: newPassword };
   write(STAFF_KEY, all);
   window.dispatchEvent(new Event("agrikart-staff"));
@@ -118,9 +168,9 @@ export async function staffLogin(email: string, password: string): Promise<Staff
   if (firebaseUser) {
     const uid = firebaseUser.uid;
     const name = firebaseUser.displayName || "Staff Member";
-    const role = (firebaseUser.photoURL === "admin" ? "admin" : "employee") as StaffRole;
 
     const existingIdx = all.findIndex(s => s.email.toLowerCase() === cleanEmail.toLowerCase());
+    const role = existingIdx !== -1 ? all[existingIdx].role : ((firebaseUser.photoURL === "admin" ? "admin" : "employee") as StaffRole);
     const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password };
     
     if (existingIdx !== -1) {
@@ -230,7 +280,11 @@ export async function createStaff(input: { email: string; name: string; password
     const firebaseUid = await createFirebaseStaff(input);
     uid = firebaseUid;
   } catch (err: any) {
-    throw new Error(err.message || "Failed to create user in Firebase Auth");
+    console.warn("Firebase staff creation failed, falling back to local storage only:", err);
+    if (err.code === "auth/email-already-in-use" || err.code === "auth/invalid-email" || err.code === "auth/weak-password") {
+      throw new Error(err.message || "Firebase validation failed");
+    }
+    toast.warning("Firebase sync failed. Added staff locally only.");
   }
 
   const item: StoredStaff = { ...input, id: uid };
@@ -247,9 +301,48 @@ export function deleteStaff(id: string) {
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
-export function updateStaffRole(id: string, role: StaffRole) {
+export async function updateStaffRole(id: string, role: StaffRole) {
   const all = read<StoredStaff[]>(STAFF_KEY, []);
-  write(STAFF_KEY, all.map(s => s.id === id ? { ...s, role } : s));
+  const target = all.find(s => s.id === id);
+  if (!target) throw new Error("Staff member not found");
+
+  // Attempt client-side Firebase Auth sync using impersonation if it's not a local demo user
+  if (target.password && !id.startsWith("emp-") && !id.startsWith("adm-")) {
+    let tempApp;
+    try {
+      tempApp = getApp("TempRegistrationApp");
+    } catch {
+      try {
+        tempApp = initializeApp(firebaseConfig, "TempRegistrationApp");
+      } catch (e) {
+        console.error("Failed to initialize TempRegistrationApp for role update sync:", e);
+      }
+    }
+    if (tempApp) {
+      const tempAuth = getAuth(tempApp);
+      try {
+        const credential = await signInWithEmailAndPassword(tempAuth, target.email, target.password);
+        if (credential.user) {
+          await updateProfile(credential.user, {
+            photoURL: role,
+          });
+          await signOut(tempAuth);
+        }
+      } catch (err: any) {
+        console.warn("Firebase role update sync failed, update will only apply locally:", err);
+        toast.warning(`Firebase role sync failed: ${err.message || "Connection error"}`);
+      } finally {
+        try {
+          await deleteApp(tempApp);
+        } catch (e) {
+          console.error("Failed to delete tempApp:", e);
+        }
+      }
+    }
+  }
+
+  const updated = all.map(s => s.id === id ? { ...s, role } : s);
+  write(STAFF_KEY, updated);
   window.dispatchEvent(new Event("agrikart-staff"));
 }
 
