@@ -10,6 +10,7 @@ import {
   Sprout,
   Headphones,
   PlayCircle,
+  Search,
 } from "lucide-react";
 
 const tools = [
@@ -54,6 +55,12 @@ const tools = [
     desc: "Track your crop cycle and bookings.",
     Icon: Sprout,
     to: "/portal/dashboard",
+  },
+  {
+    label: "Track Enrollment",
+    desc: "Check membership status and billing history.",
+    Icon: Search,
+    to: "/farmer-lookup",
   },
   { label: "Ask an Expert", desc: "Talk to an agronomist.", Icon: Headphones, to: "/support" },
   { label: "Agri Videos", desc: "Learn farming best practices.", Icon: PlayCircle, to: "/blog" },

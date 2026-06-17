@@ -204,7 +204,7 @@ export default function PlaceOrder() {
               <Label htmlFor="code">Farmer ID</Label>
               <Input
                 id="code"
-                placeholder="e.g. AKF7XK2P"
+                placeholder="e.g. AGFC0001"
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                 onKeyDown={(e) => {

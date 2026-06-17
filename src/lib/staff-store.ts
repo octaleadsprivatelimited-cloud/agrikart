@@ -710,12 +710,17 @@ export function isFarmerVerified(
 }
 
 function generateFarmerCode(existing: Pick<Customer, "farmerCode">[]): string {
-  const used = new Set(existing.map((c) => c.farmerCode).filter(Boolean));
-  let code = "";
-  do {
-    code = "AKF" + Math.random().toString(36).slice(2, 8).toUpperCase();
-  } while (used.has(code));
-  return code;
+  const codes = existing.map((c) => c.farmerCode).filter((code) => code && code.startsWith("AGFC"));
+  let maxNum = 0;
+  for (const code of codes) {
+    const numStr = code.slice(4);
+    const num = parseInt(numStr, 10);
+    if (!isNaN(num) && num > maxNum) {
+      maxNum = num;
+    }
+  }
+  const nextNum = maxNum + 1;
+  return "AGFC" + String(nextNum).padStart(4, "0");
 }
 
 export function createCustomer(

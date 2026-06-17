@@ -478,7 +478,12 @@ export default function AddCustomer() {
                       size="sm"
                       className="mt-2 text-xs"
                       onClick={() => {
-                        setGps({ lat: 17.385044, lng: 78.486671, accuracy: 10, timestamp: Date.now() });
+                        setGps({
+                          lat: 17.385044,
+                          lng: 78.486671,
+                          accuracy: 10,
+                          timestamp: Date.now(),
+                        });
                         setAddress("Mock Location: Hyderabad, Telangana, India");
                         setGpsErr(null);
                       }}
@@ -501,7 +506,12 @@ export default function AddCustomer() {
                       size="sm"
                       className="mt-2 text-xs"
                       onClick={() => {
-                        setGps({ lat: 17.385044, lng: 78.486671, accuracy: 10, timestamp: Date.now() });
+                        setGps({
+                          lat: 17.385044,
+                          lng: 78.486671,
+                          accuracy: 10,
+                          timestamp: Date.now(),
+                        });
                         setAddress("Mock Location: Hyderabad, Telangana, India");
                         setGpsErr(null);
                       }}

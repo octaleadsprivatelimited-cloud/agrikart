@@ -28,6 +28,7 @@ const Tools = lazy(() => import("@/pages/Tools"));
 const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
 const Support = lazy(() => import("@/pages/Support"));
 const Terms = lazy(() => import("@/pages/Terms"));
+const FarmerLookup = lazy(() => import("@/pages/FarmerLookup"));
 
 // -- Layouts / Auth sections ---------------------------------------------------
 const AdminLogin = lazy(() => import("@/pages/admin/Login"));
@@ -158,6 +159,7 @@ export default function App() {
         <Route path="tools" element={<Tools />} />
         <Route path="support" element={<Support />} />
         <Route path="terms" element={<Terms />} />
+        <Route path="farmer-lookup" element={<FarmerLookup />} />
 
         {/* Portal (farmer) */}
         <Route path="portal">
