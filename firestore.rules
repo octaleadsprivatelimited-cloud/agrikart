@@ -12,7 +12,10 @@ service cloud.firestore {
     }
     
     function isEmployee() {
-      return isAuthenticated() && (request.auth.token.picture == 'employee' || request.auth.token.picture == 'admin');
+      return isAuthenticated() && 
+             (request.auth.token.picture == 'employee' || request.auth.token.picture == 'admin') &&
+             (!exists(/databases/$(database)/documents/staff/$(request.auth.uid)) || 
+              get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.status != 'deleted');
     }
 
     // Staff / Users Collection
