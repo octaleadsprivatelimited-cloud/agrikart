@@ -408,6 +408,16 @@ export default function PlaceOrder() {
               </div>
             )}
           </div>
+          {pay === "UPI" && (
+            <div className="flex flex-col items-center justify-center p-4 rounded-lg border border-dashed border-border bg-muted/30">
+              <p className="text-sm font-semibold mb-2 text-foreground">UPI Payment QR Code</p>
+              <img src="/upi-qr.png" alt="UPI QR Code" className="max-w-[260px] w-full rounded-lg shadow-md border border-border bg-white p-2" />
+              <p className="text-xs text-muted-foreground mt-2 text-center font-medium">
+                Scan the QR code to pay the exact amount of {fmt(subtotal)} via any UPI app.
+                Please enter the UPI Reference ID in the field above after scanning.
+              </p>
+            </div>
+          )}
           {pay !== "COD" && (
             <div>
               <Label>Note (optional)</Label>

@@ -429,6 +429,16 @@ export default function AddCustomer() {
                     </Label>
                     <Input value={payReference} onChange={(e) => setPayReference(e.target.value)} placeholder={payMethod === "UPI" ? "e.g. 4123ABCD56" : ""} maxLength={64} />
                   </div>
+                  {payMethod === "UPI" && (
+                    <div className="sm:col-span-2 flex flex-col items-center justify-center p-4 rounded-lg border border-dashed border-border bg-muted/30">
+                      <p className="text-sm font-semibold mb-2 text-foreground">UPI Payment QR Code</p>
+                      <img src="/upi-qr.png" alt="UPI QR Code" className="max-w-[260px] w-full rounded-lg shadow-md border border-border bg-white p-2" />
+                      <p className="text-xs text-muted-foreground mt-2 text-center">
+                        Scan the QR code above using any UPI app (GPay, PhonePe, Paytm, BHIM, etc.) to pay.
+                        After paying, please enter the transaction/reference ID in the field below.
+                      </p>
+                    </div>
+                  )}
                   <div className="sm:col-span-2">
                     <Label>Note (optional)</Label>
                     <Input value={payNote} onChange={(e) => setPayNote(e.target.value)} maxLength={200} placeholder="Any remark for this collection" />

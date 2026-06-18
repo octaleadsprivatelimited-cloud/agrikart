@@ -9,13 +9,19 @@ service cloud.firestore {
     
     function isAdmin() {
       return isAuthenticated() && 
-             (request.auth.token.picture == 'admin' || request.auth.token.picture == 'admin:active');
+             (request.auth.token.picture == 'admin' || 
+              request.auth.token.picture == 'admin:active' ||
+              (exists(/databases/$(database)/documents/staff/$(request.auth.uid)) && 
+               get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'admin'));
     }
     
     function isEmployee() {
       return isAuthenticated() && 
              (request.auth.token.picture == 'employee' || request.auth.token.picture == 'employee:active' || 
-              request.auth.token.picture == 'admin' || request.auth.token.picture == 'admin:active') &&
+              request.auth.token.picture == 'admin' || request.auth.token.picture == 'admin:active' ||
+              (exists(/databases/$(database)/documents/staff/$(request.auth.uid)) && 
+               (get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'employee' ||
+                get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'admin'))) &&
              (!exists(/databases/$(database)/documents/staff/$(request.auth.uid)) || 
               get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.status != 'deleted');
     }

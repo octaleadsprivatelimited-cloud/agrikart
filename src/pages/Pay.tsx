@@ -5,10 +5,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { IndianRupee, CheckCircle2, Copy, Landmark } from "lucide-react";
+import { IndianRupee, CheckCircle2, Copy, Landmark, Loader2, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import { recordPayment } from "@/lib/staff-store";
 import { useSettings } from "@/lib/shop-store";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 export default function Pay() {
   const { t } = useTranslation();
@@ -24,22 +31,49 @@ export default function Pay() {
   const [email, setEmail] = useState("");
   const [showBank, setShowBank] = useState(false);
 
-  const pay = (kind: "joining" | "renewal") => {
+  const [activeKind, setActiveKind] = useState<"joining" | "renewal" | null>(null);
+  const [payMethod, setPayMethod] = useState<"UPI" | "Gateway" | null>(null);
+  const [upiRef, setUpiRef] = useState("");
+  const [isSimulating, setIsSimulating] = useState(false);
+
+  const initiatePayment = (kind: "joining" | "renewal") => {
     if (!farmerId.trim()) return toast.error(t("pay.errFarmerId"));
     if (mobile && !/^\d{10}$/.test(mobile.trim())) return toast.error(t("pay.errMobile"));
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
       return toast.error(t("pay.errEmail"));
-    const amount = kind === "joining" ? 1499 : 4999;
-    const p = recordPayment({
-      farmerId: farmerId.trim().toUpperCase(),
-      farmerName: farmerName.trim() || undefined,
-      mobile: mobile.trim() || undefined,
-      email: email.trim().toLowerCase() || undefined,
-      kind,
-      amount,
-    });
-    toast.success(t("pay.success"));
-    setPaid({ kind, txnId: p.id, orderId: p.orderId });
+    
+    setActiveKind(kind);
+    setPayMethod(null);
+    setUpiRef("");
+  };
+
+  const handlePaymentSubmit = (method: "UPI" | "Card" | "NetBanking", reference?: string) => {
+    if (!activeKind) return;
+    const amount = activeKind === "joining" ? 1499 : 4999;
+    
+    setIsSimulating(true);
+    
+    setTimeout(() => {
+      try {
+        const p = recordPayment({
+          farmerId: farmerId.trim().toUpperCase(),
+          farmerName: farmerName.trim() || undefined,
+          mobile: mobile.trim() || undefined,
+          email: email.trim().toLowerCase() || undefined,
+          kind: activeKind,
+          amount,
+          method,
+          reference: reference || undefined,
+        });
+        toast.success(t("pay.success"));
+        setPaid({ kind: activeKind, txnId: p.id, orderId: p.orderId });
+        setActiveKind(null);
+      } catch (err: any) {
+        toast.error(err?.message || "Payment recording failed.");
+      } finally {
+        setIsSimulating(false);
+      }
+    }, method === "UPI" ? 500 : 1500);
   };
 
   return (
@@ -108,7 +142,7 @@ export default function Pay() {
           <PayCard
             label={t("pay.joining")}
             amount="₹1,499"
-            onPay={() => pay("joining")}
+            onPay={() => initiatePayment("joining")}
             paid={paid?.kind === "joining"}
             btn={t("pay.payBtn")}
             paidLabel={t("pay.paid")}
@@ -116,7 +150,7 @@ export default function Pay() {
           <PayCard
             label={t("pay.renewal")}
             amount="₹4,999"
-            onPay={() => pay("renewal")}
+            onPay={() => initiatePayment("renewal")}
             paid={paid?.kind === "renewal"}
             btn={t("pay.payBtn")}
             paidLabel={t("pay.paid")}
@@ -146,6 +180,86 @@ export default function Pay() {
       <p className="container mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-muted-foreground">
         {t("pay.poweredBy")}
       </p>
+
+      <Dialog open={activeKind !== null} onOpenChange={(open) => { if (!open && !isSimulating) setActiveKind(null); }}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Select Payment Method</DialogTitle>
+            <DialogDescription>
+              Plan Amount: ₹{activeKind === "joining" ? "1,499" : "4,999"}
+            </DialogDescription>
+          </DialogHeader>
+
+          {isSimulating ? (
+            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm font-medium text-muted-foreground">Processing payment securely...</p>
+            </div>
+          ) : payMethod === null ? (
+            <div className="grid gap-3 py-4">
+              <Button 
+                onClick={() => setPayMethod("UPI")} 
+                className="w-full flex items-center justify-start gap-3 py-6 px-4 text-base cursor-pointer"
+                variant="outline"
+              >
+                <QrCode className="h-5 w-5 text-primary" />
+                <div className="text-left">
+                  <p className="font-semibold">UPI Payment (Scan QR)</p>
+                  <p className="text-xs text-muted-foreground font-normal">Pay with PhonePe, GPay, Paytm, etc.</p>
+                </div>
+              </Button>
+              <Button 
+                onClick={() => handlePaymentSubmit("NetBanking")} 
+                className="w-full flex items-center justify-start gap-3 py-6 px-4 text-base cursor-pointer"
+                variant="outline"
+              >
+                <Landmark className="h-5 w-5 text-primary" />
+                <div className="text-left">
+                  <p className="font-semibold">Rojaripay Gateway</p>
+                  <p className="text-xs text-muted-foreground font-normal">Pay via Cards, Netbanking, etc.</p>
+                </div>
+              </Button>
+            </div>
+          ) : payMethod === "UPI" ? (
+            <div className="flex flex-col items-center py-4 space-y-4">
+              <div className="flex flex-col items-center justify-center p-4 rounded-lg border border-dashed border-border bg-muted/30 w-full">
+                <img src="/upi-qr.png" alt="UPI QR Code" className="max-w-[240px] w-full rounded-lg shadow-md border border-border bg-white p-2" />
+                <p className="text-[10px] text-muted-foreground mt-2 text-center font-medium">
+                  GANDI JAYANTH · UPI ID: 8121030900.1@hdfc
+                </p>
+              </div>
+              <div className="w-full space-y-2">
+                <Label htmlFor="upi-ref" className="text-xs font-semibold">
+                  UPI Transaction ID / Ref No. <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="upi-ref"
+                  placeholder="Enter 12-digit UPI reference ID"
+                  value={upiRef}
+                  onChange={(e) => setUpiRef(e.target.value)}
+                  maxLength={64}
+                />
+              </div>
+              <div className="flex w-full gap-2 pt-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setPayMethod(null)}
+                  className="flex-1"
+                >
+                  Back
+                </Button>
+                <Button 
+                  onClick={() => handlePaymentSubmit("UPI", upiRef)} 
+                  disabled={!upiRef.trim()}
+                  className="flex-1 font-semibold"
+                >
+                  Confirm Payment
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

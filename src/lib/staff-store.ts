@@ -616,6 +616,20 @@ export async function staffLogin(email: string, password: string): Promise<Staff
       status = "active";
     }
 
+    // Sync profile in Firebase Auth if it doesn't match role/status
+    const expectedPhotoURL = `${role}:${status}`;
+    if (firebaseUser.photoURL !== expectedPhotoURL) {
+      try {
+        await updateProfile(firebaseUser, {
+          displayName: firebaseUser.displayName || name,
+          photoURL: expectedPhotoURL,
+        });
+        await firebaseUser.getIdToken(true);
+      } catch (profileErr) {
+        console.warn("Failed to update profile photoURL during login:", profileErr);
+      }
+    }
+
     const staffData: StoredStaff = { id: uid, email: cleanEmail, name, role, password, status };
 
     const existingIdx = all.findIndex((s) => s.email.toLowerCase() === cleanEmail.toLowerCase());
@@ -665,7 +679,21 @@ export async function ensureFirebaseAuth(): Promise<void> {
   if (!s || s.status === "deleted") return;
 
   try {
-    await signInWithEmailAndPassword(firebaseAuth, s.email, s.password);
+    const res = await signInWithEmailAndPassword(firebaseAuth, s.email, s.password);
+    if (res.user) {
+      const expectedPhotoURL = `${s.role}:${s.status || "active"}`;
+      if (res.user.photoURL !== expectedPhotoURL) {
+        try {
+          await updateProfile(res.user, {
+            displayName: res.user.displayName || s.name,
+            photoURL: expectedPhotoURL,
+          });
+          await res.user.getIdToken(true);
+        } catch (profileErr) {
+          console.warn("Failed to update profile photoURL during ensureFirebaseAuth:", profileErr);
+        }
+      }
+    }
   } catch (err: any) {
     console.warn("Background Firebase Auth sign-in failed:", err);
     if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
